@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SONIC LAB — AI Music Production</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&family=Space+Mono:wght@400;700&display=swap');
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --void:#04020a;--deep:#080414;
+  --pink:#ff2d78;--violet:#8b2fff;--cyan:#00e5ff;--orange:#ff6b00;
+  --text:#f0eaff;--muted:#7a6f94;--border:rgba(139,47,255,0.2);
+}
+html{scroll-behavior:smooth;}
+body{background:var(--void);color:var(--text);font-family:'Space Grotesk',sans-serif;overflow-x:hidden;}
+
+/* FIXED 3D CANVAS */
+#bg{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;}
+.vignette{position:fixed;inset:0;background:radial-gradient(ellipse at 50% 50%,transparent 30%,rgba(4,2,10,0.75)100%);z-index:1;pointer-events:none;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:24px 48px;display:flex;justify-content:space-between;align-items:center;transition:all 0.4s;}
+nav.scrolled{backdrop-filter:blur(24px);background:rgba(4,2,10,0.7);border-bottom:1px solid var(--border);}
+.logo{font-family:'Space Mono',monospace;font-size:18px;font-weight:700;letter-spacing:0.2em;color:var(--text);text-decoration:none;}
+.logo span{color:var(--pink);}
+.nav-links{display:flex;gap:40px;list-style:none;}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:13px;letter-spacing:0.1em;text-transform:uppercase;transition:color 0.2s;}
+.nav-links a:hover{color:var(--text);}
+.nav-cta{background:transparent;border:1px solid var(--violet);color:var(--text);padding:10px 24px;font-family:'Space Grotesk',sans-serif;font-size:13px;letter-spacing:0.1em;cursor:pointer;transition:all 0.2s;}
+.nav-cta:hover{background:rgba(139,47,255,0.15);box-shadow:0 0 20px rgba(139,47,255,0.3);}
+
+/* SECTIONS — each is full viewport height for scroll triggers */
+section{position:relative;z-index:10;min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:120px 80px;}
+
+/* HERO */
+.hero{align-items:center;text-align:center;padding-top:140px;}
+.hero-tag{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.35em;text-transform:uppercase;color:var(--pink);margin-bottom:32px;opacity:0;transform:translateY(20px);}
+.hero h1{font-size:clamp(64px,11vw,160px);font-weight:700;line-height:0.88;letter-spacing:-0.04em;margin-bottom:40px;opacity:0;transform:translateY(40px);}
+.hero h1 em{font-style:normal;background:linear-gradient(135deg,var(--violet),var(--pink),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;background-size:200%;animation:gshift 4s ease infinite;}
+@keyframes gshift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+.hero-sub{font-size:18px;color:var(--muted);max-width:480px;line-height:1.6;margin-bottom:56px;font-weight:300;opacity:0;transform:translateY(20px);}
+.hero-btns{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;opacity:0;transform:translateY(20px);}
+.btn-p{background:linear-gradient(135deg,var(--violet),var(--pink));border:none;color:#fff;padding:18px 48px;font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:500;cursor:pointer;letter-spacing:0.05em;transition:all 0.25s;}
+.btn-p:hover{opacity:0.88;box-shadow:0 0 48px rgba(255,45,120,0.45);transform:translateY(-3px);}
+.btn-g{background:transparent;border:1px solid rgba(240,234,255,0.25);color:var(--text);padding:18px 48px;font-family:'Space Grotesk',sans-serif;font-size:16px;cursor:pointer;letter-spacing:0.05em;transition:all 0.2s;display:flex;align-items:center;gap:10px;}
+.btn-g:hover{border-color:rgba(240,234,255,0.55);background:rgba(240,234,255,0.05);}
+
+/* SCROLL INDICATOR */
+.scroll-hint{position:absolute;bottom:48px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;opacity:0;}
+.scroll-hint span{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:var(--muted);}
+.scroll-line{width:1px;height:48px;background:linear-gradient(to bottom,var(--violet),transparent);animation:scrollpulse 2s ease-in-out infinite;}
+@keyframes scrollpulse{0%{opacity:0;transform:scaleY(0);transform-origin:top}50%{opacity:1}100%{opacity:0;transform:scaleY(1);transform-origin:top}}
+
+/* FEATURES SECTION */
+.features{padding:120px 80px;}
+.section-eyebrow{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.3em;text-transform:uppercase;color:var(--violet);margin-bottom:20px;}
+.section-title{font-size:clamp(36px,5vw,64px);font-weight:700;letter-spacing:-0.025em;line-height:1.05;margin-bottom:80px;}
+
+.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);}
+.feat{background:rgba(8,4,20,0.92);padding:48px 36px;position:relative;overflow:hidden;transition:background 0.3s;}
+.feat::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--violet),var(--pink));transform:scaleX(0);transform-origin:left;transition:transform 0.4s;}
+.feat:hover::after{transform:scaleX(1);}
+.feat:hover{background:rgba(139,47,255,0.07);}
+.feat-icon{font-size:36px;margin-bottom:24px;display:block;filter:drop-shadow(0 0 10px rgba(255,45,120,0.5));}
+.feat-n{font-size:20px;font-weight:700;margin-bottom:12px;}
+.feat-d{color:var(--muted);font-size:14px;line-height:1.7;}
+.feat-num{position:absolute;top:36px;right:36px;font-family:'Space Mono',monospace;font-size:11px;color:var(--muted);opacity:0.35;}
+
+/* PARALLAX SHOWCASE */
+.showcase{min-height:100vh;display:flex;align-items:center;padding:120px 80px;position:relative;z-index:10;overflow:hidden;}
+.showcase-inner{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;width:100%;max-width:1200px;margin:0 auto;}
+.showcase-text{}
+.showcase-visual{position:relative;height:500px;display:flex;align-items:center;justify-content:center;}
+.visual-card{width:100%;height:100%;background:rgba(139,47,255,0.06);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+.visual-card::before{content:'';position:absolute;inset:-50%;background:conic-gradient(from 0deg at 50% 50%,transparent 0deg,rgba(139,47,255,0.15)60deg,transparent 120deg);animation:rotate 8s linear infinite;}
+@keyframes rotate{to{transform:rotate(360deg)}}
+.vc-inner{position:relative;z-index:2;text-align:center;padding:40px;}
+.vc-big{font-family:'Space Mono',monospace;font-size:72px;font-weight:700;background:linear-gradient(135deg,var(--cyan),var(--violet));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;}
+.vc-label{font-size:13px;color:var(--muted);letter-spacing:0.2em;text-transform:uppercase;margin-top:12px;}
+
+/* STATS ROW */
+.stats{position:relative;z-index:10;padding:60px 80px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);backdrop-filter:blur(16px);background:rgba(8,4,20,0.6);display:flex;justify-content:center;gap:80px;flex-wrap:wrap;}
+.stat-n{font-family:'Space Mono',monospace;font-size:40px;font-weight:700;background:linear-gradient(135deg,var(--cyan),var(--violet));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.stat-l{font-size:12px;color:var(--muted);letter-spacing:0.15em;text-transform:uppercase;margin-top:6px;}
+
+/* HORIZONTAL SCROLL TRACK (CSS only — fake marquee) */
+.marquee-wrap{position:relative;z-index:10;padding:40px 0;overflow:hidden;border-top:1px solid var(--border);}
+.marquee-track{display:flex;gap:64px;animation:marquee 18s linear infinite;width:max-content;}
+.marquee-track:hover{animation-play-state:paused;}
+@keyframes marquee{to{transform:translateX(-50%)}}
+.marquee-item{font-family:'Space Mono',monospace;font-size:13px;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);white-space:nowrap;display:flex;align-items:center;gap:24px;}
+.marquee-item span{color:var(--pink);font-size:18px;}
+
+/* CTA */
+.cta-sec{position:relative;z-index:10;padding:160px 80px;text-align:center;overflow:hidden;}
+.cta-blob{position:absolute;width:900px;height:900px;border-radius:50%;background:radial-gradient(circle,rgba(139,47,255,0.12)0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;animation:blob-pulse 6s ease-in-out infinite;}
+@keyframes blob-pulse{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.1)}}
+.cta-sec h2{font-size:clamp(48px,8vw,112px);font-weight:700;letter-spacing:-0.04em;line-height:0.95;margin-bottom:36px;position:relative;}
+.cta-sec p{color:var(--muted);font-size:18px;margin-bottom:56px;max-width:400px;margin-left:auto;margin-right:auto;line-height:1.6;position:relative;}
+
+/* FOOTER */
+footer{position:relative;z-index:10;padding:40px 80px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;backdrop-filter:blur(16px);background:rgba(4,2,10,0.8);flex-wrap:wrap;gap:16px;}
+footer p{font-family:'Space Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:0.1em;}
+.ft-links{display:flex;gap:32px;}
+.ft-links a{font-size:12px;color:var(--muted);text-decoration:none;letter-spacing:0.1em;text-transform:uppercase;transition:color 0.2s;}
+.ft-links a:hover{color:var(--pink);}
+
+@media(max-width:768px){
+  section{padding:100px 24px;}
+  .features-grid{grid-template-columns:1fr;}
+  .showcase-inner{grid-template-columns:1fr;}
+  .stats{gap:40px;padding:40px 24px;}
+  nav{padding:20px 24px;}
+  .nav-links{display:none;}
+  footer{padding:32px 24px;}
+}
+</style>
+</head>
+<body>
+
+<canvas id="bg"></canvas>
+<div class="vignette"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="logo">SONIC<span>LAB</span></a>
+  <ul class="nav-links">
+    <li><a href="#features">Services</a></li>
+    <li><a href="#showcase">Studio</a></li>
+    <li><a href="#cta">Start</a></li>
+  </ul>
+  <button class="nav-cta">Book Session</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-tag" id="htag">AI-Powered Music Production</div>
+  <h1 id="htitle">YOUR<br>SOUND,<br><em>AMPLIFIED.</em></h1>
+  <p class="hero-sub" id="hsub">From raw idea to mastered track — AI tools built for producers who take their craft seriously.</p>
+  <div class="hero-btns" id="hbtns">
+    <button class="btn-p">Book a Session →</button>
+    <button class="btn-g"><span>▶</span> Hear Samples</button>
+  </div>
+  <div class="scroll-hint" id="scrollhint">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track" id="marquee"></div>
+</div>
+
+<!-- STATS -->
+<div class="stats">
+  <div><div class="stat-n" data-target="2400">0</div><div class="stat-l">Tracks Produced</div></div>
+  <div><div class="stat-n" data-target="98">0</div><div class="stat-l">ms Latency</div></div>
+  <div><div class="stat-n" data-target="340">0</div><div class="stat-l">Artists Worldwide</div></div>
+  <div><div class="stat-n" data-target="4000">0</div><div class="stat-l">Sound Models</div></div>
+</div>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+  <div class="section-eyebrow">What We Do</div>
+  <h2 class="section-title">Tools Built<br>for Real Producers</h2>
+  <div class="features-grid" id="feat-grid">
+    <div class="feat"><span class="feat-icon">🎛️</span><div class="feat-num">01</div><h3 class="feat-n">Neural Mix Engine</h3><p class="feat-d">AI stem separation and intelligent mixing that learns your genre. Stems come out clean, ready for processing.</p></div>
+    <div class="feat"><span class="feat-icon">🌀</span><div class="feat-num">02</div><h3 class="feat-n">Generative Arrangement</h3><p class="feat-d">Feed it 8 bars. Get 20 full-arrangement variations. Pick one, modify, export. Fast.</p></div>
+    <div class="feat"><span class="feat-icon">⚡</span><div class="feat-num">03</div><h3 class="feat-n">Instant Mastering</h3><p class="feat-d">Reference-matched mastering in under 60 seconds. Sounds like a human — because it was trained on one.</p></div>
+    <div class="feat"><span class="feat-icon">🎹</span><div class="feat-num">04</div><h3 class="feat-n">Chord & Melody AI</h3><p class="feat-d">Stuck on a progression? Describe the mood, get harmonic options. Export MIDI directly to your DAW.</p></div>
+    <div class="feat"><span class="feat-icon">🔊</span><div class="feat-num">05</div><h3 class="feat-n">Voice Synthesis</h3><p class="feat-d">Clone, transform, pitch-perfect. Build a reference vocal in seconds before booking studio time.</p></div>
+    <div class="feat"><span class="feat-icon">📡</span><div class="feat-num">06</div><h3 class="feat-n">Live Collab API</h3><p class="feat-d">Sync with your DAW in real-time. Plugin for Ableton, Logic, FL Studio. Zero latency.</p></div>
+  </div>
+</section>
+
+<!-- SHOWCASE -->
+<section class="showcase" id="showcase">
+  <div class="showcase-inner">
+    <div class="showcase-text">
+      <div class="section-eyebrow">The Studio</div>
+      <h2 class="section-title" style="margin-bottom:24px;">98ms<br>Average<br>Latency</h2>
+      <p style="color:var(--muted);font-size:16px;line-height:1.7;margin-bottom:40px;max-width:400px;">Our inference engine runs on edge nodes distributed across 14 regions. Your request hits the nearest node and returns before you notice it left.</p>
+      <button class="btn-p" style="font-size:14px;padding:14px 36px;">Explore the Tech →</button>
+    </div>
+    <div class="showcase-visual" id="showcase-vis">
+      <div class="visual-card">
+        <div class="vc-inner">
+          <div class="vc-big">98</div>
+          <div class="vc-label">Milliseconds</div>
+          <div style="width:80%;height:1px;background:var(--border);margin:24px auto;"></div>
+          <div style="display:flex;justify-content:center;gap:32px;">
+            <div style="text-align:center"><div style="font-family:'Space Mono',monospace;font-size:20px;color:var(--cyan);">14</div><div style="font-size:11px;color:var(--muted);letter-spacing:0.15em;text-transform:uppercase;margin-top:4px;">Regions</div></div>
+            <div style="text-align:center"><div style="font-family:'Space Mono',monospace;font-size:20px;color:var(--pink);">99.9%</div><div style="font-size:11px;color:var(--muted);letter-spacing:0.15em;text-transform:uppercase;margin-top:4px;">Uptime</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-sec" id="cta">
+  <div class="cta-blob"></div>
+  <h2 id="cta-title">Ready to<br><span style="background:linear-gradient(135deg,#ff2d78,#8b2fff,#00e5ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Make Noise?</span></h2>
+  <p>First session is free. No credit card. No pitch deck. Just your music.</p>
+  <button class="btn-p" style="font-size:17px;padding:22px 64px;">Start Free Session →</button>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 SONICLAB — ALL RIGHTS RESERVED</p>
+  <div class="ft-links">
+    <a href="#">Instagram</a><a href="#">Twitter</a><a href="#">Discord</a><a href="#">Privacy</a>
+  </div>
+</footer>
+
+<!-- THREE.JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<!-- GSAP + ScrollTrigger -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+// ─── THREE.JS SCENE ───────────────────────────────────────────────────────────
+const canvas = document.getElementById('bg');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setSize(innerWidth, innerHeight);
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(70, innerWidth / innerHeight, 0.1, 1000);
+camera.position.z = 80;
+
+// — Particles —
+const N = 7000;
+const pos = new Float32Array(N * 3);
+const col = new Float32Array(N * 3);
+const sz  = new Float32Array(N);
+const phases = [];
+const palette = [
+  new THREE.Color('#8b2fff'), new THREE.Color('#ff2d78'),
+  new THREE.Color('#00e5ff'), new THREE.Color('#ff6b00'), new THREE.Color('#4400ff')
+];
+for (let i = 0; i < N; i++) {
+  const th = Math.random() * Math.PI * 2, ph = Math.random() * Math.PI;
+  const r  = 15 + Math.random() * 90;
+  pos[i*3]   = r * Math.sin(ph) * Math.cos(th);
+  pos[i*3+1] = r * Math.sin(ph) * Math.sin(th) * 0.45;
+  pos[i*3+2] = r * Math.cos(ph);
+  const c = palette[Math.floor(Math.random() * palette.length)];
+  col[i*3]=c.r; col[i*3+1]=c.g; col[i*3+2]=c.b;
+  sz[i] = Math.random() * 2.8 + 0.4;
+  phases.push(Math.random() * Math.PI * 2);
+}
+const geo = new THREE.BufferGeometry();
+geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+geo.setAttribute('color',    new THREE.BufferAttribute(col, 3));
+geo.setAttribute('size',     new THREE.BufferAttribute(sz,  1));
+
+const mat = new THREE.ShaderMaterial({
+  uniforms: { time: { value: 0 } },
+  vertexShader: `
+    attribute float size; attribute vec3 color;
+    varying vec3 vColor; varying float vAlpha; uniform float time;
+    void main(){
+      vColor = color;
+      vec4 mv = modelViewMatrix * vec4(position,1.0);
+      float d = length(mv.xyz);
+      vAlpha = smoothstep(130.0,15.0,d)*0.85;
+      gl_PointSize = size*(310.0/-mv.z);
+      gl_Position = projectionMatrix*mv;
+    }`,
+  fragmentShader: `
+    varying vec3 vColor; varying float vAlpha;
+    void main(){
+      vec2 uv = gl_PointCoord-0.5; float d=length(uv);
+      if(d>0.5)discard;
+      float a = smoothstep(0.5,0.0,d)*vAlpha;
+      gl_FragColor = vec4(vColor,a);
+    }`,
+  transparent:true, blending:THREE.AdditiveBlending, depthWrite:false, vertexColors:true
+});
+const particles = new THREE.Points(geo, mat);
+scene.add(particles);
+
+// — 3D Objects —
+// Torus
+const torusGeo = new THREE.TorusGeometry(18, 1.2, 16, 100);
+const torusMat = new THREE.MeshBasicMaterial({ color: 0x8b2fff, wireframe: true, transparent: true, opacity: 0.15 });
+const torus = new THREE.Mesh(torusGeo, torusMat);
+scene.add(torus);
+
+// Icosahedron
+const icoGeo = new THREE.IcosahedronGeometry(12, 1);
+const icoMat = new THREE.MeshBasicMaterial({ color: 0xff2d78, wireframe: true, transparent: true, opacity: 0.1 });
+const ico = new THREE.Mesh(icoGeo, icoMat);
+ico.position.set(40, -10, -20);
+scene.add(ico);
+
+// Octahedron
+const octGeo = new THREE.OctahedronGeometry(8, 0);
+const octMat = new THREE.MeshBasicMaterial({ color: 0x00e5ff, wireframe: true, transparent: true, opacity: 0.12 });
+const oct = new THREE.Mesh(octGeo, octMat);
+oct.position.set(-40, 15, -30);
+scene.add(oct);
+
+// Ring 2
+const ring2Geo = new THREE.TorusGeometry(30, 0.4, 8, 120);
+const ring2Mat = new THREE.MeshBasicMaterial({ color: 0x00e5ff, wireframe: false, transparent: true, opacity: 0.06 });
+const ring2 = new THREE.Mesh(ring2Geo, ring2Mat);
+ring2.rotation.x = Math.PI / 3;
+scene.add(ring2);
+
+// Mouse
+let mouse = { x: 0, y: 0 };
+document.addEventListener('mousemove', e => {
+  mouse.x = (e.clientX / innerWidth - 0.5) * 2;
+  mouse.y = -(e.clientY / innerHeight - 0.5) * 2;
+});
+
+// Scroll Y for 3D parallax
+let scrollY = 0;
+window.addEventListener('scroll', () => { scrollY = window.scrollY; });
+
+// Animate
+let t = 0;
+function animate() {
+  requestAnimationFrame(animate);
+  t += 0.007;
+  mat.uniforms.time.value = t;
+
+  // Fluid particle movement
+  for (let i = 0; i < N; i++) {
+    const ph = phases[i];
+    pos[i*3]   += Math.sin(pos[i*3+1]*0.025 + t + ph) * 0.045;
+    pos[i*3+1] += Math.cos(pos[i*3]  *0.025 + t*0.75 + ph) * 0.028;
+    pos[i*3+2] += Math.sin(pos[i*3+2]*0.02  + t*0.5  + ph) * 0.032;
+    const d = Math.sqrt(pos[i*3]**2+pos[i*3+1]**2+pos[i*3+2]**2);
+    if (d > 105) { pos[i*3]*=0.97; pos[i*3+1]*=0.97; pos[i*3+2]*=0.97; }
+  }
+  geo.attributes.position.needsUpdate = true;
+
+  // 3D object animations
+  torus.rotation.x = t * 0.2 + scrollY * 0.001;
+  torus.rotation.y = t * 0.15;
+  torus.rotation.z = t * 0.08;
+
+  ico.rotation.x = t * 0.25;
+  ico.rotation.y = t * 0.18;
+  ico.position.y = -10 + Math.sin(t * 0.6) * 5 - scrollY * 0.02;
+
+  oct.rotation.x = t * 0.3;
+  oct.rotation.z = t * 0.2;
+  oct.position.y = 15 + Math.cos(t * 0.5) * 4 + scrollY * 0.015;
+
+  ring2.rotation.z = t * 0.05;
+  ring2.rotation.x = Math.PI/3 + scrollY * 0.0008;
+
+  // Particles parallax on scroll
+  particles.rotation.y = t * 0.04 + mouse.x * 0.08 + scrollY * 0.0005;
+  particles.rotation.x = Math.sin(t * 0.025) * 0.08 + mouse.y * 0.04;
+
+  camera.position.x += (mouse.x * 6 - camera.position.x) * 0.025;
+  camera.position.y += (mouse.y * 4 - camera.position.y) * 0.025;
+  camera.lookAt(scene.position);
+
+  renderer.render(scene, camera);
+}
+animate();
+
+window.addEventListener('resize', () => {
+  camera.aspect = innerWidth / innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+});
+
+// ─── GSAP SCROLL ANIMATIONS ───────────────────────────────────────────────────
+
+// Hero entrance
+const heroTl = gsap.timeline({ delay: 0.3 });
+heroTl
+  .to('#htag',     { opacity:1, y:0, duration:0.8, ease:'power3.out' })
+  .to('#htitle',   { opacity:1, y:0, duration:1,   ease:'power3.out' }, '-=0.4')
+  .to('#hsub',     { opacity:1, y:0, duration:0.8, ease:'power3.out' }, '-=0.5')
+  .to('#hbtns',    { opacity:1, y:0, duration:0.7, ease:'power3.out' }, '-=0.4')
+  .to('#scrollhint',{ opacity:1, duration:0.6 }, '-=0.2');
+
+// Nav
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('scrolled', scrollY > 40);
+});
+
+// Features cards — stagger in on scroll
+gsap.utils.toArray('.feat').forEach((card, i) => {
+  gsap.from(card, {
+    scrollTrigger: { trigger: card, start: 'top 85%', toggleActions: 'play none none reverse' },
+    opacity: 0,
+    y: 50,
+    duration: 0.7,
+    delay: (i % 3) * 0.12,
+    ease: 'power3.out'
+  });
+});
+
+// Showcase text parallax
+gsap.fromTo('.showcase-text', { y: 40, opacity: 0 }, {
+  scrollTrigger: { trigger: '.showcase', start: 'top 70%', toggleActions: 'play none none reverse' },
+  y: 0, opacity: 1, duration: 1, ease: 'power3.out'
+});
+gsap.fromTo('#showcase-vis', { y: 60, opacity: 0 }, {
+  scrollTrigger: { trigger: '.showcase', start: 'top 65%', toggleActions: 'play none none reverse' },
+  y: 0, opacity: 1, duration: 1, delay: 0.2, ease: 'power3.out'
+});
+
+// CTA title split letters feel
+gsap.fromTo('#cta-title', { y: 60, opacity: 0 }, {
+  scrollTrigger: { trigger: '#cta', start: 'top 75%', toggleActions: 'play none none reverse' },
+  y: 0, opacity: 1, duration: 1.1, ease: 'power4.out'
+});
+
+// Counter animation
+function animateCounter(el) {
+  const target = parseInt(el.dataset.target);
+  const suffix = target >= 1000 ? '+' : (target === 98 ? 'ms' : '+');
+  gsap.to({ val: 0 }, {
+    val: target,
+    duration: 2,
+    ease: 'power2.out',
+    onUpdate: function() {
+      el.textContent = Math.round(this.targets()[0].val).toLocaleString() + suffix;
+    }
+  });
+}
+const statEls = document.querySelectorAll('[data-target]');
+const statsObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { animateCounter(e.target); statsObserver.unobserve(e.target); } });
+}, { threshold: 0.5 });
+statEls.forEach(el => statsObserver.observe(el));
+
+// ─── MARQUEE ───────────────────────────────────────────────────────────────────
+const items = ['Neural Mix','Stem Separation','AI Mastering','Chord Generation','Voice Clone','Live Collab','Beat Synthesis','Auto-Arrangement','MIDI Export','DAW Plugin'];
+const track = document.getElementById('marquee');
+const doubled = [...items, ...items];
+doubled.forEach(txt => {
+  const div = document.createElement('div');
+  div.className = 'marquee-item';
+  div.innerHTML = `${txt} <span>✦</span>`;
+  track.appendChild(div);
+});
+
+</script>
+</body>
+</html>
