@@ -4,16 +4,22 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SONIC LAB — AI Music Production</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&family=Space+Mono:wght@400;700&display=swap">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&family=Space+Mono:wght@400;700&display=swap');
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
 :root{
   --void:#04020a;--deep:#080414;
   --pink:#ff2d78;--violet:#8b2fff;--cyan:#00e5ff;--orange:#ff6b00;
-  --text:#f0eaff;--muted:#7a6f94;--border:rgba(139,47,255,0.2);
+  --text:#f0eaff;--muted:#8479a0;--border:rgba(139,47,255,0.2);
 }
 html{scroll-behavior:smooth;}
 body{background:var(--void);color:var(--text);font-family:'Space Grotesk',sans-serif;overflow-x:hidden;}
+a,button{cursor:pointer;touch-action:manipulation;}
+a:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offset:3px;}
+.skip-link{position:absolute;top:-48px;left:16px;z-index:1000;background:var(--void);color:var(--text);padding:12px 20px;border:1px solid var(--cyan);transition:top 0.2s;}
+.skip-link:focus{top:16px;}
 
 /* FIXED 3D CANVAS */
 #bg{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;}
@@ -27,8 +33,16 @@ nav.scrolled{backdrop-filter:blur(24px);background:rgba(4,2,10,0.7);border-botto
 .nav-links{display:flex;gap:40px;list-style:none;}
 .nav-links a{color:var(--muted);text-decoration:none;font-size:13px;letter-spacing:0.1em;text-transform:uppercase;transition:color 0.2s;}
 .nav-links a:hover{color:var(--text);}
-.nav-cta{background:transparent;border:1px solid var(--violet);color:var(--text);padding:10px 24px;font-family:'Space Grotesk',sans-serif;font-size:13px;letter-spacing:0.1em;cursor:pointer;transition:all 0.2s;}
+.nav-cta{background:transparent;border:1px solid var(--violet);color:var(--text);padding:14px 24px;font-family:'Space Grotesk',sans-serif;font-size:13px;letter-spacing:0.1em;transition:all 0.2s;}
 .nav-cta:hover{background:rgba(139,47,255,0.15);box-shadow:0 0 20px rgba(139,47,255,0.3);}
+
+.nav-toggle{display:none;background:none;border:none;width:44px;height:44px;padding:0;align-items:center;justify-content:center;}
+.nav-toggle span,.nav-toggle span::before,.nav-toggle span::after{content:'';display:block;width:22px;height:2px;background:var(--text);position:relative;transition:transform 0.25s,opacity 0.25s;}
+.nav-toggle span::before{position:absolute;top:-7px;}
+.nav-toggle span::after{position:absolute;top:7px;}
+.nav-toggle[aria-expanded="true"] span{background:transparent;}
+.nav-toggle[aria-expanded="true"] span::before{transform:rotate(45deg) translate(5px,5px);}
+.nav-toggle[aria-expanded="true"] span::after{transform:rotate(-45deg) translate(5px,-5px);}
 
 /* SECTIONS — each is full viewport height for scroll triggers */
 section{position:relative;z-index:10;min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:120px 80px;}
@@ -62,7 +76,8 @@ section{position:relative;z-index:10;min-height:100vh;display:flex;flex-directio
 .feat::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--violet),var(--pink));transform:scaleX(0);transform-origin:left;transition:transform 0.4s;}
 .feat:hover::after{transform:scaleX(1);}
 .feat:hover{background:rgba(139,47,255,0.07);}
-.feat-icon{font-size:36px;margin-bottom:24px;display:block;filter:drop-shadow(0 0 10px rgba(255,45,120,0.5));}
+.feat-icon{width:32px;height:32px;margin-bottom:24px;display:block;color:var(--pink);filter:drop-shadow(0 0 10px rgba(255,45,120,0.5));}
+.feat-icon svg{width:100%;height:100%;}
 .feat-n{font-size:20px;font-weight:700;margin-bottom:12px;}
 .feat-d{color:var(--muted);font-size:14px;line-height:1.7;}
 .feat-num{position:absolute;top:36px;right:36px;font-family:'Space Mono',monospace;font-size:11px;color:var(--muted);opacity:0.35;}
@@ -112,24 +127,39 @@ footer p{font-family:'Space Mono',monospace;font-size:11px;color:var(--muted);le
   .showcase-inner{grid-template-columns:1fr;}
   .stats{gap:40px;padding:40px 24px;}
   nav{padding:20px 24px;}
-  .nav-links{display:none;}
+  .nav-toggle{display:flex;}
+  .nav-links{
+    display:flex;flex-direction:column;gap:0;position:absolute;top:100%;left:0;right:0;
+    background:rgba(4,2,10,0.97);backdrop-filter:blur(24px);border-bottom:1px solid var(--border);
+    max-height:0;overflow:hidden;transition:max-height 0.3s ease;
+  }
+  .nav-links.open{max-height:320px;}
+  .nav-links li{border-top:1px solid var(--border);}
+  .nav-links a{display:block;padding:20px 24px;}
   footer{padding:32px 24px;}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:0.001ms!important;animation-iteration-count:1!important;transition-duration:0.001ms!important;scroll-behavior:auto!important;}
+  #bg{display:none;}
 }
 </style>
 </head>
 <body>
 
-<canvas id="bg"></canvas>
-<div class="vignette"></div>
+<a href="#hero" class="skip-link">Skip to content</a>
+<canvas id="bg" aria-hidden="true"></canvas>
+<div class="vignette" aria-hidden="true"></div>
 
 <!-- NAV -->
 <nav id="nav">
   <a href="#" class="logo">SONIC<span>LAB</span></a>
-  <ul class="nav-links">
+  <ul class="nav-links" id="nav-links">
     <li><a href="#features">Services</a></li>
     <li><a href="#showcase">Studio</a></li>
     <li><a href="#cta">Start</a></li>
   </ul>
+  <button class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu"><span></span></button>
   <button class="nav-cta">Book Session</button>
 </nav>
 
@@ -166,12 +196,12 @@ footer p{font-family:'Space Mono',monospace;font-size:11px;color:var(--muted);le
   <div class="section-eyebrow">What We Do</div>
   <h2 class="section-title">Tools Built<br>for Real Producers</h2>
   <div class="features-grid" id="feat-grid">
-    <div class="feat"><span class="feat-icon">🎛️</span><div class="feat-num">01</div><h3 class="feat-n">Neural Mix Engine</h3><p class="feat-d">AI stem separation and intelligent mixing that learns your genre. Stems come out clean, ready for processing.</p></div>
-    <div class="feat"><span class="feat-icon">🌀</span><div class="feat-num">02</div><h3 class="feat-n">Generative Arrangement</h3><p class="feat-d">Feed it 8 bars. Get 20 full-arrangement variations. Pick one, modify, export. Fast.</p></div>
-    <div class="feat"><span class="feat-icon">⚡</span><div class="feat-num">03</div><h3 class="feat-n">Instant Mastering</h3><p class="feat-d">Reference-matched mastering in under 60 seconds. Sounds like a human — because it was trained on one.</p></div>
-    <div class="feat"><span class="feat-icon">🎹</span><div class="feat-num">04</div><h3 class="feat-n">Chord & Melody AI</h3><p class="feat-d">Stuck on a progression? Describe the mood, get harmonic options. Export MIDI directly to your DAW.</p></div>
-    <div class="feat"><span class="feat-icon">🔊</span><div class="feat-num">05</div><h3 class="feat-n">Voice Synthesis</h3><p class="feat-d">Clone, transform, pitch-perfect. Build a reference vocal in seconds before booking studio time.</p></div>
-    <div class="feat"><span class="feat-icon">📡</span><div class="feat-num">06</div><h3 class="feat-n">Live Collab API</h3><p class="feat-d">Sync with your DAW in real-time. Plugin for Ableton, Logic, FL Studio. Zero latency.</p></div>
+    <div class="feat"><span class="feat-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="5" y1="4" x2="5" y2="20"/><circle cx="5" cy="9" r="2.5"/><line x1="12" y1="4" x2="12" y2="20"/><circle cx="12" cy="15" r="2.5"/><line x1="19" y1="4" x2="19" y2="20"/><circle cx="19" cy="7" r="2.5"/></svg></span><div class="feat-num">01</div><h3 class="feat-n">Neural Mix Engine</h3><p class="feat-d">AI stem separation and intelligent mixing that learns your genre. Stems come out clean, ready for processing.</p></div>
+    <div class="feat"><span class="feat-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h4c2 0 3 1 4.5 3.5S15 14 17 14h3"/><path d="M17 10l3-3-3-3"/><path d="M4 17h4c2 0 3-1 4.5-3.5"/><path d="M17 21l3-3-3-3"/></svg></span><div class="feat-num">02</div><h3 class="feat-n">Generative Arrangement</h3><p class="feat-d">Feed it 8 bars. Get 20 full-arrangement variations. Pick one, modify, export. Fast.</p></div>
+    <div class="feat"><span class="feat-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3L4 14h6l-1 7l9-11h-6l1-7z"/></svg></span><div class="feat-num">03</div><h3 class="feat-n">Instant Mastering</h3><p class="feat-d">Reference-matched mastering in under 60 seconds. Sounds like a human — because it was trained on one.</p></div>
+    <div class="feat"><span class="feat-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg></span><div class="feat-num">04</div><h3 class="feat-n">Chord & Melody AI</h3><p class="feat-d">Stuck on a progression? Describe the mood, get harmonic options. Export MIDI directly to your DAW.</p></div>
+    <div class="feat"><span class="feat-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></svg></span><div class="feat-num">05</div><h3 class="feat-n">Voice Synthesis</h3><p class="feat-d">Clone, transform, pitch-perfect. Build a reference vocal in seconds before booking studio time.</p></div>
+    <div class="feat"><span class="feat-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v6"/><circle cx="12" cy="12" r="2.5"/><path d="M7.8 9.8a6 6 0 0 0 0 8.4"/><path d="M16.2 9.8a6 6 0 0 1 0 8.4"/><path d="M4.6 6.6a10 10 0 0 0 0 14.8"/><path d="M19.4 6.6a10 10 0 0 1 0 14.8"/></svg></span><div class="feat-num">06</div><h3 class="feat-n">Live Collab API</h3><p class="feat-d">Sync with your DAW in real-time. Plugin for Ableton, Logic, FL Studio. Zero latency.</p></div>
   </div>
 </section>
 
@@ -203,7 +233,7 @@ footer p{font-family:'Space Mono',monospace;font-size:11px;color:var(--muted);le
 <!-- CTA -->
 <div class="cta-sec" id="cta">
   <div class="cta-blob"></div>
-  <h2 id="cta-title">Ready to<br><span style="background:linear-gradient(135deg,#ff2d78,#8b2fff,#00e5ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Make Noise?</span></h2>
+  <h2 id="cta-title">Ready to<br><span style="background:linear-gradient(135deg,var(--pink),var(--violet),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Make Noise?</span></h2>
   <p>First session is free. No credit card. No pitch deck. Just your music.</p>
   <button class="btn-p" style="font-size:17px;padding:22px 64px;">Start Free Session →</button>
 </div>
@@ -224,8 +254,24 @@ footer p{font-family:'Space Mono',monospace;font-size:11px;color:var(--muted);le
 
 <script>
 gsap.registerPlugin(ScrollTrigger);
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+let scrollY = 0;
+
+// ─── NAV TOGGLE (mobile) ────────────────────────────────────────────────────
+const navToggle = document.getElementById('nav-toggle');
+const navLinksEl = document.getElementById('nav-links');
+navToggle.addEventListener('click', () => {
+  const open = navLinksEl.classList.toggle('open');
+  navToggle.setAttribute('aria-expanded', open);
+});
+navLinksEl.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+  navLinksEl.classList.remove('open');
+  navToggle.setAttribute('aria-expanded', 'false');
+}));
 
 // ─── THREE.JS SCENE ───────────────────────────────────────────────────────────
+// Skipped entirely under prefers-reduced-motion: reduce (canvas is also hidden via CSS)
+if (!reduceMotion) {
 const canvas = document.getElementById('bg');
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
 renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
@@ -323,7 +369,6 @@ document.addEventListener('mousemove', e => {
 });
 
 // Scroll Y for 3D parallax
-let scrollY = 0;
 window.addEventListener('scroll', () => { scrollY = window.scrollY; });
 
 // Animate
@@ -377,17 +422,23 @@ window.addEventListener('resize', () => {
   camera.updateProjectionMatrix();
   renderer.setSize(innerWidth, innerHeight);
 });
+} // end if (!reduceMotion) — THREE.js scene
 
 // ─── GSAP SCROLL ANIMATIONS ───────────────────────────────────────────────────
+// Under prefers-reduced-motion, jump straight to the final visible state instead of animating.
 
 // Hero entrance
-const heroTl = gsap.timeline({ delay: 0.3 });
-heroTl
-  .to('#htag',     { opacity:1, y:0, duration:0.8, ease:'power3.out' })
-  .to('#htitle',   { opacity:1, y:0, duration:1,   ease:'power3.out' }, '-=0.4')
-  .to('#hsub',     { opacity:1, y:0, duration:0.8, ease:'power3.out' }, '-=0.5')
-  .to('#hbtns',    { opacity:1, y:0, duration:0.7, ease:'power3.out' }, '-=0.4')
-  .to('#scrollhint',{ opacity:1, duration:0.6 }, '-=0.2');
+if (reduceMotion) {
+  gsap.set(['#htag', '#htitle', '#hsub', '#hbtns', '#scrollhint'], { opacity: 1, y: 0 });
+} else {
+  const heroTl = gsap.timeline({ delay: 0.3 });
+  heroTl
+    .to('#htag',     { opacity:1, y:0, duration:0.8, ease:'power3.out' })
+    .to('#htitle',   { opacity:1, y:0, duration:1,   ease:'power3.out' }, '-=0.4')
+    .to('#hsub',     { opacity:1, y:0, duration:0.8, ease:'power3.out' }, '-=0.5')
+    .to('#hbtns',    { opacity:1, y:0, duration:0.7, ease:'power3.out' }, '-=0.4')
+    .to('#scrollhint',{ opacity:1, duration:0.6 }, '-=0.2');
+}
 
 // Nav
 window.addEventListener('scroll', () => {
@@ -395,32 +446,44 @@ window.addEventListener('scroll', () => {
 });
 
 // Features cards — stagger in on scroll
-gsap.utils.toArray('.feat').forEach((card, i) => {
-  gsap.from(card, {
-    scrollTrigger: { trigger: card, start: 'top 85%', toggleActions: 'play none none reverse' },
-    opacity: 0,
-    y: 50,
-    duration: 0.7,
-    delay: (i % 3) * 0.12,
-    ease: 'power3.out'
+if (reduceMotion) {
+  gsap.set('.feat', { opacity: 1, y: 0 });
+} else {
+  gsap.utils.toArray('.feat').forEach((card, i) => {
+    gsap.from(card, {
+      scrollTrigger: { trigger: card, start: 'top 85%', toggleActions: 'play none none reverse' },
+      opacity: 0,
+      y: 50,
+      duration: 0.7,
+      delay: (i % 3) * 0.12,
+      ease: 'power3.out'
+    });
   });
-});
+}
 
 // Showcase text parallax
-gsap.fromTo('.showcase-text', { y: 40, opacity: 0 }, {
-  scrollTrigger: { trigger: '.showcase', start: 'top 70%', toggleActions: 'play none none reverse' },
-  y: 0, opacity: 1, duration: 1, ease: 'power3.out'
-});
-gsap.fromTo('#showcase-vis', { y: 60, opacity: 0 }, {
-  scrollTrigger: { trigger: '.showcase', start: 'top 65%', toggleActions: 'play none none reverse' },
-  y: 0, opacity: 1, duration: 1, delay: 0.2, ease: 'power3.out'
-});
+if (reduceMotion) {
+  gsap.set(['.showcase-text', '#showcase-vis'], { opacity: 1, y: 0 });
+} else {
+  gsap.fromTo('.showcase-text', { y: 40, opacity: 0 }, {
+    scrollTrigger: { trigger: '.showcase', start: 'top 70%', toggleActions: 'play none none reverse' },
+    y: 0, opacity: 1, duration: 1, ease: 'power3.out'
+  });
+  gsap.fromTo('#showcase-vis', { y: 60, opacity: 0 }, {
+    scrollTrigger: { trigger: '.showcase', start: 'top 65%', toggleActions: 'play none none reverse' },
+    y: 0, opacity: 1, duration: 1, delay: 0.2, ease: 'power3.out'
+  });
+}
 
 // CTA title split letters feel
-gsap.fromTo('#cta-title', { y: 60, opacity: 0 }, {
-  scrollTrigger: { trigger: '#cta', start: 'top 75%', toggleActions: 'play none none reverse' },
-  y: 0, opacity: 1, duration: 1.1, ease: 'power4.out'
-});
+if (reduceMotion) {
+  gsap.set('#cta-title', { opacity: 1, y: 0 });
+} else {
+  gsap.fromTo('#cta-title', { y: 60, opacity: 0 }, {
+    scrollTrigger: { trigger: '#cta', start: 'top 75%', toggleActions: 'play none none reverse' },
+    y: 0, opacity: 1, duration: 1.1, ease: 'power4.out'
+  });
+}
 
 // Counter animation
 function animateCounter(el) {
@@ -428,7 +491,7 @@ function animateCounter(el) {
   const suffix = target >= 1000 ? '+' : (target === 98 ? 'ms' : '+');
   gsap.to({ val: 0 }, {
     val: target,
-    duration: 2,
+    duration: reduceMotion ? 0 : 2,
     ease: 'power2.out',
     onUpdate: function() {
       el.textContent = Math.round(this.targets()[0].val).toLocaleString() + suffix;
@@ -448,7 +511,7 @@ const doubled = [...items, ...items];
 doubled.forEach(txt => {
   const div = document.createElement('div');
   div.className = 'marquee-item';
-  div.innerHTML = `${txt} <span>✦</span>`;
+  div.innerHTML = `${txt} <span aria-hidden="true">✦</span>`;
   track.appendChild(div);
 });
 
