@@ -1,3 +1,3 @@
 # source clips (kept out of git; regenerate or re-upload if needed)
-kroma/*.mp4
-kroma/hero-keyframe.png
+*.mp4
+hero-keyframe.png
