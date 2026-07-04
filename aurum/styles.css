@@ -1,0 +1,258 @@
+/* ============================================================
+   AURUM & NOIR — Eclipse
+   off-black, gold, high-contrast serif. very few words.
+   ============================================================ */
+:root {
+  --noir: #0a0908;
+  --ivory: #ece5d6;
+  --gold: #c9a44c;
+  --gold-bright: #e8ca7d;
+  --dim: rgba(236, 229, 214, 0.55);
+  --hairline: rgba(201, 164, 76, 0.28);
+  --serif: "Cormorant Garamond", "Didot", "Bodoni MT", Georgia, serif;
+  --sans: "Inter", "Helvetica Neue", Arial, sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scrollbar-width: none; }
+html::-webkit-scrollbar { display: none; }
+
+body {
+  background: var(--noir);
+  color: var(--ivory);
+  font-family: var(--sans);
+  font-weight: 300;
+  overflow-x: hidden;
+}
+
+/* ---------- Masthead ---------- */
+.masthead {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 50;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 26px 34px;
+  font-size: 12px;
+  letter-spacing: 0.38em;
+  color: var(--ivory);
+  mix-blend-mode: difference;
+}
+.mast-left { font-family: var(--serif); font-size: 15px; letter-spacing: 0.3em; }
+.mast-left em { color: var(--gold); font-style: italic; }
+.mast-mid, .mast-right { font-size: 10px; color: var(--dim); }
+
+/* ---------- Scrub sections ---------- */
+.scrub { position: relative; height: 520vh; }
+#assembly { height: 560vh; }
+
+.scrub .sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  background: var(--noir);
+}
+.scrub canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+.veil {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(120% 90% at 50% 45%, transparent 50%, rgba(6, 5, 4, 0.72) 100%),
+    linear-gradient(180deg, rgba(6, 5, 4, 0.5) 0%, transparent 20%, transparent 74%, rgba(6, 5, 4, 0.8) 100%);
+}
+
+.overlay { position: relative; z-index: 10; text-align: center; }
+
+.reveal-line {
+  position: absolute;
+  left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  width: max-content;
+  max-width: 90vw;
+  opacity: 0;
+  will-change: opacity, transform;
+}
+.eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.6em;
+  color: var(--gold);
+  top: 38%;
+}
+.brand {
+  font-family: var(--serif);
+  font-weight: 300;
+  font-size: clamp(3.4rem, 12vw, 11rem);
+  letter-spacing: 0.52em;
+  text-indent: 0.52em; /* optically recenters tracked-out text */
+  line-height: 1;
+  color: var(--ivory);
+  text-shadow: 0 0 90px rgba(201, 164, 76, 0.25);
+}
+.whisper {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.4rem, 3.2vw, 2.6rem);
+  color: var(--ivory);
+  text-shadow: 0 4px 40px rgba(0, 0, 0, 0.8);
+}
+
+/* spec callouts — anchored, not centered copy */
+.spec {
+  font-family: var(--serif);
+  font-weight: 300;
+  font-size: clamp(2.6rem, 6vw, 5rem);
+  line-height: 1;
+  color: var(--gold-bright);
+  text-align: left;
+}
+.spec small {
+  font-size: 0.45em;
+  color: var(--gold);
+  margin-left: 2px;
+}
+.spec span {
+  display: block;
+  margin-top: 10px;
+  font-family: var(--sans);
+  font-size: 11px;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+.corner {
+  position: absolute;
+  z-index: 12;
+  font-size: 10px;
+  letter-spacing: 0.4em;
+  color: var(--dim);
+}
+.bl { bottom: 36px; left: 34px; }
+.br { bottom: 36px; right: 34px; font-family: var(--serif); font-size: 14px; color: var(--gold); }
+
+.scroll-hint {
+  position: absolute;
+  bottom: 32px; left: 50%;
+  transform: translateX(-50%);
+  z-index: 12;
+  font-size: 10px;
+  letter-spacing: 0.55em;
+  color: var(--dim);
+  animation: fadepulse 2.6s ease-in-out infinite;
+}
+@keyframes fadepulse { 0%, 100% { opacity: 0.35; } 50% { opacity: 0.9; } }
+
+/* ---------- Quiet chapters ---------- */
+.chapter {
+  min-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: 26px;
+  padding: 150px 8vw;
+  background: var(--noir);
+}
+.eyebrow-static {
+  font-family: var(--serif);
+  font-size: 15px;
+  letter-spacing: 0.4em;
+  color: var(--gold);
+}
+.eyebrow-static::after {
+  content: "";
+  display: block;
+  width: 44px;
+  height: 1px;
+  background: var(--hairline);
+  margin: 22px auto 0;
+}
+.chapter h2, .finale h2 {
+  font-family: var(--serif);
+  font-weight: 300;
+  font-size: clamp(2.4rem, 6vw, 5.2rem);
+  line-height: 1.08;
+  text-wrap: balance;
+}
+.prose {
+  max-width: 34em;
+  font-size: 15px;
+  line-height: 2;
+  letter-spacing: 0.02em;
+  color: var(--dim);
+}
+.prose.quiet { font-family: var(--serif); font-style: italic; font-size: 17px; color: var(--gold); }
+.price {
+  font-family: var(--serif);
+  font-weight: 300;
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  letter-spacing: 0.14em;
+  color: var(--gold-bright);
+}
+
+/* ---------- Finale ---------- */
+.finale {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: 48px;
+  padding: 140px 8vw 40px;
+  background:
+    radial-gradient(70% 55% at 50% 100%, rgba(201, 164, 76, 0.1), transparent 65%),
+    var(--noir);
+}
+.cta {
+  font-family: var(--sans);
+  font-weight: 400;
+  font-size: 12px;
+  letter-spacing: 0.42em;
+  text-decoration: none;
+  color: var(--gold-bright);
+  border: 1px solid var(--hairline);
+  padding: 22px 52px;
+  transition: background 0.5s, color 0.5s, border-color 0.5s;
+}
+.cta:hover { background: var(--gold); border-color: var(--gold); color: var(--noir); }
+.cta:focus-visible { outline: 2px solid var(--gold-bright); outline-offset: 4px; }
+.finale footer {
+  margin-top: auto;
+  padding-top: 70px;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  color: rgba(236, 229, 214, 0.3);
+}
+
+/* ---------- Reveals ---------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity 1.1s cubic-bezier(0.22, 1, 0.36, 1), transform 1.1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal.in { opacity: 1; transform: none; }
+
+/* ---------- Mobile ---------- */
+@media (max-width: 600px) {
+  .masthead { padding: 18px 18px; }
+  .mast-mid { display: none; }
+  .brand { letter-spacing: 0.3em !important; text-indent: 0.3em; }
+  .spec { font-size: 2rem; }
+  .bl { left: 18px; }
+  .br { right: 18px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .scroll-hint { animation: none; }
+  .reveal { transition-duration: 0.2s; }
+}

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AURUM &amp; NOIR — Eclipse</title>
+  <meta name="description" content="Eclipse. A tourbillon chronograph. Edition of 88." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='46' fill='%230a0908'/%3E%3Ccircle cx='50' cy='50' r='45' fill='none' stroke='%23c9a44c' stroke-width='3'/%3E%3Ccircle cx='50' cy='50' r='14' fill='%23c9a44c'/%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <nav class="masthead">
+    <span class="mast-left">AURUM <em>&amp;</em> NOIR</span>
+    <span class="mast-mid">GENÈVE</span>
+    <span class="mast-right">MMXXVI</span>
+  </nav>
+
+  <!-- ============ I · HERO — orbit scrub, name tracks in ============ -->
+  <section class="scrub" id="hero">
+    <div class="sticky">
+      <canvas></canvas>
+      <div class="veil"></div>
+      <div class="overlay">
+        <p class="reveal-line eyebrow" data-in="-0.3" data-out="0.22">THE TOURBILLON CHRONOGRAPH</p>
+        <h1 class="reveal-line brand" id="brand-track" data-in="-0.3" data-out="0.34">ECLIPSE</h1>
+        <p class="reveal-line whisper" data-in="0.42" data-out="0.68">Time, kept in the dark.</p>
+        <p class="reveal-line whisper" data-in="0.76" data-out="1.02">One revolution. Every hour. Forever.</p>
+      </div>
+      <div class="corner bl">AURUM &amp; NOIR</div>
+      <div class="corner br">I</div>
+      <div class="scroll-hint">SCROLL</div>
+    </div>
+  </section>
+
+  <!-- ============ II · CRAFTED IN DARKNESS ============ -->
+  <section class="chapter" id="story">
+    <p class="eyebrow-static reveal">II</p>
+    <h2 class="reveal">Crafted in darkness.</h2>
+    <p class="prose reveal">Eight years. One movement. Our watchmakers assemble the Eclipse
+    in a blacked-out atelier above Lac Léman, by the light of a single lamp —
+    the way the first tourbillons were regulated two centuries ago.</p>
+    <p class="prose reveal quiet">Nothing about this is efficient. That is the point.</p>
+  </section>
+
+  <!-- ============ III · MACRO — dial fly-through scrub ============ -->
+  <section class="scrub" id="macro">
+    <div class="sticky">
+      <canvas></canvas>
+      <div class="veil"></div>
+      <div class="overlay">
+        <p class="reveal-line whisper" data-in="-0.28" data-out="0.3">Grade-5 titanium, brushed by hand.</p>
+        <p class="reveal-line whisper" data-in="0.4" data-out="0.66">Indices engraved, then gilded.</p>
+        <p class="reveal-line whisper" data-in="0.74" data-out="1.02">The cage turns once a minute.</p>
+      </div>
+      <div class="corner bl">CALIBRE AN-88</div>
+      <div class="corner br">III</div>
+    </div>
+  </section>
+
+  <!-- ============ IV · ENGINEERING — exploded assembly scrub + specs ============ -->
+  <section class="scrub" id="assembly">
+    <div class="sticky">
+      <canvas></canvas>
+      <div class="veil"></div>
+      <div class="overlay">
+        <p class="reveal-line spec" style="left:24%; top:34%;" data-in="0.05" data-out="0.4">42<small>mm</small><span>grade-5 titanium</span></p>
+        <p class="reveal-line spec" style="left:76%; top:42%;" data-in="0.34" data-out="0.68">72<small>h</small><span>power reserve</span></p>
+        <p class="reveal-line spec" style="left:30%; top:66%;" data-in="0.62" data-out="0.96">217<span>components, one hand</span></p>
+      </div>
+      <div class="corner bl">ASSEMBLY</div>
+      <div class="corner br">IV</div>
+    </div>
+  </section>
+
+  <!-- ============ V · EDITION ============ -->
+  <section class="chapter" id="edition">
+    <p class="eyebrow-static reveal">V</p>
+    <h2 class="reveal">Edition of 88.</h2>
+    <p class="price reveal">$48,000</p>
+    <p class="prose reveal quiet">Each case back engraved by the watchmaker who closed it.
+    No two alike. None repeated.</p>
+  </section>
+
+  <!-- ============ VI · WAITLIST ============ -->
+  <section class="finale" id="waitlist">
+    <h2 class="reveal">The dark keeps its own list.</h2>
+    <a class="cta reveal" href="#hero">REQUEST A PRIVATE VIEWING</a>
+    <footer>AURUM &amp; NOIR · GENÈVE — sequences rendered with Kling 3.0 Turbo</footer>
+  </section>
+
+  <script src="lenis.min.js"></script>
+  <script>
+    window.Lenis = window.Lenis || class { constructor() {} raf() {} on() {} };
+
+    window.SCRUB_SECTIONS = [
+      { section: "#hero",     frameCount: 180, bg: "#0a0908", framePath: (i) => `frames/orbit/frame_${String(i).padStart(4, "0")}.jpg` },
+      { section: "#macro",    frameCount: 180, bg: "#0a0908", framePath: (i) => `frames/macro/frame_${String(i).padStart(4, "0")}.jpg` },
+      { section: "#assembly", frameCount: 180, bg: "#0a0908", framePath: (i) => `frames/assembly/frame_${String(i).padStart(4, "0")}.jpg` },
+    ];
+
+    // Brand name tracks in: letter-spacing tightens as the hero plays.
+    document.addEventListener("DOMContentLoaded", () => {
+      const hero = document.querySelector("#hero");
+      const brand = document.getElementById("brand-track");
+      function track() {
+        const r = hero.getBoundingClientRect();
+        const p = Math.min(Math.max(-r.top / (r.height - innerHeight), 0), 1);
+        const k = Math.min(p / 0.34, 1);
+        brand.style.letterSpacing = (0.52 - 0.38 * k) + "em";
+        requestAnimationFrame(track);
+      }
+      requestAnimationFrame(track);
+    });
+  </script>
+  <script src="scroll-cinematic.js"></script>
+</body>
+</html>
