@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KROMA ONE — Every Color. At Once.</title>
+  <meta name="description" content="KROMA ONE — the iridescent performance sneaker. Engineered iridescence, detonated color." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- Fixed chrome -->
+  <nav class="hud">
+    <span class="hud-brand">KROMA<span class="dim">/</span>ONE</span>
+    <span class="hud-mid">COLOR SYSTEM 01 · LIVE</span>
+    <span class="hud-right">SS26 DROP</span>
+  </nav>
+  <div class="progress"><div class="progress-fill" id="progress-fill"></div></div>
+
+  <!-- ============ 01 · HERO — 360° turntable scrub ============ -->
+  <section class="scrub" id="hero">
+    <div class="sticky">
+      <canvas></canvas>
+      <div class="vignette"></div>
+      <div class="overlay">
+        <h1 class="reveal-line" data-in="0.00" data-out="0.26"><span class="grad">KROMA ONE.</span></h1>
+        <h1 class="reveal-line" data-in="0.32" data-out="0.60">EVERY COLOR.<br/>AT ONCE.</h1>
+        <h1 class="reveal-line" data-in="0.68" data-out="1.00"><span class="grad">ENGINEERED<br/>IRIDESCENCE.</span></h1>
+      </div>
+      <div class="corner bl">KROMA ONE · 360°</div>
+      <div class="corner br">01 / 05</div>
+      <div class="scroll-hint">SCROLL ▾</div>
+    </div>
+  </section>
+
+  <!-- ============ 02 · THE BLAST — color explosion scrub ============ -->
+  <section class="scrub" id="burst">
+    <div class="sticky">
+      <canvas></canvas>
+      <div class="vignette"></div>
+      <div class="overlay">
+        <h1 class="reveal-line" data-in="0.02" data-out="0.32"><span class="grad">COLOR,<br/>DETONATED.</span></h1>
+        <h1 class="reveal-line" data-in="0.38" data-out="0.66">PIGMENT<br/>IN MOTION.</h1>
+        <h1 class="reveal-line" data-in="0.72" data-out="1.00"><span class="grad">WEAR<br/>THE BLAST.</span></h1>
+      </div>
+      <div class="corner bl">CHROMABURST™ SEQUENCE</div>
+      <div class="corner br">02 / 05</div>
+    </div>
+  </section>
+
+  <!-- ============ 03 · COLORWAYS ============ -->
+  <section class="panel" id="colorways">
+    <p class="kicker reveal">03 · COLORWAYS</p>
+    <h2 class="reveal">PICK YOUR <span class="grad">WAVELENGTH</span></h2>
+    <div class="colorway-grid">
+      <figure class="card reveal">
+        <img src="colorways/spectra.jpg" alt="KROMA ONE — Spectra colorway" loading="lazy" />
+        <figcaption><b>SPECTRA</b><span>magenta / ultraviolet</span><em>$180</em></figcaption>
+      </figure>
+      <figure class="card reveal">
+        <img src="colorways/reef.jpg" alt="KROMA ONE — Reef colorway" loading="lazy" />
+        <figcaption><b>REEF</b><span>cyan / emerald</span><em>$180</em></figcaption>
+      </figure>
+      <figure class="card reveal">
+        <img src="colorways/ember.jpg" alt="KROMA ONE — Ember colorway" loading="lazy" />
+        <figcaption><b>EMBER</b><span>molten orange / gold</span><em>$180</em></figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ============ 04 · SPEC / STATS ============ -->
+  <section class="panel dark" id="spec">
+    <p class="kicker reveal">04 · UNDER THE PRISM</p>
+    <h2 class="reveal">BUILT LIKE <span class="grad">LIGHT</span></h2>
+    <div class="stats">
+      <div class="stat reveal"><span class="stat-num" data-count="16.7" data-suffix="M">0</span><p>colors in the photonic weave</p></div>
+      <div class="stat reveal"><span class="stat-num" data-count="212" data-suffix="g">0</span><p>featherweight, size 9</p></div>
+      <div class="stat reveal"><span class="stat-num" data-count="87" data-suffix="%">0</span><p>energy return, PrismFoam™</p></div>
+      <div class="stat reveal"><span class="stat-num" data-count="360" data-suffix="°">0</span><p>of iridescent shift</p></div>
+    </div>
+    <div class="features">
+      <div class="feature reveal"><h3>PHOTONIC WEAVE</h3><p>A thread-level diffraction upper that refracts the full visible spectrum as you move. No dyes — just physics.</p></div>
+      <div class="feature reveal"><h3>PRISMFOAM™ SOLE</h3><p>Translucent energy-return foam, tinted mid-stride by the light passing through it.</p></div>
+      <div class="feature reveal"><h3>CHROMABURST™ LACING</h3><p>Pressure-mapped lockdown that blooms color at every anchor point under load.</p></div>
+    </div>
+  </section>
+
+  <!-- ============ 05 · CTA ============ -->
+  <section class="outro" id="drop">
+    <p class="kicker reveal">05 · THE DROP</p>
+    <h2 class="reveal">STEP INTO<br/><span class="grad">THE SPECTRUM</span></h2>
+    <p class="sub reveal">KROMA ONE releases worldwide 03·21. One shoe. Every color you'll ever need.</p>
+    <a class="cta reveal" href="#hero">GET NOTIFIED</a>
+    <footer>© 2026 KROMA · a color company — hero &amp; blast sequences generated with Kling 2.5 Turbo</footer>
+  </section>
+
+  <script src="lenis.min.js"></script>
+  <script>
+    // Native-scroll fallback if the vendored Lenis ever fails to load.
+    window.Lenis = window.Lenis || class { constructor() {} raf() {} on() {} };
+
+    window.SCRUB_SECTIONS = [
+      {
+        section: "#hero",
+        frameCount: 180, // updated after extraction
+        bg: "#050208",
+        framePath: (i) => `frames/spin/frame_${String(i).padStart(4, "0")}.jpg`,
+      },
+      {
+        section: "#burst",
+        frameCount: 180, // updated after extraction
+        bg: "#050208",
+        framePath: (i) => `frames/burst/frame_${String(i).padStart(4, "0")}.jpg`,
+      },
+    ];
+
+    // Top progress bar driven by overall page scroll.
+    document.addEventListener("DOMContentLoaded", () => {
+      const fill = document.getElementById("progress-fill");
+      const max = () => document.documentElement.scrollHeight - window.innerHeight;
+      const paint = () => { fill.style.width = `${(window.scrollY / max()) * 100}%`; };
+      window.addEventListener("scroll", paint, { passive: true });
+      paint();
+    });
+  </script>
+  <script src="scroll-cinematic.js"></script>
+</body>
+</html>
