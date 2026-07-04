@@ -48,7 +48,7 @@ function initScrub(cfg) {
       let o = 1 - Math.abs(p - mid) / half;
       o = Math.max(0, Math.min(1, o));
       el.style.opacity = o.toFixed(3);
-      el.style.transform = `translateY(${(1 - o) * 30}px)`;
+      el.style.transform = `translate(-50%, -50%) translateY(${(1 - o) * 30}px)`;
     }
   }
   window.addEventListener("resize", resize);
