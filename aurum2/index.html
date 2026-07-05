@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AURUM &amp; NOIR — Eclipse</title>
+  <meta name="description" content="Eclipse. A tourbillon chronograph directed by your scroll. Edition of 88." />
+  <meta name="theme-color" content="#0a0908" />
+  <meta property="og:title" content="AURUM &amp; NOIR — Eclipse" />
+  <meta property="og:description" content="Time, kept in the dark. Edition of 88 — $48,000." />
+  <meta property="og:image" content="poster-hero.jpg" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='46' fill='%230a0908'/%3E%3Ccircle cx='50' cy='50' r='45' fill='none' stroke='%23c9a44c' stroke-width='3'/%3E%3Ccircle cx='50' cy='50' r='14' fill='%23c9a44c'/%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- preloader curtain -->
+  <div id="loader" aria-hidden="true">
+    <p class="loader-brand">AURUM <em>&amp;</em> NOIR</p>
+    <div class="loader-track"><div id="loader-bar"></div></div>
+  </div>
+
+  <!-- fixed chrome -->
+  <div class="progress"><div id="progress-fill"></div></div>
+  <nav class="masthead">
+    <span class="mast-left">AURUM <em>&amp;</em> NOIR</span>
+    <span class="mast-right">GENÈVE · MMXXVI</span>
+  </nav>
+  <div id="section-marker" aria-hidden="true">I</div>
+  <div class="glow" aria-hidden="true"></div>
+
+  <!-- ============ I · HERO — immediate product, no empty intro ============ -->
+  <header class="hero" id="hero" data-mark="I">
+    <picture class="hero-media">
+      <source media="(max-width: 767px)" srcset="poster-hero-m.jpg" />
+      <img src="poster-hero.jpg" alt="The Eclipse tourbillon chronograph" fetchpriority="high" />
+    </picture>
+    <div class="hero-shade" aria-hidden="true"></div>
+    <div class="hero-copy">
+      <p class="hero-kicker">THE TOURBILLON CHRONOGRAPH · ÉDITION 88</p>
+      <h1>Darkness,<br /><span>engineered.</span></h1>
+      <p class="hero-sub">Eight years in a blacked-out atelier. One revolution, every minute, forever.</p>
+      <a class="cta magnetic" href="#waitlist">DISCOVER ECLIPSE</a>
+    </div>
+    <p class="scroll-hint" aria-hidden="true">SCROLL TO DIRECT</p>
+  </header>
+
+  <!-- ============ II · SIGNATURE — scroll directs the reveal ============ -->
+  <section class="scrub" id="signature" data-mark="II" style="--stage-h: 270vh; --stage-h-m: 200dvh;">
+    <div class="sticky">
+      <canvas aria-label="The Eclipse revealed by your scroll"></canvas>
+      <p class="ghost" aria-hidden="true">ECLIPSE</p>
+      <div class="veil"></div>
+      <div class="stage-copy">
+        <h2 class="line split serif-xl" data-in="0.28" data-out="0.75">
+          <span>E</span><span>C</span><span>L</span><span>I</span><span>P</span><span>S</span><span>E</span>
+        </h2>
+        <p class="line whisper" data-in="0.8" data-out="1.05">Directed entirely by your hand.</p>
+      </div>
+      <div class="corner bl">SIGNATURE REVEAL</div>
+      <div class="corner br">TOURBILLON AN-88</div>
+    </div>
+  </section>
+
+  <!-- ============ III · ANATOMY — dive into the dial ============ -->
+  <section class="scrub" id="anatomy" data-mark="III" style="--stage-h: 250vh; --stage-h-m: 190dvh;">
+    <div class="sticky">
+      <canvas aria-label="Macro flight across the dial"></canvas>
+      <p class="ghost" aria-hidden="true">ANATOMY</p>
+      <div class="veil"></div>
+      <div class="stage-copy">
+        <p class="line spec pos-a" data-in="0.06" data-out="0.36"><b>42<i>MM</i></b>HAND-FINISHED TITANIUM</p>
+        <p class="line spec pos-b" data-in="0.38" data-out="0.66"><b>72<i>H</i></b>POWER RESERVE</p>
+        <p class="line spec pos-c" data-in="0.68" data-out="0.98"><b>217</b>COMPONENTS · ONE HAND</p>
+      </div>
+      <div class="corner bl">PRODUCT ANATOMY</div>
+      <div class="corner br">SAPPHIRE · GRADE 5</div>
+    </div>
+  </section>
+
+  <!-- ============ IV · MOVEMENT — compact craftsmanship ============ -->
+  <section class="scrub" id="movement" data-mark="IV" style="--stage-h: 170vh; --stage-h-m: 150dvh;">
+    <div class="sticky">
+      <canvas aria-label="Inside the calibre AN-88 movement"></canvas>
+      <div class="veil"></div>
+      <div class="stage-copy">
+        <p class="line whisper" data-in="0.15" data-out="0.55">Assembled by the light of a single lamp.</p>
+        <p class="line whisper" data-in="0.6" data-out="1.0">Regulated the way it was two centuries ago.</p>
+      </div>
+      <div class="hairline h-top" aria-hidden="true"></div>
+      <div class="hairline h-bottom" aria-hidden="true"></div>
+      <div class="corner bl">CALIBRE AN-88</div>
+      <div class="corner br">GENÈVE</div>
+    </div>
+  </section>
+
+  <!-- ============ V · FINALE — pull back, brand behind, CTA forward ============ -->
+  <section class="scrub" id="finale" data-mark="V" style="--stage-h: 230vh; --stage-h-m: 180dvh;">
+    <div class="sticky">
+      <canvas aria-label="The Eclipse, complete"></canvas>
+      <p class="ghost ghost-brand" aria-hidden="true">AURUM &amp; NOIR</p>
+      <div class="veil"></div>
+      <div class="stage-copy">
+        <p class="line whisper" data-in="0.2" data-out="0.52">Edition of 88 · $48,000</p>
+        <div class="line finale-cta" data-in="0.55" data-out="1.1">
+          <p class="finale-head">The dark keeps its own list.</p>
+          <a class="cta magnetic" id="waitlist" href="mailto:atelier@aurumnoir.ch?subject=Eclipse%20%C3%89dition%2088%20%E2%80%94%20Private%20viewing">REQUEST A PRIVATE VIEWING</a>
+        </div>
+      </div>
+      <div class="corner bl">ÉDITION 88</div>
+      <div class="corner br">№ ——/88</div>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <span>AURUM &amp; NOIR · GENÈVE</span>
+    <span>SEQUENCES · KLING 3.0</span>
+    <span>MMXXVI</span>
+  </footer>
+
+  <script>
+    // Dedicated portrait sequence on phones for the signature stage;
+    // macro stages share the 16:9 sequences at mobile resolution.
+    var IS_MOBILE = matchMedia("(max-width: 767px)").matches;
+    var D = IS_MOBILE ? "frames-m" : "frames";
+    var pad = function (i) { return String(i).padStart(4, "0"); };
+    window.SCRUB_SECTIONS = [
+      { section: "#signature", eager: true, frameCount: 180, bg: "#0a0908",
+        framePath: function (i) { return (IS_MOBILE ? "frames-m/hero-portrait/" : "frames/signature/") + "frame_" + pad(i) + ".jpg"; } },
+      { section: "#anatomy", frameCount: 160, bg: "#0a0908",
+        framePath: function (i) { return D + "/anatomy/frame_" + pad(i) + ".jpg"; } },
+      { section: "#movement", frameCount: 120, bg: "#0a0908",
+        framePath: function (i) { return D + "/movement/frame_" + pad(i) + ".jpg"; } },
+      { section: "#finale", frameCount: 160, reverse: true, bg: "#0a0908",
+        framePath: function (i) { return D + "/anatomy/frame_" + pad(i) + ".jpg"; } },
+    ];
+  </script>
+  <script src="engine.js"></script>
+</body>
+</html>
