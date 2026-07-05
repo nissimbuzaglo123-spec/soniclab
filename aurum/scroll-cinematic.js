@@ -10,11 +10,28 @@ function initScrub(cfg) {
   const bgFill  = cfg.bg || "#0a0a12";
   const images = [];
   let firstDrawn = false;
-  for (let i = 0; i < cfg.frameCount; i++) {
-    const img = new Image();
-    img.src = cfg.framePath(i + 1);
-    img.onload = () => { if (!firstDrawn) { firstDrawn = true; draw(0); } };
-    images[i] = img;
+  let loadStarted = false;
+  function startLoading() {
+    if (loadStarted) return;
+    loadStarted = true;
+    for (let i = 0; i < cfg.frameCount; i++) {
+      const img = new Image();
+      img.src = cfg.framePath(i + 1);
+      img.onload = () => {
+        if (!firstDrawn) { firstDrawn = true; draw(0); }
+        else if (i === current) draw(i); // repaint if scroll got here first
+      };
+      images[i] = img;
+    }
+  }
+  if (cfg.eager) {
+    startLoading();
+  } else {
+    // Defer this section's frames until the user is within two screens of it.
+    const io = new IntersectionObserver((entries) => {
+      if (entries.some((e) => e.isIntersecting)) { startLoading(); io.disconnect(); }
+    }, { rootMargin: "200% 0px 200% 0px" });
+    io.observe(section);
   }
   let current = -1;
   function draw(index) {

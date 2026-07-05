@@ -52,6 +52,7 @@ body {
   position: sticky;
   top: 0;
   height: 100vh;
+  height: 100dvh; /* tracks the iOS Safari collapsing URL bar */
   width: 100%;
   overflow: hidden;
   display: grid;

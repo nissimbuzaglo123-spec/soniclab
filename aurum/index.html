@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AURUM &amp; NOIR — Eclipse</title>
   <meta name="description" content="Eclipse. A tourbillon chronograph. Edition of 88." />
+  <meta name="theme-color" content="#0a0908" />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='46' fill='%230a0908'/%3E%3Ccircle cx='50' cy='50' r='45' fill='none' stroke='%23c9a44c' stroke-width='3'/%3E%3Ccircle cx='50' cy='50' r='14' fill='%23c9a44c'/%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
@@ -95,10 +96,12 @@
   <script>
     window.Lenis = window.Lenis || class { constructor() {} raf() {} on() {} };
 
+    // Phones get 720px frames (~3x lighter); desktops get the 1600px set.
+    const FRAME_DIR = matchMedia("(max-width: 820px)").matches ? "frames-m" : "frames";
     window.SCRUB_SECTIONS = [
-      { section: "#hero",     frameCount: 160, bg: "#0a0908", framePath: (i) => `frames/orbit/frame_${String(i).padStart(4, "0")}.jpg` },
-      { section: "#macro",    frameCount: 160, bg: "#0a0908", framePath: (i) => `frames/macro/frame_${String(i).padStart(4, "0")}.jpg` },
-      { section: "#assembly", frameCount: 160, bg: "#0a0908", framePath: (i) => `frames/assembly/frame_${String(i).padStart(4, "0")}.jpg` },
+      { section: "#hero",     frameCount: 160, eager: true, bg: "#0a0908", framePath: (i) => `${FRAME_DIR}/orbit/frame_${String(i).padStart(4, "0")}.jpg` },
+      { section: "#macro",    frameCount: 160, bg: "#0a0908", framePath: (i) => `${FRAME_DIR}/macro/frame_${String(i).padStart(4, "0")}.jpg` },
+      { section: "#assembly", frameCount: 160, bg: "#0a0908", framePath: (i) => `${FRAME_DIR}/assembly/frame_${String(i).padStart(4, "0")}.jpg` },
     ];
 
     // Brand name tracks in: letter-spacing tightens as the hero plays.
