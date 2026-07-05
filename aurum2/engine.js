@@ -115,7 +115,8 @@
           });
         } else {
           el.style.opacity = o.toFixed(3);
-          el.style.transform = `translateY(${(1 - o) * 24}px)`;
+          // keep the centering translate — the fade must not wipe it
+          el.style.transform = `translate(-50%, -50%) translateY(${(1 - o) * 24}px)`;
         }
       }
 
