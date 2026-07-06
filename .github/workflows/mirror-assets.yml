@@ -1,7 +1,11 @@
 name: mirror-assets
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - 'claude/**'
+    paths:
+      - 'assets-manifest.json'
 
 permissions:
   contents: write
