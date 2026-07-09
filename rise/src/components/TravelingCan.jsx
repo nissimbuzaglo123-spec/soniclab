@@ -45,6 +45,8 @@ export default function TravelingCan() {
     const lerp = (a, b, t) => a + (b - a) * t
     const easeInOut = (t) => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2)
 
+    const smooth = (t) => t * t * (3 - 2 * t)
+
     const layout = () => {
       if (!heroRect) return
       const s = window.scrollY
@@ -54,11 +56,17 @@ export default function TravelingCan() {
       const restY = (innerHeight - showRect.height) / 2
       let x, y, hgt, rot
       if (s <= endScroll) {
-        // hero position in viewport coords at this scroll (moves with page),
-        // blended toward the showcase rest position
-        x = lerp(heroRect.left, showRect.left, p)
-        y = lerp(heroRect.top - s, restY, p)
         hgt = lerp(heroRect.height, showRect.height, p)
+        // detach quickly from the page flow so the can never scrolls
+        // off-screen mid-journey (critical on mobile, where the distance
+        // between the two anchors is several screens long) — it floats,
+        // hovering near mid-viewport, until it lands on the showcase anchor
+        const detach = smooth(Math.min(raw * 3, 1))
+        const hoverY = (innerHeight - hgt) / 2
+        const flowY = heroRect.top - s // natural in-flow position
+        const flightY = lerp(flowY, hoverY, detach)
+        y = lerp(flightY, restY, p)
+        x = lerp(heroRect.left, showRect.left, p)
         rot = lerp(-8, -6, p) + Math.sin(p * Math.PI) * 12 // gentle arc swing mid-flight
       } else {
         // glued to the showcase anchor, scrolling away with the section

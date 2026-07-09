@@ -4,27 +4,18 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { FLAVORS } from '../flavors.js'
 
 /**
- * Pinned flavor morph: scroll scrubs the can through three full spins
- * (scaleX = |cos θ| coin-spin illusion for photographic cans). The flavor
- * crossfades exactly on the edge-on frames at θ = 90°, 450°, 810°, so it
- * reads as ONE can changing color mid-spin. Background glow, giant word,
- * counter and copy all interpolate in sync with scroll progress.
+ * Pinned flavor morph: the can stays full-width and centered the whole way
+ * through; scroll drives ONE continuous opacity crossfade along the flavor
+ * chain (red → green → orange → purple), with only a gentle sway for life.
+ * Background glow, giant word, counter and copy interpolate in sync — the
+ * morph is a smooth blend, never a hard cut.
  */
 
-const TOTAL_DEG = 1080 // three rotations
-const SWAP_DEGS = [90, 450, 810] // flavor changes on these edge-on moments
 const hexToRgb = (hex) => {
   const n = parseInt(hex.slice(1), 16)
   return [(n >> 16) & 255, (n >> 8) & 255, n & 255]
 }
 const RGB = FLAVORS.map((f) => hexToRgb(f.color))
-
-// flavor index for a given angle
-const flavorAt = (deg) => {
-  let idx = 0
-  for (const s of SWAP_DEGS) if (deg >= s) idx++
-  return Math.min(idx, FLAVORS.length - 1)
-}
 
 export default function FlavorSpin() {
   const sectionRef = useRef(null)
@@ -44,44 +35,29 @@ export default function FlavorSpin() {
       const smooth = (t) => t * t * (3 - 2 * t) // smoothstep
 
       const render = (p) => {
-        const deg = p * TOTAL_DEG
-        const rad = (deg * Math.PI) / 180
-        const cos = Math.cos(rad)
-        // soften the thinning curve so the can never snaps to a hard sliver
-        const scaleX = Math.max(Math.pow(Math.abs(cos), 0.8), 0.12)
-        const wobble = Math.sin(rad) * 2
+        // one continuous crossfade chain across the whole pin:
+        // segment 0: red→green, 1: green→orange, 2: orange→purple
+        const seg = Math.min(Math.max(p, 0), 0.9999) * (FLAVORS.length - 1)
+        const fromIdx = Math.floor(seg)
+        const toIdx = Math.min(fromIdx + 1, FLAVORS.length - 1)
+        const blend = smooth(seg - fromIdx)
 
+        // the can stays full-width; just a slow, gentle sway for life
+        const sway = Math.sin(p * Math.PI * 3) * 2.2
+        const bob = Math.sin(p * Math.PI * 5) * 8
         if (spinRef.current) {
-          spinRef.current.style.transform = `scaleX(${scaleX}) rotate(${wobble}deg)`
+          spinRef.current.style.transform = `rotate(${sway}deg) translateY(${bob}px)`
         }
 
-        const idx = flavorAt(deg)
+        // active flavor = whichever side of the blend we're closer to
+        const idx = blend > 0.5 ? toIdx : fromIdx
 
-        // long eased crossfade (±48°) centered on each edge-on moment,
-        // so the color morph reads as one continuous blend — never a cut
-        const WINDOW = 48
-        let blend = 0
-        let fromIdx = idx
-        let toIdx = idx
-        for (let s = 0; s < SWAP_DEGS.length; s++) {
-          const d = deg - SWAP_DEGS[s]
-          if (Math.abs(d) < WINDOW) {
-            fromIdx = s
-            toIdx = s + 1
-            blend = smooth((d + WINDOW) / (WINDOW * 2))
-            break
-          }
-        }
-        if (fromIdx === toIdx) blend = 0
-
-        // can image opacities
+        // can image opacities — plain, continuous crossfade
         imgRefs.current.forEach((img, i) => {
           if (!img) return
           let o = 0
-          if (blend > 0) {
-            if (i === fromIdx) o = 1 - blend
-            else if (i === toIdx) o = blend
-          } else if (i === idx) o = 1
+          if (i === fromIdx) o = 1 - blend
+          else if (i === toIdx) o = blend
           img.style.opacity = o
         })
 

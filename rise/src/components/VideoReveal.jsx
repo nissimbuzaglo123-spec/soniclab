@@ -13,6 +13,8 @@ export default function VideoReveal() {
   const videoRef = useRef(null)
   const topLineRef = useRef(null)
   const bottomLineRef = useRef(null)
+  const eyebrowRef = useRef(null)
+  const captionRef = useRef(null)
 
   useEffect(() => {
     const isMobile = window.matchMedia('(max-width: 768px)').matches
@@ -44,8 +46,15 @@ export default function VideoReveal() {
           duration: 1,
         },
       )
-        .to(topLineRef.current, { yPercent: -160, opacity: 0.9, ease: 'power1.inOut', duration: 1 }, 0)
-        .to(bottomLineRef.current, { yPercent: 160, opacity: 0.9, ease: 'power1.inOut', duration: 1 }, 0)
+        .to(topLineRef.current, { yPercent: -160, ease: 'power1.inOut', duration: 1 }, 0)
+        .to(bottomLineRef.current, { yPercent: 160, ease: 'power1.inOut', duration: 1 }, 0)
+        // all captions fade out completely as the video reaches full-bleed —
+        // nothing stays written over the footage
+        .to(
+          [topLineRef.current, bottomLineRef.current, eyebrowRef.current, captionRef.current],
+          { opacity: 0, ease: 'power1.in', duration: 0.45 },
+          0.5,
+        )
         .to({}, { duration: 0.35 }) // hold full-bleed before releasing the pin
     }, sectionRef)
 
@@ -71,7 +80,7 @@ export default function VideoReveal() {
     <section id="reveal" ref={sectionRef} className="relative h-[100svh] overflow-hidden">
       {/* split headline — top half above the frame, bottom half below */}
       <div className="absolute inset-0 z-20 flex flex-col items-center justify-center pointer-events-none">
-        <p className="eyebrow mb-4">Shot on Seedance — Slow Motion</p>
+        <p ref={eyebrowRef} className="eyebrow mb-4">Shot on Seedance — Slow Motion</p>
         <h2
           ref={topLineRef}
           className="font-display text-[clamp(3rem,10vw,8.5rem)] leading-none text-white will-change-transform"
@@ -103,7 +112,9 @@ export default function VideoReveal() {
           preload="none"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#07050a]/60 via-transparent to-[#07050a]/60" />
-        <p className="absolute bottom-5 left-6 eyebrow">RISE — The Film · Cold. Loud. Alive.</p>
+        <p ref={captionRef} className="absolute bottom-5 left-6 eyebrow">
+          RISE — The Film · Cold. Loud. Alive.
+        </p>
       </div>
     </section>
   )
