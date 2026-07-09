@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { FLAVORS } from '../flavors.js'
+import { INTRO } from './Loader.jsx'
 
 const berry = FLAVORS[0]
 
@@ -88,7 +89,7 @@ export default function TravelingCan() {
     gsap.fromTo(
       floatRef.current,
       { y: 90, opacity: 0 },
-      { y: 0, opacity: 1, duration: 1.4, ease: 'power3.out', delay: 0.35 },
+      { y: 0, opacity: 1, duration: 1.4, ease: 'power3.out', delay: INTRO + 0.35 },
     )
 
     gsap.ticker.add(layout)

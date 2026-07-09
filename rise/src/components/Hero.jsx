@@ -3,6 +3,7 @@ import gsap from 'gsap'
 import { motion } from 'framer-motion'
 import { asset } from '../flavors.js'
 import Bolt from './Bolt.jsx'
+import { INTRO } from './Loader.jsx'
 
 export default function Hero() {
   const sectionRef = useRef(null)
@@ -14,7 +15,7 @@ export default function Hero() {
       gsap.fromTo(
         '.hero-stagger',
         { y: 42, opacity: 0 },
-        { y: 0, opacity: 1, duration: 1.1, stagger: 0.12, ease: 'power3.out', delay: 0.15 },
+        { y: 0, opacity: 1, duration: 1.1, stagger: 0.12, ease: 'power3.out', delay: INTRO + 0.2 },
       )
 
       // fruits parallax at differing depths (the can itself lives in TravelingCan)
@@ -166,7 +167,7 @@ export default function Hero() {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 1.6, duration: 1 }}
+        transition={{ delay: INTRO + 1.5, duration: 1 }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-3 z-10"
       >
         <span className="eyebrow">Scroll</span>

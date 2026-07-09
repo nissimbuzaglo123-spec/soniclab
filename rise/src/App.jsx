@@ -5,6 +5,7 @@ import Lenis from 'lenis'
 
 import Nav from './components/Nav.jsx'
 import Cursor from './components/Cursor.jsx'
+import Loader from './components/Loader.jsx'
 import TravelingCan from './components/TravelingCan.jsx'
 
 // three.js lives in its own lazy chunk so first paint doesn't wait for it
@@ -58,6 +59,7 @@ export default function App() {
 
   return (
     <>
+      <Loader />
       {finePointer && <Cursor />}
       <Suspense fallback={null}>
         <Particles />
