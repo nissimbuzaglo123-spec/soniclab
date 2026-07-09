@@ -143,11 +143,12 @@ export default function FlavorSpin() {
           </p>
         </div>
 
-        {/* spinning can — all four stacked, opacity-driven */}
-        <div className="justify-self-center" style={{ perspective: '1000px' }}>
+        {/* spinning can — all four stacked, opacity-driven; raised and smaller
+            on mobile so it never touches the copy block at the bottom */}
+        <div className="justify-self-center -translate-y-[11vh] md:translate-y-0" style={{ perspective: '1000px' }}>
           <div
             ref={spinRef}
-            className="relative h-[46vh] md:h-[64vh] aspect-[490/1100] will-change-transform"
+            className="relative h-[36vh] md:h-[64vh] aspect-[490/1100] will-change-transform"
           >
             {FLAVORS.map((f, i) => (
               <img
