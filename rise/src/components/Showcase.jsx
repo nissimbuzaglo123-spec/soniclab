@@ -1,8 +1,5 @@
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
-import { FLAVORS } from '../flavors.js'
-
-const berry = FLAVORS[0]
 
 const FEATURES = [
   {
@@ -24,28 +21,10 @@ const FEATURES = [
 
 export default function Showcase() {
   const sectionRef = useRef(null)
-  const canRef = useRef(null)
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // can travels in from the right and settles tilted, scrubbed to scroll
-      gsap.fromTo(
-        canRef.current,
-        { xPercent: 30, rotate: 14, yPercent: 12 },
-        {
-          xPercent: 0,
-          rotate: -6,
-          yPercent: -6,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: 'top bottom',
-            end: 'bottom top',
-            scrub: 0.7,
-          },
-        },
-      )
-      // headline + features reveal
+      // headline + features reveal (the can arrives via TravelingCan)
       gsap.utils.toArray('.show-reveal').forEach((el, i) => {
         gsap.fromTo(
           el,
@@ -79,22 +58,8 @@ export default function Showcase() {
 
       <div className="relative z-10 max-w-[1300px] mx-auto grid md:grid-cols-2 gap-14 md:gap-8 items-center">
         <div className="relative order-2 md:order-1 flex justify-center">
-          <div ref={canRef} className="relative will-change-transform">
-            <img
-              src={berry.img}
-              srcSet={`${berry.imgSm} 490w, ${berry.img} 900w`}
-              sizes="(max-width: 768px) 52vw, 26vw"
-              alt="RISE can — built like nothing else"
-              className="h-[48vh] md:h-[64vh] w-auto drop-shadow-[0_60px_80px_rgba(0,0,0,0.7)]"
-              loading="lazy"
-              width="490"
-              height="1100"
-            />
-            <div
-              className="absolute left-1/2 -bottom-10 h-12 w-2/3 -translate-x-1/2 rounded-[100%] blur-3xl"
-              style={{ background: berry.glow }}
-            />
-          </div>
+          {/* landing anchor for the traveling can */}
+          <div id="can-anchor-showcase" className="h-[48vh] md:h-[64vh] aspect-[490/1100]" />
         </div>
 
         <div className="order-1 md:order-2">

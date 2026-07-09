@@ -1,15 +1,11 @@
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { motion } from 'framer-motion'
-import { FLAVORS, asset } from '../flavors.js'
+import { asset } from '../flavors.js'
 import Bolt from './Bolt.jsx'
-
-const berry = FLAVORS[0]
 
 export default function Hero() {
   const sectionRef = useRef(null)
-  const canRef = useRef(null)
-  const canWrapRef = useRef(null)
   const fruitsRef = useRef(null)
 
   useEffect(() => {
@@ -20,35 +16,8 @@ export default function Hero() {
         { y: 42, opacity: 0 },
         { y: 0, opacity: 1, duration: 1.1, stagger: 0.12, ease: 'power3.out', delay: 0.15 },
       )
-      gsap.fromTo(
-        canWrapRef.current,
-        { y: 90, opacity: 0, rotate: -14 },
-        { y: 0, opacity: 1, rotate: -8, duration: 1.4, ease: 'power3.out', delay: 0.35 },
-      )
 
-      // idle hover float
-      gsap.to(canWrapRef.current, {
-        y: '-=22',
-        rotate: '-=3',
-        duration: 3.2,
-        yoyo: true,
-        repeat: -1,
-        ease: 'sine.inOut',
-        delay: 1.8,
-      })
-
-      // scroll: can drifts up + tilts as hero leaves, fruits parallax at differing depths
-      gsap.to(canWrapRef.current, {
-        yPercent: -36,
-        rotate: 6,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top top',
-          end: 'bottom top',
-          scrub: 0.6,
-        },
-      })
+      // fruits parallax at differing depths (the can itself lives in TravelingCan)
       gsap.utils.toArray('.hero-fruit').forEach((el) => {
         gsap.to(el, {
           yPercent: -140 * parseFloat(el.dataset.depth || 0.5),
@@ -63,17 +32,13 @@ export default function Hero() {
       })
     }, sectionRef)
 
-    // mouse tracking (desktop): can tilt + fruit parallax + moving light
+    // mouse tracking (desktop): fruit parallax + moving light
     const fine = window.matchMedia('(pointer: fine)').matches
     let onMove
     if (fine) {
-      const xToCan = gsap.quickTo(canRef.current, 'rotationY', { duration: 0.7, ease: 'power2.out' })
-      const yToCan = gsap.quickTo(canRef.current, 'rotationX', { duration: 0.7, ease: 'power2.out' })
       onMove = (e) => {
         const nx = (e.clientX / innerWidth) * 2 - 1
         const ny = (e.clientY / innerHeight) * 2 - 1
-        xToCan(nx * 10)
-        yToCan(-ny * 6)
         if (fruitsRef.current) {
           for (const el of fruitsRef.current.querySelectorAll('.hero-fruit')) {
             const d = parseFloat(el.dataset.depth || 0.5)
@@ -189,28 +154,11 @@ export default function Hero() {
             height="68"
           />
 
+          {/* the can itself is rendered by TravelingCan and lands on this anchor */}
           <div
-            ref={canWrapRef}
-            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 will-change-transform"
-          >
-            <div ref={canRef} style={{ transformStyle: 'preserve-3d' }}>
-              <img
-                src={berry.img}
-                srcSet={`${berry.imgSm} 490w, ${berry.img} 900w`}
-                sizes="(max-width: 768px) 40vw, 24vw"
-                alt="RISE Strawberry energy drink can"
-                className="h-[44vh] md:h-[62vh] w-auto drop-shadow-[0_50px_60px_rgba(0,0,0,0.65)]"
-                fetchPriority="high"
-                width="490"
-                height="1100"
-              />
-            </div>
-            {/* glow under the can */}
-            <div
-              className="absolute left-1/2 -bottom-8 h-10 w-3/4 -translate-x-1/2 rounded-[100%] blur-2xl"
-              style={{ background: berry.glow }}
-            />
-          </div>
+            id="can-anchor-hero"
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[44vh] md:h-[62vh] aspect-[490/1100]"
+          />
         </div>
       </div>
 

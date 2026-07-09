@@ -41,12 +41,15 @@ export default function FlavorSpin() {
     const ctx = gsap.context(() => {
       let lastIdx = -1
 
+      const smooth = (t) => t * t * (3 - 2 * t) // smoothstep
+
       const render = (p) => {
         const deg = p * TOTAL_DEG
         const rad = (deg * Math.PI) / 180
         const cos = Math.cos(rad)
-        const scaleX = Math.max(Math.abs(cos), 0.06)
-        const wobble = Math.sin(rad) * 2.5
+        // soften the thinning curve so the can never snaps to a hard sliver
+        const scaleX = Math.max(Math.pow(Math.abs(cos), 0.8), 0.12)
+        const wobble = Math.sin(rad) * 2
 
         if (spinRef.current) {
           spinRef.current.style.transform = `scaleX(${scaleX}) rotate(${wobble}deg)`
@@ -54,16 +57,18 @@ export default function FlavorSpin() {
 
         const idx = flavorAt(deg)
 
-        // crossfade near each swap point (±26°) so colors blend through the sliver
+        // long eased crossfade (±48°) centered on each edge-on moment,
+        // so the color morph reads as one continuous blend — never a cut
+        const WINDOW = 48
         let blend = 0
         let fromIdx = idx
         let toIdx = idx
         for (let s = 0; s < SWAP_DEGS.length; s++) {
           const d = deg - SWAP_DEGS[s]
-          if (Math.abs(d) < 26) {
+          if (Math.abs(d) < WINDOW) {
             fromIdx = s
             toIdx = s + 1
-            blend = (d + 26) / 52
+            blend = smooth((d + WINDOW) / (WINDOW * 2))
             break
           }
         }
@@ -120,9 +125,9 @@ export default function FlavorSpin() {
       ScrollTrigger.create({
         trigger: sectionRef.current,
         start: 'top top',
-        end: '+=300%',
+        end: '+=340%',
         pin: true,
-        scrub: 0.5,
+        scrub: 1.2,
         anticipatePin: 1,
         onUpdate: (self) => render(self.progress),
       })

@@ -64,14 +64,14 @@ export default function Lifestyle() {
           <div>
             <p className="life-reveal eyebrow mb-4">In the Wild</p>
             <h2 className="life-reveal font-display text-[clamp(2.6rem,7vw,5.5rem)] leading-[0.95] text-white">
-              MADE FOR
+              PROOF IT
               <br />
-              REAL MORNINGS<span className="text-[#3b82f6]">.</span>
+              EXISTS<span className="text-[var(--accent)]">.</span>
             </h2>
           </div>
           <p className="life-reveal max-w-xs text-sm text-[var(--muted)] leading-relaxed">
-            Rooftop, 6:04 AM. No script, no crew call — just the first cold sip after the last
-            hard mile.
+            Golden hour, one take, no script — a real sip and the can held up to camera.
+            The last thing you see before you decide.
           </p>
         </div>
 
@@ -82,14 +82,14 @@ export default function Lifestyle() {
           <video
             ref={videoRef}
             className="w-full aspect-video object-cover"
-            src={asset('rooftop-lifestyle.mp4')}
-            poster={asset('rooftop-lifestyle-poster.jpg')}
+            src={asset('ad-proof.mp4')}
+            poster={asset('ad-proof-poster.jpg')}
             muted={muted}
             loop
             playsInline
             preload="none"
           />
-          <p className="absolute bottom-5 left-6 eyebrow">RISE — The Rooftop Cut</p>
+          <p className="absolute bottom-5 left-6 eyebrow">RISE — The Ad Cut · Strawberry</p>
           <button
             data-hover
             onClick={() => {
