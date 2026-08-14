@@ -1,0 +1,510 @@
+<title>אוטומציית הלידים של נשק פוינט</title>
+
+<style>
+  :root {
+    --ground:      #f7f6f4;
+    --surface:     #ffffff;
+    --surface-alt: #efede8;
+    --ink:         #1c1d1f;
+    --steel:       #5b616a;
+    --line:        #dcd8d1;
+    --brass:       #8f6a1f;
+    --brass-soft:  #f0e6cf;
+    --done:        #2c6e49;
+    --done-soft:   #dcece2;
+    --wait:        #8a5a12;
+    --wait-soft:   #f6e8cf;
+
+    --sans: system-ui, -apple-system, "Segoe UI", "Noto Sans Hebrew", "Arial Hebrew", Arial, sans-serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground:      #141517;
+      --surface:     #1d1f22;
+      --surface-alt: #26282c;
+      --ink:         #e9e7e3;
+      --steel:       #9aa0a8;
+      --line:        #33363b;
+      --brass:       #cba75a;
+      --brass-soft:  #3a3222;
+      --done:        #6bbd90;
+      --done-soft:   #1f3329;
+      --wait:        #d8a955;
+      --wait-soft:   #362c1a;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground:      #141517;
+    --surface:     #1d1f22;
+    --surface-alt: #26282c;
+    --ink:         #e9e7e3;
+    --steel:       #9aa0a8;
+    --line:        #33363b;
+    --brass:       #cba75a;
+    --brass-soft:  #3a3222;
+    --done:        #6bbd90;
+    --done-soft:   #1f3329;
+    --wait:        #d8a955;
+    --wait-soft:   #362c1a;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.65;
+    margin: 0;
+    padding: 0;
+  }
+
+  .page {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+
+  [dir="rtl"] { direction: rtl; }
+
+  /* ---------- masthead ---------- */
+
+  .masthead { display: flex; flex-direction: column; gap: 10px; margin-bottom: 40px; }
+
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--brass);
+  }
+
+  h1 {
+    font-size: clamp(30px, 5vw, 42px);
+    line-height: 1.15;
+    font-weight: 700;
+    letter-spacing: -.02em;
+    text-wrap: balance;
+    margin: 0;
+  }
+
+  .standfirst {
+    font-size: 17px;
+    color: var(--steel);
+    max-width: 58ch;
+    margin: 0;
+  }
+
+  /* ---------- flow strip ---------- */
+
+  .flow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    padding: 18px 20px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    margin-bottom: 40px;
+  }
+
+  .flow-step {
+    font-size: 13.5px;
+    font-weight: 600;
+    padding: 5px 11px;
+    border-radius: 6px;
+    background: var(--surface-alt);
+    white-space: nowrap;
+  }
+
+  .flow-arrow { color: var(--brass); font-size: 15px; }
+
+  /* ---------- ledger ---------- */
+
+  .ledger {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 52px;
+  }
+
+  .ledger-cell { background: var(--surface); padding: 18px 20px; }
+
+  .ledger-num {
+    font-family: var(--mono);
+    font-size: 28px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.1;
+    display: block;
+  }
+
+  .ledger-cell.is-done .ledger-num { color: var(--done); }
+  .ledger-cell.is-wait .ledger-num { color: var(--wait); }
+
+  .ledger-label { font-size: 14px; color: var(--steel); }
+
+  /* ---------- steps ---------- */
+
+  .step {
+    display: grid;
+    grid-template-columns: 44px 1fr;
+    gap: 20px;
+    padding-bottom: 40px;
+    margin-bottom: 40px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .step:last-of-type { border-bottom: 0; }
+
+  .step-num {
+    font-family: var(--mono);
+    font-size: 14px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    color: var(--brass);
+    padding-top: 5px;
+    border-inline-start: 2px solid var(--brass-soft);
+    padding-inline-start: 12px;
+  }
+
+  .step-body { min-width: 0; }
+
+  .step-head {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+
+  h2 {
+    font-size: 21px;
+    font-weight: 700;
+    letter-spacing: -.01em;
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  .chip {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    padding: 3px 9px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+
+  .chip.done { background: var(--done-soft); color: var(--done); }
+  .chip.wait { background: var(--wait-soft); color: var(--wait); }
+
+  .meta {
+    font-size: 13.5px;
+    color: var(--steel);
+    margin: 0 0 14px;
+  }
+
+  .step-body p { margin: 0 0 14px; max-width: 62ch; }
+
+  .step-body ul, .step-body ol { margin: 0 0 14px; padding-inline-start: 22px; max-width: 62ch; }
+  .step-body li { margin-bottom: 7px; }
+
+  /* ---------- data blocks ---------- */
+
+  .block {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    margin: 0 0 16px;
+    overflow: hidden;
+  }
+
+  .block-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--steel);
+    padding: 9px 14px;
+    background: var(--surface-alt);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .block-value {
+    font-family: var(--mono);
+    font-size: 13.5px;
+    line-height: 1.7;
+    padding: 13px 14px;
+    margin: 0;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .block-value.ltr { direction: ltr; text-align: left; }
+
+  code {
+    font-family: var(--mono);
+    font-size: .89em;
+    background: var(--surface-alt);
+    padding: 2px 5px;
+    border-radius: 4px;
+    unicode-bidi: embed;
+  }
+
+  a { color: var(--brass); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+  a:focus-visible { outline: 2px solid var(--brass); outline-offset: 3px; border-radius: 2px; }
+
+  /* ---------- aside ---------- */
+
+  .aside {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-inline-start: 3px solid var(--brass);
+    border-radius: 8px;
+    padding: 20px 22px;
+    margin-top: 48px;
+  }
+
+  .aside h3 { font-size: 17px; margin: 0 0 8px; font-weight: 700; }
+  .aside p { margin: 0 0 12px; color: var(--steel); max-width: 62ch; }
+  .aside p:last-child { margin-bottom: 0; }
+
+  .footnote {
+    margin-top: 44px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+    font-size: 13.5px;
+    color: var(--steel);
+  }
+</style>
+
+<div class="page" dir="rtl">
+
+  <header class="masthead">
+    <span class="eyebrow">n8n · Workflow SxSwNv00</span>
+    <h1>אוטומציית הלידים של נשק פוינט</h1>
+    <p class="standfirst">
+      לקוח ממלא טופס באתר, ותוך שניות אתה מקבל הודעת וואטסאפ עם כל הפרטים שלו — והוא מקבל הודעת תודה אוטומטית.
+      ה־workflow בנוי ונבדק. מה שנשאר הוא שלושה חיבורים חיצוניים שדורשים את החשבונות שלך.
+    </p>
+  </header>
+
+  <div class="flow">
+    <span class="flow-step">טופס באתר</span>
+    <span class="flow-arrow">←</span>
+    <span class="flow-step">סידור הפרטים</span>
+    <span class="flow-arrow">←</span>
+    <span class="flow-step">וואטסאפ אליך</span>
+    <span class="flow-arrow">←</span>
+    <span class="flow-step">וואטסאפ ללקוח</span>
+    <span class="flow-arrow">←</span>
+    <span class="flow-step">אישור בטופס</span>
+  </div>
+
+  <div class="ledger">
+    <div class="ledger-cell is-done">
+      <span class="ledger-num">5</span>
+      <span class="ledger-label">שלבים בנויים ומחוברים ב־n8n</span>
+    </div>
+    <div class="ledger-cell is-done">
+      <span class="ledger-num">1</span>
+      <span class="ledger-label">הרצת בדיקה שעברה בהצלחה</span>
+    </div>
+    <div class="ledger-cell is-wait">
+      <span class="ledger-num">3</span>
+      <span class="ledger-label">חיבורים שנשארו אצלך</span>
+    </div>
+  </div>
+
+  <!-- ============ 1 ============ -->
+  <section class="step">
+    <div class="step-num">01</div>
+    <div class="step-body">
+      <div class="step-head">
+        <h2>חשבון וואטסאפ עסקי אצל Meta</h2>
+        <span class="chip wait">אצלך</span>
+      </div>
+      <p class="meta">כשעה עבודה · חינם · דורש חשבון פייסבוק עסקי</p>
+
+      <p>
+        זה החלק הכבד היחיד, וכדאי שתדע אותו מראש: שליחת וואטסאפ אוטומטית דורשת
+        <strong>WhatsApp Business Cloud API</strong> של Meta. אפליקציית וואטסאפ עסקי מהטלפון לא מספיקה —
+        היא לא יודעת לקבל פקודות ממערכת חיצונית.
+      </p>
+
+      <ol>
+        <li>נכנסים ל־<a href="https://business.facebook.com" target="_blank" rel="noopener">business.facebook.com</a> ופותחים חשבון עסקי לנשק פוינט.</li>
+        <li>ב־<a href="https://developers.facebook.com" target="_blank" rel="noopener">developers.facebook.com</a> יוצרים אפליקציה ומוסיפים לה את המוצר WhatsApp.</li>
+        <li>מוסיפים מספר טלפון עסקי. חשוב: מספר שאינו רשום כרגע באפליקציית וואטסאפ רגילה.</li>
+        <li>שומרים שני ערכים שתצטרך בשלב 3: <code>Phone Number ID</code> ו־<code>Permanent Access Token</code>.</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ============ 2 ============ -->
+  <section class="step">
+    <div class="step-num">02</div>
+    <div class="step-body">
+      <div class="step-head">
+        <h2>אישור שתי תבניות הודעה</h2>
+        <span class="chip wait">אצלך</span>
+      </div>
+      <p class="meta">10 דקות הגשה · אישור תוך מספר שעות עד יום</p>
+
+      <p>
+        Meta לא מרשה לשלוח טקסט חופשי ללקוח שלא כתב לך קודם — חייבים תבנית מאושרת מראש.
+        בניתי את האוטומציה כך שכל תבנית צריכה <strong>משתנה אחד בלבד</strong>, הכי פשוט שאפשר לאשר.
+        מגישים אותן ב־WhatsApp Manager תחת Message Templates, בקטגוריה <code>Utility</code> ובשפה עברית.
+      </p>
+
+      <div class="block">
+        <div class="block-label">תבנית א · שם: new_lead_alert · ההתראה אליך</div>
+        <p class="block-value">🔔 ליד חדש בנשק פוינט: {{1}}</p>
+      </div>
+
+      <div class="block">
+        <div class="block-label">תבנית ב · שם: lead_thank_you · התודה ללקוח</div>
+        <p class="block-value">שלום {{1}}, תודה על פנייתך לנשק פוינט. קיבלנו את הפרטים ונחזור אליך בהקדם.</p>
+      </div>
+
+      <p>
+        Meta תבקש ערך לדוגמה לכל משתנה. אלה הערכים שהאוטומציה באמת שולחת, אז תן בדיוק אותם:
+      </p>
+
+      <div class="block">
+        <div class="block-label">ערך לדוגמה · תבנית א</div>
+        <p class="block-value">שם: דוד כהן | טלפון: 972501234567 | מעוניין ב: חידוש רישיון | מקור: אתר | התקבל: 14/08/2026 17:28</p>
+      </div>
+
+      <div class="block">
+        <div class="block-label">ערך לדוגמה · תבנית ב</div>
+        <p class="block-value">דוד כהן</p>
+      </div>
+
+      <p>
+        שים לב לפרט קטן שמפיל הרבה אנשים: Meta פוסלת ערכי משתנה שמכילים ירידת שורה או רצף רווחים.
+        לכן פרטי הליד מופרדים בקו אנכי <code>|</code> ולא בשורות נפרדות. אל תשנה את זה.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ 3 ============ -->
+  <section class="step">
+    <div class="step-num">03</div>
+    <div class="step-body">
+      <div class="step-head">
+        <h2>חיבור הפרטים ב־n8n</h2>
+        <span class="chip wait">אצלך · 5 דקות</span>
+      </div>
+      <p class="meta">אחרי שהתבניות אושרו</p>
+
+      <p>
+        נכנסים ל־<a href="https://surgestudio7.app.n8n.cloud/workflow/SxSwNv00iqqGnhex" target="_blank" rel="noopener">ה־workflow</a>.
+        בשני צמתי הוואטסאפ יש כרגע שדות מסומנים כממתינים למילוי — לוחצים על כל צומת וממלאים:
+      </p>
+
+      <ul>
+        <li><strong>Credential</strong> — יוצרים אחד חדש מסוג WhatsApp ומדביקים את ה־Access Token משלב 1.</li>
+        <li><strong>Phone Number ID</strong> — הערך משלב 1, זהה בשני הצמתים.</li>
+        <li><strong>Template</strong> — בצומת ההתראה בוחרים <code>new_lead_alert</code>, בצומת התודה <code>lead_thank_you</code>.</li>
+        <li><strong>Recipient Phone Number</strong> — רק בצומת ההתראה: המספר שלך בפורמט בינלאומי, למשל <code>972501234567</code>. בצומת התודה השדה כבר ממולא אוטומטית במספר של הלקוח.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ 4 ============ -->
+  <section class="step">
+    <div class="step-num">04</div>
+    <div class="step-body">
+      <div class="step-head">
+        <h2>חיבור הטופס באתר</h2>
+        <span class="chip wait">אצלך או אצל בונה האתר</span>
+      </div>
+      <p class="meta">אפשר לעשות במקביל לשלבים 1–3</p>
+
+      <p>
+        הטופס באתר צריך לשלוח את הפרטים לכתובת הזו בשיטת POST:
+      </p>
+
+      <div class="block">
+        <div class="block-label">Production URL</div>
+        <p class="block-value ltr">https://surgestudio7.app.n8n.cloud/webhook/neshek-point-lead</p>
+      </div>
+
+      <p>
+        וארבעת השדות שהוא צריך לשלוח:
+      </p>
+
+      <div class="block">
+        <div class="block-label">שדות הטופס</div>
+        <p class="block-value ltr">name · phone · message · source</p>
+      </div>
+
+      <p>
+        הכנתי לך גם קובץ טופס מוכן ועובד — <code>neshek-point-lead-form.html</code> — כבר מחובר לכתובת הזו,
+        בעברית ובעיצוב נקי. אפשר להעלות אותו כמו שהוא, או למסור אותו למי שבונה לך את האתר כדוגמה.
+        אם האתר בנוי על Elementor או Wix, מדביקים את הכתובת בהגדרת ה־Webhook של הטופס במקום להשתמש בקובץ.
+      </p>
+
+      <p>
+        את הטלפון אין צורך לנקות — האוטומציה מתרגמת לבד כל פורמט ישראלי למספר בינלאומי.
+        <code>050-123-4567</code> הופך ל־<code>972501234567</code>. זה כבר נבדק ועובד.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ 5 ============ -->
+  <section class="step">
+    <div class="step-num">05</div>
+    <div class="step-body">
+      <div class="step-head">
+        <h2>הפעלה ובדיקה חיה</h2>
+        <span class="chip wait">אצלך · 2 דקות</span>
+      </div>
+      <p class="meta">השלב האחרון</p>
+
+      <ol>
+        <li>מעבירים את ה־workflow למצב <strong>Active</strong> בכפתור שבפינה העליונה.</li>
+        <li>ממלאים את הטופס באתר עם המספר האישי שלך.</li>
+        <li>מוודאים ששתי ההודעות הגיעו — ההתראה אליך והתודה ללקוח.</li>
+      </ol>
+
+      <p>
+        אם משהו לא הגיע, נכנסים ללשונית Executions ב־n8n. כל הרצה מוצגת שם עם הצומת המדויק שנכשל
+        וההודעה שחזרה מ־Meta. שלח לי צילום מסך של הצומת האדום ואומר לך מה לתקן.
+      </p>
+    </div>
+  </section>
+
+  <aside class="aside">
+    <h3>אם ההרשמה ל־Meta נראית לך כמו הרבה</h3>
+    <p>
+      יש קיצור דרך. טלגרם נותן בדיוק את אותה התראה מיידית אליך, בהקמה של שתי דקות, בלי חשבון עסקי ובלי אישורי תבניות:
+      פותחים בוט אצל BotFather ומעתיקים טוקן. זהו.
+    </p>
+    <p>
+      ההבדל היחיד הוא שטלגרם מתאים להתראות פנימיות אליך, לא להודעות ללקוחות — הלקוחות שלך נמצאים בוואטסאפ.
+      אפשר להתחיל מטלגרם כדי לראות את האוטומציה עובדת כבר היום, ולהוסיף את הוואטסאפ ללקוחות אחרי שהחשבון אצל Meta מוכן.
+      תגיד לי ואוסיף את הענף.
+    </p>
+  </aside>
+
+  <p class="footnote">
+    מה שכבר בוצע: חמשת שלבי ה־workflow בנויים ומחוברים, נרמול הטלפון נבדק בהרצה חיה שעברה בהצלחה,
+    שני פתקי הסבר הוצבו על הקנבס, וקובץ טופס מוכן נשמר בפרויקט.
+    ה־workflow שמור בפרויקט האישי שלך ב־n8n וממתין כבוי עד שתשלים את שלב 3.
+  </p>
+
+</div>

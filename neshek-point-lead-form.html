@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>נשק פוינט - טופס יצירת קשר</title>
+<style>
+  body { font-family: system-ui, "Segoe UI", Arial, sans-serif; background: #f4f4f5; margin: 0; padding: 24px; }
+  .lead-form { max-width: 420px; margin: 0 auto; background: #fff; padding: 24px; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,.08); }
+  .lead-form h2 { margin: 0 0 4px; font-size: 20px; }
+  .lead-form p.sub { margin: 0 0 20px; color: #666; font-size: 14px; }
+  .lead-form label { display: block; margin-bottom: 6px; font-size: 14px; font-weight: 600; }
+  .lead-form input, .lead-form textarea {
+    width: 100%; box-sizing: border-box; padding: 10px 12px; margin-bottom: 16px;
+    border: 1px solid #d4d4d8; border-radius: 8px; font-size: 15px; font-family: inherit;
+  }
+  .lead-form textarea { min-height: 90px; resize: vertical; }
+  .lead-form button {
+    width: 100%; padding: 12px; background: #18181b; color: #fff; border: 0;
+    border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer;
+  }
+  .lead-form button:disabled { opacity: .6; cursor: not-allowed; }
+  .lead-form .status { margin-top: 14px; font-size: 14px; text-align: center; min-height: 20px; }
+  .lead-form .status.ok { color: #15803d; }
+  .lead-form .status.err { color: #b91c1c; }
+</style>
+</head>
+<body>
+
+<form class="lead-form" id="neshekPointLead">
+  <h2>נשק פוינט</h2>
+  <p class="sub">השאירו פרטים ונחזור אליכם בהקדם</p>
+
+  <label for="np-name">שם מלא</label>
+  <input id="np-name" name="name" type="text" required autocomplete="name">
+
+  <label for="np-phone">טלפון</label>
+  <input id="np-phone" name="phone" type="tel" required autocomplete="tel" placeholder="050-1234567">
+
+  <label for="np-message">במה נוכל לעזור?</label>
+  <textarea id="np-message" name="message" placeholder="לדוגמה: חידוש רישיון, ירי חובה, רכישת נשק"></textarea>
+
+  <button type="submit">שליחה</button>
+  <div class="status" id="np-status"></div>
+</form>
+
+<script>
+(function () {
+  var WEBHOOK_URL = 'https://surgestudio7.app.n8n.cloud/webhook/neshek-point-lead';
+
+  var form = document.getElementById('neshekPointLead');
+  var statusEl = document.getElementById('np-status');
+  var button = form.querySelector('button');
+
+  form.addEventListener('submit', function (event) {
+    event.preventDefault();
+    button.disabled = true;
+    statusEl.className = 'status';
+    statusEl.textContent = 'שולח...';
+
+    fetch(WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: form.name.value,
+        phone: form.phone.value,
+        message: form.message.value,
+        source: 'אתר נשק פוינט'
+      })
+    })
+      .then(function (response) {
+        if (!response.ok) { throw new Error('HTTP ' + response.status); }
+        return response.json();
+      })
+      .then(function () {
+        statusEl.className = 'status ok';
+        statusEl.textContent = 'הפנייה התקבלה, ניצור קשר בהקדם';
+        form.reset();
+      })
+      .catch(function () {
+        statusEl.className = 'status err';
+        statusEl.textContent = 'אירעה תקלה בשליחה, נסו שוב או התקשרו אלינו';
+      })
+      .then(function () {
+        button.disabled = false;
+      });
+  });
+})();
+</script>
+
+</body>
+</html>
