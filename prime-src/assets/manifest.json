@@ -1,0 +1,100 @@
+{
+  "project": "PRIME — cinematic scroll site",
+  "architecture": "locked-foreground product + scroll-driven layer stack",
+  "generated": "2026-08-16",
+  "notes": [
+    "Every asset is rendered on pure black so it composites with mix-blend-mode: screen — no alpha channel needed, no cutout artefacts, and the layers stack cheaply on the GPU.",
+    "The can is the only element that stays fixed in the viewport. Everything else parallaxes, scales and cross-fades around it on scroll.",
+    "Source files live on the Higgsfield CDN, which this session cannot reach (egress policy). Fetch and process them in the Higgsfield sandbox (sandbox_exec), which can reach both the CDN and github.com."
+  ],
+  "qc": {
+    "method": "corner-pixel sample + subject fill ratio, run in the Higgsfield sandbox",
+    "black_background_threshold": "sum(RGB) < 40 at all four corners"
+  },
+  "assets": [
+    {
+      "index": 0, "name": "can-blue-raspberry", "role": "hero-product-locked",
+      "job_id": "f0eb96f5-9fdf-4a13-b2e8-0c21003321f6",
+      "size": "1536x2752", "aspect": "9:16",
+      "qc": { "black_bg": true, "corner_max": 6, "subject_fill": "28%", "subject_bbox": "x 370-1170, y 340-2430" },
+      "layer": "foreground, fixed, z-top"
+    },
+    {
+      "index": 1, "name": "splash-crown", "role": "impact-burst",
+      "job_id": "d56c4c8d-605d-4ab2-82d1-862c13be6a29",
+      "size": "2752x1536", "aspect": "16:9",
+      "qc": { "black_bg": true, "corner_max": 3, "subject_fill": "20%" },
+      "layer": "behind can, scales up on scroll"
+    },
+    {
+      "index": 2, "name": "bg-liquid", "role": "ambient-backdrop",
+      "job_id": "a4c98d83-239f-4aaa-89ff-d2e13c9a6adb",
+      "size": "3168x1344", "aspect": "21:9",
+      "qc": { "black_bg": true, "corner_max": 16, "subject_fill": "31%" },
+      "layer": "deepest, slow parallax"
+    },
+    {
+      "index": 3, "name": "fruit-blueraspberry", "role": "flavor-orbit",
+      "job_id": "a8fbf0f7-253d-4e17-b64b-3ad16b32bb0e",
+      "size": "2048x2048", "aspect": "1:1",
+      "qc": { "black_bg": true, "corner_max": 3, "subject_fill": "32%" },
+      "layer": "orbiting satellite, flavor: Blue Raspberry"
+    },
+    {
+      "index": 4, "name": "fruit-lime", "role": "flavor-orbit",
+      "job_id": "cdb79b78-41ae-4440-968c-58e0100c44e5",
+      "size": "2048x2048", "aspect": "1:1",
+      "qc": { "black_bg": true, "corner_max": 3, "subject_fill": "29%" },
+      "layer": "orbiting satellite, flavor: Lemon Lime"
+    },
+    {
+      "index": 5, "name": "ice-cubes", "role": "cold-proof",
+      "job_id": "82dcecc1-5883-4df4-a4a9-4e543acc1be4",
+      "size": "2048x2048", "aspect": "1:1",
+      "qc": { "black_bg": true, "corner_max": 1, "subject_fill": "36%" },
+      "layer": "mid, counter-rotates against scroll"
+    },
+    {
+      "index": 6, "name": "fruit-tropical", "role": "flavor-orbit",
+      "job_id": "c380dcd3-9887-4f51-8fa4-0389bb364804",
+      "size": "2048x2048", "aspect": "1:1",
+      "qc": { "black_bg": true, "corner_max": 3, "subject_fill": "32%" },
+      "layer": "orbiting satellite, flavor: Tropical Punch / Orange Mango"
+    },
+    {
+      "index": 7, "name": "fruit-strawmelon", "role": "flavor-orbit",
+      "job_id": "9570cfc6-b472-4239-a812-5eb41574f807",
+      "size": "2048x2048", "aspect": "1:1",
+      "qc": { "black_bg": true, "corner_max": 3, "subject_fill": "35%" },
+      "layer": "orbiting satellite, flavor: Strawberry Watermelon"
+    },
+    {
+      "index": 8, "name": "energy-arcs", "role": "energy-accent",
+      "job_id": "f7b569c6-5383-421e-a5b4-f06efe818982",
+      "size": "2752x1536", "aspect": "16:9",
+      "status": "rendering",
+      "layer": "additive flash on section transitions"
+    },
+    {
+      "index": 9, "name": "condensation", "role": "texture-overlay",
+      "job_id": "23eb6540-8b02-4ad5-91bb-104ace3d3134",
+      "size": "2752x1536", "aspect": "16:9",
+      "qc": { "black_bg": false, "corner_max": 476, "subject_fill": "49%", "verdict": "background came back bright — needs a regen for screen-blend use, or repurpose as a low-opacity grain/texture pass" },
+      "layer": "full-frame overlay"
+    },
+    {
+      "index": 10, "name": "liquid-ribbon", "role": "connector-motif",
+      "job_id": "65a82d7c-c299-4582-a515-b7d37d76b5c3",
+      "size": "2752x1536", "aspect": "16:9",
+      "qc": { "black_bg": true, "corner_max": 4, "subject_fill": "9%" },
+      "layer": "sweeps across section seams"
+    },
+    {
+      "index": 11, "name": "fruit-icepop", "role": "flavor-orbit",
+      "job_id": "67a93871-1c12-4c23-8d6f-76223bd461c7",
+      "size": "2048x2048", "aspect": "1:1",
+      "qc": { "black_bg": true, "corner_max": 4, "subject_fill": "27%" },
+      "layer": "orbiting satellite, flavor: Ice Pop"
+    }
+  ]
+}
