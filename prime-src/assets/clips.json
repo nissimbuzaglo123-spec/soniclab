@@ -1,0 +1,63 @@
+{
+  "project": "PRIME — cinematic scroll site",
+  "generated": "2026-08-16",
+  "model": {
+    "used": "seedance1_5",
+    "requested": "seedance_2_5",
+    "reason": "Seedance 2.5 returned 'Requires plus plan or higher' on submission for BOTH t2v and omni_reference modes. Seedance 2.0 and 2.0 Mini are gated the same way. This is a plan restriction, not a credit shortfall. Seedance 1.5 Pro accepts start_image on the free plan and costs 12 credits per 4s 1080p clip versus 45 for 2.5.",
+    "note": "get_cost preflight does NOT surface the plan gate — it returned a price for 2.5 that could not actually be spent. Only submission reveals it."
+  },
+  "hard_rules": {
+    "continuous_motion": "Every clip is scrubbed by scroll position, forwards and backwards. A hard cut looks broken when scrubbed in reverse, so each prompt ends with 'one continuous shot, no cuts, no transitions' and each render is verified with ffmpeg scene detection before it is accepted.",
+    "declined_preset_id": "24bae836-2c4a-48e0-89b6-49fcc0b21612 must be passed or the backend returns a preset recommendation instead of submitting the job."
+  },
+  "clips": [
+    {
+      "name": "bottle-turntable",
+      "job_id": "eb44463d-b860-4ddb-8caa-18d6c03497b5",
+      "start_image": "733f8f56-9bd3-40ae-9be1-3af3bf0286fd",
+      "resolution": "1080x1920", "fps": 24, "frames": 97, "duration_s": 4.042,
+      "hard_cuts": 0,
+      "role": "primary scroll-scrub — the locked foreground bottle turning one full revolution as the page scrolls"
+    },
+    {
+      "name": "athlete-drink",
+      "job_id": "ffece73b-b629-4052-bc61-797ec03bfd22",
+      "start_image": "0f0cb2b1-153d-45be-b822-8363e1779435",
+      "resolution": "1920x1080", "fps": 24, "frames": 97, "duration_s": 4.042,
+      "hard_cuts": 0,
+      "role": "lifestyle proof section — anonymous fitness model, label held to camera throughout"
+    },
+    {
+      "name": "splash-bloom",
+      "job_id": "a92caebe-3573-4643-b248-e7be2a0f84ba",
+      "start_image": "d56c4c8d-605d-4ab2-82d1-862c13be6a29",
+      "resolution": "1920x1080", "fps": 24, "frames": 97, "duration_s": 4.042,
+      "hard_cuts": 0,
+      "role": "impact layer behind the bottle — screen-blended, scales up through the flavor transition"
+    },
+    {
+      "name": "backdrop-drift",
+      "job_id": "1099f722-1878-499c-86e6-1cf6cda27549",
+      "start_image": "a4c98d83-239f-4aaa-89ff-d2e13c9a6adb",
+      "resolution": "2016x864", "fps": 24, "frames": 97, "duration_s": 4.042,
+      "hard_cuts": 0,
+      "role": "deepest ambient layer — slow drift under everything"
+    }
+  ],
+  "talent_stills": [
+    {
+      "name": "athlete-drinking-blue",
+      "job_id": "0f0cb2b1-153d-45be-b822-8363e1779435",
+      "size": "2752x1536",
+      "note": "anonymous model, electric blue backdrop, bottle at the mouth with the label to camera"
+    },
+    {
+      "name": "athlete-holding-dark",
+      "job_id": "57d253bd-bb29-4d0a-94c3-11c60dc0ce52",
+      "size": "2752x1536",
+      "note": "anonymous model, dark gym, bottle held at chest height — sits closer to the dark stage"
+    }
+  ],
+  "likeness_policy": "No real, identifiable people are depicted. The founders are named in the brand reference as factual background only; all talent imagery uses anonymous models."
+}
