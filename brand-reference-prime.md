@@ -2,11 +2,11 @@
 
 Working reference for the cinematic scroll site. Compiled 2026-08-16.
 
-> **Sourcing note.** `drinkprime.com` is blocked by this session's egress policy, so nothing
-> here comes from the live site. Product facts below are corroborated across multiple retail
-> and editorial sources. The palette is **derived from packaging descriptions and flavor
-> identity — it is not the official brand palette**, and no hex code here should be presented
-> as PRIME's own.
+> **Sourcing note.** `drinkprime.com` is blocked by this session's egress policy. Sections 1–6
+> were compiled from retail and editorial sources; **section 8 comes from screenshots of the
+> live site** supplied directly and is the authoritative record of the current design. The
+> palette in section 4 is derived from packaging and flavor identity — it is not the official
+> brand palette.
 
 ---
 
@@ -122,3 +122,74 @@ cinematic scroll site and avoids copying site layout wholesale.
 PRIME is a live trademark. This build is a **concept / demo** — fine as portfolio and
 demonstration work. It should not be published in a way that presents it as the official
 PRIME site, and should not reuse PRIME's actual logo files or photography.
+
+---
+
+## 8. The live site — observed from screenshots
+
+Authoritative. This is what the current drinkprime.com actually does.
+
+### Chrome
+- **Top bar:** market switcher `US | UK` hard left · **PRIME** wordmark dead centre ·
+  search icon and a solid black `BUY PRIME` block hard right.
+- **Nav row** beneath it, centred: `SHOP · ABOUT PRIME · WHERE TO BUY · VERIFY YOUR PRIME`.
+  Letter-spaced, uppercase, medium weight.
+- Header sits **over** the hero with no background — it inverts to suit each slide.
+- **`DON'T MISS OUT`** dismissible capsule pinned bottom-right on every page.
+
+### Wordmark
+Heavy, very tight, condensed uppercase sans with **flat angular terminals** — the `R` leg and
+the `M` vertices are cut on hard diagonals. Not Anton, not Bebas: closer to a customised
+Druk / Monument Extended. On packaging the same wordmark is **rotated 90° to run vertically
+up the bottle**, set in white with a heavy black outline, at enormous scale — it is the single
+most recognisable asset the brand owns.
+
+### Hero
+Full-bleed **carousel, three slides**, dot indicators bottom-centre. Every slide:
+- talent or product photographed against a **saturated single-hue backdrop** — a swirling
+  orange/red field, a flat electric blue, a near-black charcoal;
+- a small letter-spaced **eyebrow** (`LIMITED EDITION`, `TARGET EXCLUSIVE`, `PROTEIN, REDEFINED`);
+- a heavy uppercase **headline** (`SUMMER POP`, `PRIME SHAKE X POP-TARTS`, `PRIME SHAKE`);
+- one **square white button** (`FIND IN STORES`, `SHOP NOW`) — no rounding, black text.
+
+Copy is left-aligned and sits low-left; the subject occupies the right two-thirds.
+
+### Product sections
+- **Hydration:** the full bottle lineup fanned in a row on white, beside a 2×2 grid of black
+  icon badges — `10% COCONUT WATER` · `ELECTROLYTE ENHANCED` · `ZERO ADDED SUGAR` ·
+  `NO ARTIFICIAL DYES` — with a black `SHOP HYDRATION` button.
+- **Shake:** the word `SHAKE` set enormous and widely letter-spaced as a section title, with a
+  row of six cans below, each captioned with its flavor and a bordered `LEARN MORE` button.
+
+### Design temperature
+Bright, high-key, maximal. White and saturated colour fields, black type, square-cornered
+buttons, zero gradients in the UI itself — all the richness lives in the photography. This is
+the opposite of the dark cinematic stage, which is precisely the gap the redesign exploits.
+
+### Bottle construction
+Clear PET, sculpted with horizontal ridge grooves around the lower body, coloured screw cap
+matching the flavor, coloured liquid visible through the plastic, `HYDRATION` set small at the
+base, flavor name small in a band at the top.
+
+### Flavors visible in the lineup
+Ice Pop (red cap, red over cyan) · Cherry Freeze (red) · Berry Freeze (pale blue) ·
+Future Freeze (mint into lavender) · Orange Swirl (orange) · Dragon Fruit (magenta) ·
+a yellow variant · **Summer Pop** (limited edition, red→orange→yellow gradient).
+
+### Shake line — six flavors
+Frosted Blueberry · Frosted Strawberry · Frosted Chocolate Fudge · Cookies and Cream ·
+Vanilla · Chocolate. The Pop-Tarts variants are a Target exclusive collaboration.
+
+### Talent
+Logan Paul and KSI appear as the hero subjects across slides, styled in saturated monochrome
+wardrobe that matches each slide's backdrop.
+
+---
+
+## 9. Redesign direction
+
+The current site is **bright, flat and static** — a Shopify storefront with strong photography.
+The redesign inverts the stage to near-black and makes the product the one fixed object in the
+viewport while everything else moves around it on scroll. Keeping from the original: the
+vertical wordmark, the square-cornered buttons, the letter-spaced eyebrow, the badge language,
+and the saturated per-flavor colour coding.
