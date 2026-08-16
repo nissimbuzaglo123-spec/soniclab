@@ -15,7 +15,7 @@
   --void:#05060a;
   --text:#f2f5f8;
   --muted:#8b94a6;
-  --accent:#ff3355;        /* driven by the flavour currently on stage */
+  --accent:#3aa8ff;        /* driven by the flavour currently on stage; opens electric blue */
   --safe:34vw;             /* reserved centre column — the product lives here, copy never enters */
   --col:calc((100vw - var(--safe)) / 2);
 }
@@ -66,7 +66,7 @@ a{color:inherit;text-decoration:none}
 #stage .bottle.on{opacity:1}
 #stage .halo{
   position:absolute;inset:-16% -28%;z-index:-1;border-radius:50%;
-  background:radial-gradient(closest-side,var(--halo,rgba(255,51,85,.34)),transparent 72%);
+  background:radial-gradient(closest-side,var(--halo,rgba(58,168,255,.34)),transparent 72%);
   filter:blur(18px);transition:background 1s ease;
 }
 #stage .ring{position:absolute;left:50%;top:50%;width:116%;aspect-ratio:1;transform:translate(-50%,-50%);
@@ -236,7 +236,7 @@ footer p{font-size:11px;color:var(--muted)}
 
 <div class="vmark">PRIME HYDRATION</div>
 <div id="now"></div>
-<div id="label">Ice Pop</div>
+<div id="label">Berry Freeze</div>
 
 <header id="head">
   <a href="#top" class="mark">PRIME<span>.</span></a>
@@ -350,9 +350,10 @@ footer p{font-size:11px;color:var(--muted)}
   setTimeout(dropIntro, reduced ? 300 : 2000);
 
   /* ---------- flavours ---------- */
+  /* Berry Freeze leads so the site opens on the electric blue. */
   var FLAVORS = [
-    { name:"Ice Pop",       color:"#ff3355", file:"hf_20260816_191900_733f8f56-9bd3-40ae-9be1-3af3bf0286fd.png" },
     { name:"Berry Freeze",  color:"#3aa8ff", file:"hf_20260816_191900_b3836246-bc88-4635-8b22-276326431490.png" },
+    { name:"Ice Pop",       color:"#ff3355", file:"hf_20260816_191900_733f8f56-9bd3-40ae-9be1-3af3bf0286fd.png" },
     { name:"Cherry Freeze", color:"#ff2d46", file:"hf_20260816_191949_cd37d5f3-39a1-4219-8690-dcbe1f216fbb.png" },
     { name:"Orange Swirl",  color:"#ff8a1f", file:"hf_20260816_191949_35a99097-397d-4c49-a2da-cf57891d1c77.png" },
     { name:"Future Freeze", color:"#7ce8c4", file:"hf_20260816_191900_aa0c4622-ebed-4505-9e75-98b36b295b1b.png" },
