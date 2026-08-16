@@ -1,0 +1,476 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#05060a" />
+<meta name="description" content="PRIME — cold, clean, relentless. Concept redesign." />
+<title>PRIME — Cold. Clean. Relentless.</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%A7%8A%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --void:#05060a;
+  --ink:#0b0e15;
+  --text:#f2f5f8;
+  --muted:#8b94a6;
+  --accent:#1b6bff;
+  --glow:#0a3ba8;
+  --safe:34vw;            /* reserved centre column — the product lives here, copy never enters */
+  --col:calc((100vw - var(--safe)) / 2);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:initial;-webkit-text-size-adjust:100%}
+body{
+  background:var(--void);color:var(--text);
+  font-family:Inter,system-ui,-apple-system,sans-serif;
+  overflow-x:hidden;-webkit-font-smoothing:antialiased;
+}
+img,video{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+
+/* ---------- type ---------- */
+.display{font-family:"Archivo Black",Arial Black,Impact,sans-serif;letter-spacing:-.02em;line-height:.92;text-transform:uppercase}
+.eyebrow{letter-spacing:.35em;text-transform:uppercase;color:var(--muted);font-size:11px;font-weight:600}
+.body{color:var(--muted);line-height:1.65;font-size:15px;max-width:34ch}
+
+/* ---------- fixed product stage: the bottle is ALWAYS in front ---------- */
+#stage{position:fixed;inset:0;z-index:20;pointer-events:none;display:grid;place-items:center}
+#stage .holder{
+  position:relative;width:var(--safe);max-width:520px;height:78vh;
+  display:grid;place-items:center;will-change:transform;
+}
+#turntable{
+  width:100%;height:100%;object-fit:contain;
+  filter:drop-shadow(0 40px 90px rgba(10,59,168,.55));
+}
+#stage .halo{
+  position:absolute;inset:-18% -30%;z-index:-1;border-radius:50%;
+  background:radial-gradient(closest-side,rgba(27,107,255,.34),rgba(27,107,255,0) 72%);
+  filter:blur(18px);will-change:opacity,transform;
+}
+
+/* ---------- background layer stack (all assets render on black → screen blend) ---------- */
+#bg{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+#bg .layer{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;mix-blend-mode:screen;will-change:transform,opacity}
+#backdrop{opacity:.42}
+#splash{opacity:0;transform:scale(1.15)}
+#arcs{opacity:0}
+#bg .vignette{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 45%,transparent 34%,rgba(5,6,10,.82) 78%,var(--void) 100%)}
+#bg .grain{position:absolute;inset:-100%;opacity:.055;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation:grain 1.1s steps(3) infinite}
+@keyframes grain{0%,100%{transform:translate(0,0)}33%{transform:translate(-3%,2%)}66%{transform:translate(2%,-3%)}}
+
+/* orbiting satellites */
+.sat{position:absolute;mix-blend-mode:screen;will-change:transform,opacity;opacity:0;pointer-events:none}
+.sat img{width:100%;height:auto}
+
+/* ---------- copy rails — strictly outside the product column ---------- */
+.rail{position:relative;z-index:30;width:var(--col);padding:0 clamp(20px,3.4vw,64px)}
+.rail.right{margin-left:auto}
+section{position:relative;min-height:100vh;display:flex;align-items:center}
+.block{opacity:0;transform:translateY(26px);transition:opacity .9s cubic-bezier(.22,1,.36,1),transform .9s cubic-bezier(.22,1,.36,1)}
+.block.in{opacity:1;transform:none}
+.block h2{font-size:clamp(2.1rem,3.9vw,4.1rem);margin:14px 0 18px}
+.block .eyebrow{display:block}
+
+/* ---------- header ---------- */
+header{position:fixed;top:0;left:0;right:0;z-index:60;padding:20px clamp(20px,3vw,44px);
+  display:flex;align-items:center;justify-content:space-between;
+  transition:background .5s,border-color .5s;border-bottom:1px solid transparent}
+header.stuck{background:rgba(5,6,10,.72);backdrop-filter:blur(18px);border-bottom-color:rgba(255,255,255,.07)}
+.mark{font-family:"Archivo Black",sans-serif;letter-spacing:.14em;font-size:19px}
+.mark span{color:var(--accent)}
+nav{display:flex;gap:clamp(16px,2.2vw,38px)}
+nav a{font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);transition:color .3s}
+nav a:hover{color:var(--text)}
+.buy{border:1px solid rgba(255,255,255,.22);padding:9px 20px;font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;transition:.3s}
+.buy:hover{background:var(--text);color:var(--void);border-color:var(--text)}
+
+/* ---------- hero ---------- */
+#hero .rail{padding-top:12vh}
+#hero h1{font-size:clamp(2.9rem,6.4vw,7rem);margin:16px 0 22px}
+.scrollcue{position:absolute;bottom:34px;left:50%;transform:translateX(-50%);z-index:40;display:flex;flex-direction:column;align-items:center;gap:9px}
+.scrollcue .rod{width:1px;height:52px;background:linear-gradient(var(--accent),transparent)}
+
+/* ---------- vertical wordmark rail (the brand's signature move) ---------- */
+.vmark{position:fixed;right:16px;top:50%;transform:translateY(-50%) rotate(180deg);writing-mode:vertical-rl;
+  font-family:"Archivo Black",sans-serif;font-size:11px;letter-spacing:.5em;color:rgba(255,255,255,.16);z-index:50;pointer-events:none}
+
+/* ---------- flavor rail ---------- */
+#flavors .strip{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
+.chip{border:1px solid rgba(255,255,255,.16);padding:9px 15px;font-size:10.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;transition:.3s;color:var(--muted);background:none;font-family:inherit}
+.chip:hover{color:var(--text);border-color:rgba(255,255,255,.4)}
+.chip.on{background:var(--flav,var(--accent));border-color:var(--flav,var(--accent));color:#05060a}
+
+/* ---------- stats ---------- */
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:30px 22px;margin-top:34px}
+.stat .n{font-family:"Archivo Black",sans-serif;font-size:clamp(1.7rem,2.6vw,2.5rem);color:var(--accent)}
+.stat .l{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:5px}
+
+/* ---------- athlete section (breaks the fixed-product rhythm on purpose) ---------- */
+#field{min-height:150vh}
+#field .plate{position:sticky;top:0;height:100vh;display:grid;place-items:center;overflow:hidden}
+#field video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.5}
+#field .scrim{position:absolute;inset:0;background:linear-gradient(90deg,var(--void) 4%,transparent 46%,transparent 54%,var(--void) 96%)}
+#field .copy{position:relative;z-index:2;width:var(--col);padding:0 clamp(20px,3.4vw,64px)}
+
+/* ---------- marquee ---------- */
+.marquee{overflow:hidden;padding:26px 0;border-top:1px solid rgba(255,255,255,.07);border-bottom:1px solid rgba(255,255,255,.07);position:relative;z-index:30;background:var(--void)}
+.track{display:flex;width:max-content;animation:march 26s linear infinite}
+.track span{font-family:"Archivo Black",sans-serif;font-size:clamp(1.5rem,3vw,2.6rem);letter-spacing:.04em;text-transform:uppercase;padding:0 26px;color:rgba(255,255,255,.09)}
+.track span.hot{color:var(--accent)}
+@keyframes march{to{transform:translateX(-50%)}}
+
+/* ---------- close ---------- */
+#close{position:relative;z-index:30;background:var(--void);text-align:center;padding:16vh 20px 8vh;min-height:auto;display:block}
+#close h2{font-size:clamp(2.6rem,6.4vw,6rem);margin-bottom:20px}
+#close .body{margin:0 auto 34px}
+.cta{display:inline-block;background:var(--accent);color:#fff;padding:17px 42px;font-size:12px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;transition:.3s}
+.cta:hover{background:var(--text);color:var(--void)}
+footer{position:relative;z-index:30;background:var(--void);padding:30px clamp(20px,3vw,44px);display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;align-items:center;border-top:1px solid rgba(255,255,255,.07)}
+footer p{font-size:11px;color:var(--muted)}
+
+/* ---------- mobile: product shrinks and lifts, copy sits under it ---------- */
+@media (max-width:900px){
+  /* The product keeps the top of the screen and the copy keeps the bottom.
+     Reserving the band outright is what guarantees text never lands on the bottle. */
+  :root{--safe:58vw;--col:100vw}
+  #stage{align-items:flex-start;padding-top:5vh}
+  #stage .holder{height:34vh;max-width:none}
+  section{min-height:100vh}
+
+  /* Copy is pinned to the lower band and cross-fades in place rather than
+     scrolling up through the bottle. Measured tallest block is 40vh, so 56vh holds it. */
+  main .rail{
+    position:fixed;left:0;right:0;bottom:0;height:56vh;width:100%;
+    padding:0 22px 4vh;display:flex;flex-direction:column;justify-content:center;
+    opacity:0;pointer-events:none;transition:opacity .55s ease;z-index:30;
+    background:linear-gradient(transparent,var(--void) 20%);
+  }
+  main section.active .rail{opacity:1;pointer-events:auto}
+  #hero .rail{padding-top:0}
+  #field .copy{width:100%;padding:0 22px}
+  #hero h1{font-size:clamp(2.4rem,10vw,3.4rem)}
+  .vmark,.scrollcue{display:none}
+  .block h2{font-size:clamp(1.8rem,7.6vw,2.6rem)}
+  .body{font-size:14px}
+  .stats{gap:18px 14px;margin-top:24px}
+  /* These two panels are opaque, so they take the screen from the bottle outright
+     and their copy has the full width to itself. */
+  #field{min-height:auto;background:var(--void);z-index:30}
+  #field .plate{position:relative;height:auto;padding:44vh 0 9vh;display:block;background:var(--void)}
+  #field video{height:42vh;opacity:.55}
+  #field .scrim{background:linear-gradient(transparent 18%,var(--void) 46%)}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms!important;transition-duration:.01ms!important}
+}
+</style>
+</head>
+<body>
+
+<div id="bg">
+  <video id="backdrop" class="layer" muted loop playsinline preload="auto"
+    src="https://d8j0ntlcm91z4.cloudfront.net/user_3F63NrmBiT6i54hCJdGlykemzJd/hf_20260816_193153_1099f722-1878-499c-86e6-1cf6cda27549.mp4"></video>
+  <video id="splash" class="layer" muted loop playsinline preload="auto"
+    src="https://d8j0ntlcm91z4.cloudfront.net/user_3F63NrmBiT6i54hCJdGlykemzJd/hf_20260816_193026_a92caebe-3573-4643-b248-e7be2a0f84ba.mp4"></video>
+  <img id="arcs" class="layer" alt=""
+    src="https://d8j0ntlcm91z4.cloudfront.net/user_3F63NrmBiT6i54hCJdGlykemzJd/hf_20260816_175403_f7b569c6-5383-421e-a5b4-f06efe818982.png" />
+
+  <div class="sat" data-sat="0" style="width:19vw;left:5vw;top:16vh">
+    <img alt="" src="https://d8j0ntlcm91z4.cloudfront.net/user_3F63NrmBiT6i54hCJdGlykemzJd/hf_20260816_175007_a8fbf0f7-253d-4e17-b64b-3ad16b32bb0e.png" /></div>
+  <div class="sat" data-sat="1" style="width:16vw;right:6vw;top:24vh">
+    <img alt="" src="https://d8j0ntlcm91z4.cloudfront.net/user_3F63NrmBiT6i54hCJdGlykemzJd/hf_20260816_175007_82dcecc1-5883-4df4-a4a9-4e543acc1be4.png" /></div>
+  <div class="sat" data-sat="2" style="width:17vw;left:8vw;bottom:12vh">
+    <img alt="" src="https://d8j0ntlcm91z4.cloudfront.net/user_3F63NrmBiT6i54hCJdGlykemzJd/hf_20260816_175236_cdb79b78-41ae-4440-968c-58e0100c44e5.png" /></div>
+  <div class="sat" data-sat="3" style="width:18vw;right:5vw;bottom:16vh">
+    <img alt="" src="https://d8j0ntlcm91z4.cloudfront.net/user_3F63NrmBiT6i54hCJdGlykemzJd/hf_20260816_175105_c380dcd3-9887-4f51-8fa4-0389bb364804.png" /></div>
+  <div class="sat" data-sat="4" style="width:15vw;left:11vw;top:44vh">
+    <img alt="" src="https://d8j0ntlcm91z4.cloudfront.net/user_3F63NrmBiT6i54hCJdGlykemzJd/hf_20260816_175007_67a93871-1c12-4c23-8d6f-76223bd461c7.png" /></div>
+  <div class="sat" data-sat="5" style="width:16vw;right:10vw;top:52vh">
+    <img alt="" src="https://d8j0ntlcm91z4.cloudfront.net/user_3F63NrmBiT6i54hCJdGlykemzJd/hf_20260816_175105_9570cfc6-b472-4239-a812-5eb41574f807.png" /></div>
+
+  <div class="vignette"></div>
+  <div class="grain"></div>
+</div>
+
+<div id="stage">
+  <div class="holder">
+    <div class="halo"></div>
+    <video id="turntable" muted playsinline preload="auto"
+      poster="https://d8j0ntlcm91z4.cloudfront.net/user_3F63NrmBiT6i54hCJdGlykemzJd/hf_20260816_191900_733f8f56-9bd3-40ae-9be1-3af3bf0286fd.png"
+      src="https://d8j0ntlcm91z4.cloudfront.net/user_3F63NrmBiT6i54hCJdGlykemzJd/hf_20260816_192737_eb44463d-b860-4ddb-8caa-18d6c03497b5.mp4"></video>
+  </div>
+</div>
+
+<div class="vmark">PRIME HYDRATION</div>
+
+<header id="head">
+  <a href="#top" class="mark">PRIME<span>.</span></a>
+  <nav>
+    <a href="#inside">Inside</a>
+    <a href="#cold">Cold</a>
+    <a href="#flavors">Flavors</a>
+    <a href="#field">Field</a>
+  </nav>
+  <a href="#close" class="buy">Find it</a>
+</header>
+
+<main id="top">
+
+  <section id="hero">
+    <div class="rail">
+      <div class="block in">
+        <span class="eyebrow">Electrolyte Enhanced</span>
+        <h1 class="display">Cold.<br />Clean.<br />Relentless.</h1>
+        <p class="body">Ten percent coconut water. Zero added sugar. Nothing to come down from.</p>
+      </div>
+    </div>
+    <div class="scrollcue"><span class="eyebrow">Scroll</span><span class="rod"></span></div>
+  </section>
+
+  <section id="inside">
+    <div class="rail right">
+      <div class="block">
+        <span class="eyebrow">What's inside</span>
+        <h2 class="display">Nothing<br />to hide</h2>
+        <p class="body">Coconut water for the minerals. Electrolytes for the balance. That is the whole list — no added sugar, no artificial dyes, nothing along for the ride.</p>
+        <div class="stats">
+          <div class="stat"><div class="n">10%</div><div class="l">Coconut water</div></div>
+          <div class="stat"><div class="n">0g</div><div class="l">Added sugar</div></div>
+          <div class="stat"><div class="n">0</div><div class="l">Artificial dyes</div></div>
+          <div class="stat"><div class="n">6</div><div class="l">Electrolytes</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="cold">
+    <div class="rail">
+      <div class="block">
+        <span class="eyebrow">Serve it cold</span>
+        <h2 class="display">Built for<br />the last set</h2>
+        <p class="body">The bottle sweats. So do you. Everything about this is designed for the moment the work is nearly done and you still have one more in you.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="flavors">
+    <div class="rail right">
+      <div class="block">
+        <span class="eyebrow">Six ways</span>
+        <h2 class="display">Pick<br />your cold</h2>
+        <p class="body">Same formula every time. The only thing that changes is what it tastes like.</p>
+        <div class="strip" id="chips"></div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<section id="field">
+  <div class="plate">
+    <video muted loop playsinline preload="none"
+      poster="https://d8j0ntlcm91z4.cloudfront.net/user_3F63NrmBiT6i54hCJdGlykemzJd/hf_20260816_192522_0f0cb2b1-153d-45be-b822-8363e1779435.png"
+      src="https://d8j0ntlcm91z4.cloudfront.net/user_3F63NrmBiT6i54hCJdGlykemzJd/hf_20260816_192900_ffece73b-b629-4052-bc61-797ec03bfd22.mp4"></video>
+    <div class="scrim"></div>
+    <div class="copy">
+      <div class="block">
+        <span class="eyebrow">In the field</span>
+        <h2 class="display">Earn the<br />first sip</h2>
+        <p class="body">It tastes better when you've done something to deserve it. That is not marketing — that is just how it works.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="marquee">
+  <div class="track" id="track"></div>
+</div>
+
+<section id="close">
+  <div class="block">
+    <span class="eyebrow">Stocked nationwide</span>
+    <h2 class="display">Find it cold</h2>
+    <p class="body">In the fridge at the front of the store. Ask for it by name.</p>
+    <a href="#top" class="cta">Where to buy</a>
+  </div>
+</section>
+
+<footer>
+  <span class="mark">PRIME<span>.</span></span>
+  <p>Concept redesign. Not affiliated with or endorsed by PRIME.</p>
+  <p>Cold. Clean. Relentless.</p>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  var reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---------- flavors: the chip tints the halo, the bottle never leaves ---------- */
+  var CDN = "https://d8j0ntlcm91z4.cloudfront.net/user_3F63NrmBiT6i54hCJdGlykemzJd/";
+  var FLAVORS = [
+    { name:"Ice Pop",       color:"#ff3355" },
+    { name:"Berry Freeze",  color:"#3aa8ff" },
+    { name:"Cherry Freeze", color:"#ff2d46" },
+    { name:"Orange Swirl",  color:"#ff8a1f" },
+    { name:"Future Freeze", color:"#7ce8c4" },
+    { name:"Summer Pop",    color:"#ffb01f" }
+  ];
+  var chips = document.getElementById("chips");
+  var halo  = document.querySelector("#stage .halo");
+  FLAVORS.forEach(function(f, i){
+    var b = document.createElement("button");
+    b.className = "chip" + (i === 0 ? " on" : "");
+    b.textContent = f.name;
+    b.style.setProperty("--flav", f.color);
+    b.addEventListener("click", function(){
+      chips.querySelectorAll(".chip").forEach(function(c){ c.classList.remove("on"); });
+      b.classList.add("on");
+      document.documentElement.style.setProperty("--accent", f.color);
+      halo.style.background = "radial-gradient(closest-side," + hexa(f.color,.34) + "," + hexa(f.color,0) + " 72%)";
+    });
+    chips.appendChild(b);
+  });
+  function hexa(hex, a){
+    var n = parseInt(hex.slice(1), 16);
+    return "rgba(" + (n>>16&255) + "," + (n>>8&255) + "," + (n&255) + "," + a + ")";
+  }
+
+  /* ---------- marquee ---------- */
+  var words = ["Cold","Clean","Relentless","Zero Sugar","Coconut Water"];
+  var track = document.getElementById("track");
+  var line = "";
+  for (var r = 0; r < 2; r++){
+    words.forEach(function(w, i){
+      line += "<span" + (i % 2 ? ' class="hot"' : "") + ">" + w + "</span><span>&bull;</span>";
+    });
+  }
+  track.innerHTML = line;
+
+  /* ---------- reveals ---------- */
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){ if (e.isIntersecting) e.target.classList.add("in"); });
+  }, { threshold:.25, rootMargin:"-40px 0px" });
+  document.querySelectorAll(".block").forEach(function(b){ io.observe(b); });
+
+  /* ---------- header ---------- */
+  var head = document.getElementById("head");
+
+  /* ---------- the scrub: scroll position drives the bottle's rotation ---------- */
+  var turntable = document.getElementById("turntable");
+  var splash    = document.getElementById("splash");
+  var backdrop  = document.getElementById("backdrop");
+  var arcs      = document.getElementById("arcs");
+  var stage     = document.querySelector("#stage .holder");
+  var sats      = [].slice.call(document.querySelectorAll(".sat"));
+  var duration  = 4;
+  var wanted = 0, applied = -1, ready = false;
+
+  turntable.addEventListener("loadedmetadata", function(){
+    duration = turntable.duration || 4;
+    ready = true;
+  });
+  // A muted play/pause primes the decoder so the first seeks are not janky.
+  turntable.play().then(function(){ turntable.pause(); turntable.currentTime = 0; }).catch(function(){});
+  backdrop.play().catch(function(){});
+  splash.play().catch(function(){});
+
+  function scrollables(){
+    var doc = document.documentElement;
+    return Math.max(1, doc.scrollHeight - window.innerHeight);
+  }
+
+  /* On mobile the copy is pinned, so exactly one section may own it at a time. */
+  var pinned = [].slice.call(document.querySelectorAll("main section"));
+  var owner = -1;
+  function claim(y){
+    var mid = y + window.innerHeight * 0.5, best = 0;
+    for (var i = 0; i < pinned.length; i++){
+      if (pinned[i].offsetTop <= mid) best = i;
+    }
+    if (best === owner) return;
+    owner = best;
+    pinned.forEach(function(s, i){ s.classList.toggle("active", i === best); });
+  }
+
+  function onScroll(y){
+    var max = scrollables();
+    var p = Math.min(1, Math.max(0, y / max));
+
+    head.classList.toggle("stuck", y > 40);
+    claim(y);
+
+    // The bottle turns exactly twice over the length of the page, then holds.
+    wanted = (p * 2 % 1) * duration * 0.999;
+
+    // It also drifts back and shrinks slightly so the copy always has room.
+    var scale = 1 - p * 0.18;
+    var lift  = -p * 4;
+    stage.style.transform = "translateY(" + lift + "vh) scale(" + scale + ")";
+
+    // Layers respond at different rates — that difference is what reads as depth.
+    backdrop.style.transform = "scale(" + (1.08 + p * 0.14) + ") translateY(" + (-p * 6) + "vh)";
+    backdrop.style.opacity = String(0.42 - p * 0.16);
+
+    // The splash blooms only through the middle of the page.
+    var mid = 1 - Math.min(1, Math.abs(p - 0.42) / 0.24);
+    splash.style.opacity = String(mid * 0.5);
+    splash.style.transform = "scale(" + (1.15 + mid * 0.2) + ")";
+
+    var late = Math.max(0, (p - 0.62) / 0.24);
+    arcs.style.opacity = String(Math.min(1, late) * 0.34);
+
+    // Satellites orbit outward and rotate as the page moves.
+    sats.forEach(function(s, i){
+      var phase = Math.min(1, Math.max(0, (p - 0.06 - i * 0.055) / 0.34));
+      var dir = i % 2 ? 1 : -1;
+      s.style.opacity = String(phase * (1 - Math.max(0, (p - 0.78) / 0.22)) * 0.85);
+      s.style.transform =
+        "translate3d(" + (dir * (1 - phase) * 12) + "vw," +
+        (-p * (14 + i * 5)) + "vh,0) rotate(" + (dir * p * (28 + i * 12)) + "deg)";
+    });
+  }
+
+  // Seeking is the expensive part, so only ask for a frame we do not already have.
+  function paint(){
+    if (ready && Math.abs(wanted - applied) > 0.012 && turntable.readyState >= 2){
+      applied = wanted;
+      try { turntable.currentTime = wanted; } catch(e){}
+    }
+  }
+
+  /* Native scrolling is left alone — scrollbar, keyboard and touch all keep working.
+     Only the value driving the animation is eased, which gives the glide without
+     the fragility of hijacking the wheel. */
+  var smooth = window.scrollY || 0;
+  function loop(){
+    var raw = window.scrollY || 0;
+    smooth += (raw - smooth) * (reduced ? 1 : 0.11);
+    if (Math.abs(raw - smooth) < 0.15) smooth = raw;
+    onScroll(smooth);
+    paint();
+    requestAnimationFrame(loop);
+  }
+
+  document.querySelectorAll('a[href^="#"]').forEach(function(a){
+    a.addEventListener("click", function(ev){
+      var el = document.querySelector(a.getAttribute("href"));
+      if (!el) return;
+      ev.preventDefault();
+      window.scrollTo({ top: el.offsetTop, behavior: reduced ? "auto" : "smooth" });
+    });
+  });
+
+  onScroll(smooth);
+  requestAnimationFrame(loop);
+  window.addEventListener("resize", function(){ onScroll(window.scrollY || 0); });
+})();
+</script>
+</body>
+</html>

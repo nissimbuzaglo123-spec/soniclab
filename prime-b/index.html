@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#0f1116" />
+<meta name="description" content="PRIME — taste in full color. Concept redesign." />
+<title>PRIME — Taste In Full Color</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8C%88%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --ink:#0f1116;
+  --paper:#f4f4f2;
+  --field:#1b6bff;          /* driven by scroll */
+  --safe:30vw;              /* product column — copy never enters it */
+  --col:calc((100vw - var(--safe)) / 2);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:initial;-webkit-text-size-adjust:100%}
+body{
+  background:var(--ink);color:var(--paper);
+  font-family:"Space Grotesk",system-ui,-apple-system,sans-serif;
+  overflow-x:hidden;-webkit-font-smoothing:antialiased;
+}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+
+.display{font-family:Anton,"Arial Narrow",Impact,sans-serif;text-transform:uppercase;line-height:.86;letter-spacing:.005em}
+.eyebrow{font-size:10.5px;font-weight:700;letter-spacing:.34em;text-transform:uppercase;opacity:.72}
+.body{font-size:15px;line-height:1.68;opacity:.78;max-width:32ch}
+
+/* ---------- the colour field: one fixed plane that changes hue on scroll ---------- */
+#field{position:fixed;inset:0;z-index:0;background:var(--field);transition:background 1.1s cubic-bezier(.4,0,.2,1)}
+#field .wash{position:absolute;inset:0;background:
+  radial-gradient(120% 90% at 50% 8%,rgba(255,255,255,.30),transparent 58%),
+  radial-gradient(90% 70% at 50% 108%,rgba(0,0,0,.58),transparent 62%)}
+#field .ink{position:absolute;inset:0;mix-blend-mode:screen;opacity:.30;
+  background-size:cover;background-position:center;will-change:transform;
+  background-image:url("https://d8j0ntlcm91z4.cloudfront.net/user_3F63NrmBiT6i54hCJdGlykemzJd/hf_20260816_175105_a4c98d83-239f-4aaa-89ff-d2e13c9a6adb.png")}
+#field .grid{position:absolute;inset:0;opacity:.14;
+  background-image:linear-gradient(rgba(255,255,255,.5) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.5) 1px,transparent 1px);
+  background-size:88px 88px;mask-image:radial-gradient(70% 60% at 50% 50%,#000,transparent 78%)}
+
+/* ---------- fixed product: the bottle never leaves the frame ---------- */
+#product{position:fixed;inset:0;z-index:20;display:grid;place-items:center;pointer-events:none}
+#product .frame{position:relative;width:var(--safe);max-width:440px;height:76vh;will-change:transform}
+#product img{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:contain;
+  opacity:0;transition:opacity .75s cubic-bezier(.4,0,.2,1);
+  filter:drop-shadow(0 46px 70px rgba(0,0,0,.6));
+}
+#product img.on{opacity:1}
+#product .disc{position:absolute;left:50%;top:50%;width:118%;aspect-ratio:1;transform:translate(-50%,-50%);
+  border:1px solid rgba(255,255,255,.34);border-radius:50%;z-index:-1;will-change:transform}
+#product .disc::after{content:"";position:absolute;inset:11%;border:1px solid rgba(255,255,255,.18);border-radius:50%}
+
+/* ---------- giant scroll-driven flavour word behind the bottle ---------- */
+#word{position:fixed;inset:0;z-index:10;display:grid;place-items:center;pointer-events:none;overflow:hidden}
+#word b{font-family:Anton,sans-serif;font-weight:400;text-transform:uppercase;
+  font-size:clamp(4rem,17vw,15rem);letter-spacing:-.01em;white-space:nowrap;
+  color:transparent;-webkit-text-stroke:1.5px rgba(255,255,255,.34);
+  transition:opacity .6s;will-change:transform}
+
+/* ---------- header ---------- */
+header{position:fixed;top:0;left:0;right:0;z-index:60;padding:22px clamp(20px,3vw,46px);
+  display:flex;align-items:center;justify-content:space-between;mix-blend-mode:difference}
+.mark{font-family:Anton,sans-serif;font-size:23px;letter-spacing:.1em}
+nav{display:flex;gap:clamp(14px,2vw,34px)}
+nav a{font-size:10.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase}
+.buy{border:1.5px solid currentColor;padding:8px 18px;font-size:10.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase}
+
+/* ---------- copy stacks flanking the product ---------- */
+.stop{position:relative;z-index:30;min-height:100vh;display:flex;align-items:center}
+.stop .side{width:var(--col);padding:0 clamp(20px,3.2vw,58px)}
+.stop.r .side{margin-left:auto;text-align:right}
+.stop.r .body{margin-left:auto}
+.stop h2{font-size:clamp(2.3rem,4.6vw,5rem);margin:14px 0 16px}
+.fade{opacity:0;transform:translateY(22px);transition:opacity .85s cubic-bezier(.22,1,.36,1),transform .85s cubic-bezier(.22,1,.36,1)}
+.fade.in{opacity:1;transform:none}
+
+/* ---------- opening ---------- */
+#open .side{width:100%;text-align:center;padding-top:0}
+#open h1{font-size:clamp(3.2rem,9vw,9.5rem);margin:18px 0}
+#open .body{margin:0 auto}
+#open .side{padding:0}
+#open .split{display:flex;justify-content:space-between;align-items:flex-end;width:100%;gap:var(--safe)}
+#open .split .half{width:calc((100% - var(--safe)) / 2);padding:0 clamp(20px,3.2vw,58px);text-align:left}
+#open .split .half:last-child{text-align:right}
+
+/* ---------- badges, straight from the shelf language ---------- */
+.badges{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin-top:30px}
+.badge{border:1.5px solid rgba(255,255,255,.34);padding:16px 14px;text-align:center}
+.badge .n{font-family:Anton,sans-serif;font-size:1.7rem}
+.badge .t{font-size:9.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;opacity:.8;margin-top:4px}
+
+/* ---------- index ---------- */
+#index{position:fixed;left:clamp(14px,2vw,28px);top:50%;transform:translateY(-50%);z-index:50;display:flex;flex-direction:column;gap:11px}
+#index button{width:9px;height:9px;border-radius:50%;border:1.5px solid rgba(255,255,255,.5);background:none;cursor:pointer;padding:0;transition:.3s}
+#index button.on{background:#fff;border-color:#fff;transform:scale(1.35)}
+
+/* ---------- ticker ---------- */
+.ticker{position:relative;z-index:30;background:var(--ink);padding:22px 0;overflow:hidden}
+.ticker .run{display:flex;width:max-content;animation:run 24s linear infinite}
+.ticker .run span{font-family:Anton,sans-serif;font-size:clamp(1.4rem,2.8vw,2.4rem);text-transform:uppercase;padding:0 22px;opacity:.22}
+@keyframes run{to{transform:translateX(-50%)}}
+
+/* ---------- proof ---------- */
+#proof{position:relative;z-index:30;background:var(--ink);padding:0}
+#proof .wrap{position:relative;height:92vh;overflow:hidden;display:grid;align-items:center;justify-items:start}
+#proof img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.46}
+#proof .veil{position:absolute;inset:0;background:linear-gradient(90deg,var(--ink) 2%,transparent 40%,transparent 60%,var(--ink) 98%)}
+#proof .copy{position:relative;z-index:2;width:var(--col);padding:0 clamp(20px,3.2vw,58px)}
+#proof h2{font-size:clamp(2.3rem,5vw,4.6rem)}
+
+/* ---------- end ---------- */
+#end{position:relative;z-index:30;background:var(--paper);color:var(--ink);text-align:center;padding:15vh 20px 9vh}
+#end h2{font-size:clamp(2.8rem,7.5vw,7rem);margin-bottom:18px}
+#end .body{margin:0 auto 32px;opacity:.7}
+.cta{display:inline-block;background:var(--ink);color:var(--paper);padding:18px 44px;font-size:11.5px;font-weight:700;letter-spacing:.24em;text-transform:uppercase}
+footer{position:relative;z-index:30;background:var(--paper);color:var(--ink);padding:24px clamp(20px,3vw,46px);
+  display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center;border-top:1.5px solid rgba(15,17,22,.14)}
+footer p{font-size:11px;opacity:.62}
+
+@media (max-width:900px){
+  /* Same contract as desktop, rotated: the bottle owns the top band, copy owns
+     what is left. Reserving the space is what keeps text off the product. */
+  :root{--safe:56vw;--col:100vw}
+  #product{align-items:flex-start;padding-top:5vh}
+  #product .frame{height:32vh;max-width:none}
+  .stop{min-height:100vh}
+
+  /* Copy is pinned to the lower band and swaps in place instead of travelling up
+     through the bottle. Measured tallest block is 45vh, so 58vh holds it. */
+  .stop .side,.stop.r .side{
+    position:fixed;left:0;right:0;bottom:0;height:58vh;width:100%;margin:0;
+    padding:0 22px 4vh;display:flex;flex-direction:column;justify-content:center;
+    text-align:left;opacity:0;pointer-events:none;transition:opacity .55s ease;z-index:30;
+    background:linear-gradient(transparent,rgba(15,17,22,.88) 20%);
+  }
+  .stop.active .side{opacity:1;pointer-events:auto}
+  .stop.r .body{margin-left:0}
+  #open .split{flex-direction:column;align-items:flex-start;gap:14px}
+  #open .split .half,#open .split .half:last-child{width:100%;text-align:left;padding:0}
+  #proof .copy{width:100%;text-align:left;padding:0 22px}
+  #open h1{font-size:clamp(2.6rem,11vw,3.8rem)}
+  .stop h2{font-size:clamp(1.9rem,8vw,2.7rem)}
+  .body{font-size:14px}
+  #index{display:none}
+  #word b{font-size:clamp(3rem,20vw,6rem)}
+  #proof .wrap{height:auto;padding:30vh 0 8vh}
+  #proof .veil{background:linear-gradient(transparent,var(--ink) 44%)}
+  .stop .side::before{content:"";position:absolute;inset:-52px 0 0;background:linear-gradient(transparent,rgba(15,17,22,.8) 40%);z-index:-1}
+  .badges{gap:10px;margin-top:22px}
+  .badge{padding:12px 8px}
+}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+
+<div id="field">
+  <div class="ink" id="ink"></div>
+  <div class="wash"></div>
+  <div class="grid"></div>
+</div>
+
+<div id="word"><b id="wordtext">Ice Pop</b></div>
+
+<div id="product">
+  <div class="frame" id="frame">
+    <div class="disc" id="disc"></div>
+  </div>
+</div>
+
+<div id="index"></div>
+
+<header>
+  <a href="#open" class="mark">PRIME</a>
+  <nav><a href="#one">Formula</a><a href="#two">Lineup</a><a href="#proof">Proof</a></nav>
+  <a href="#end" class="buy">Shop</a>
+</header>
+
+<section class="stop" id="open">
+  <div class="side">
+    <div class="split">
+      <div class="half fade in">
+        <span class="eyebrow">Six flavors. One standard.</span>
+        <h1 class="display">Taste in<br />full color</h1>
+      </div>
+      <div class="half fade in">
+        <p class="body">Every bottle carries the same formula. The only thing that changes is what happens when you open it.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="stop" id="one">
+  <div class="side">
+    <div class="fade">
+      <span class="eyebrow">The formula</span>
+      <h2 class="display">Sweet,<br />without<br />the debt</h2>
+      <p class="body">Coconut water carries the minerals. Electrolytes hold the balance. Nothing else was invited.</p>
+      <div class="badges">
+        <div class="badge"><div class="n">10%</div><div class="t">Coconut water</div></div>
+        <div class="badge"><div class="n">0g</div><div class="t">Added sugar</div></div>
+        <div class="badge"><div class="n">0</div><div class="t">Artificial dyes</div></div>
+        <div class="badge"><div class="n">6</div><div class="t">Electrolytes</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="stop r" id="two">
+  <div class="side">
+    <div class="fade">
+      <span class="eyebrow">Berry Freeze</span>
+      <h2 class="display">Cold on<br />the way<br />down</h2>
+      <p class="body">Built to be drunk straight from the fridge, at the point where cold stops being a temperature and starts being the flavor.</p>
+    </div>
+  </div>
+</section>
+
+<section class="stop" id="three">
+  <div class="side">
+    <div class="fade">
+      <span class="eyebrow">Cherry Freeze</span>
+      <h2 class="display">Loud,<br />on purpose</h2>
+      <p class="body">Some flavors whisper. This one does not. It arrives already talking and does not apologise for it.</p>
+    </div>
+  </div>
+</section>
+
+<section class="stop r" id="four">
+  <div class="side">
+    <div class="fade">
+      <span class="eyebrow">Orange Swirl</span>
+      <h2 class="display">The one<br />that tastes<br />like summer</h2>
+      <p class="body">Citrus and cream, the way it worked when you were nine and the truck came down the street.</p>
+    </div>
+  </div>
+</section>
+
+<section class="stop" id="five">
+  <div class="side">
+    <div class="fade">
+      <span class="eyebrow">Future Freeze</span>
+      <h2 class="display">Quietly<br />the best<br />one</h2>
+      <p class="body">Nobody picks it first. Everybody comes back to it. Mint and something you cannot quite place.</p>
+    </div>
+  </div>
+</section>
+
+<section class="stop r" id="six">
+  <div class="side">
+    <div class="fade">
+      <span class="eyebrow">Summer Pop — limited</span>
+      <h2 class="display">Here until<br />it isn't</h2>
+      <p class="body">One run, one season. When the last case ships, that is the end of it.</p>
+    </div>
+  </div>
+</section>
+
+<div class="ticker"><div class="run" id="run"></div></div>
+
+<section id="proof">
+  <div class="wrap">
+    <img alt="Athlete drinking" src="https://d8j0ntlcm91z4.cloudfront.net/user_3F63NrmBiT6i54hCJdGlykemzJd/hf_20260816_192522_57d253bd-bb29-4d0a-94c3-11c60dc0ce52.png" />
+    <div class="veil"></div>
+    <div class="copy">
+      <div class="fade">
+        <span class="eyebrow">Proof</span>
+        <h2 class="display">Drink it<br />like you<br />earned it</h2>
+        <p class="body">Because you did.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="end">
+  <h2 class="display">Go get one</h2>
+  <p class="body">Front of the store, in the cold case. You will know it when you see it.</p>
+  <a href="#open" class="cta">Where to buy</a>
+</section>
+
+<footer>
+  <span class="mark">PRIME</span>
+  <p>Concept redesign. Not affiliated with or endorsed by PRIME.</p>
+  <p>Taste in full color.</p>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  var CDN = "https://d8j0ntlcm91z4.cloudfront.net/user_3F63NrmBiT6i54hCJdGlykemzJd/";
+  var reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* Each stop owns a bottle, a field colour and the giant word behind the product. */
+  var STOPS = [
+    { id:"open",  word:"Prime",         color:"#1b6bff", file:"hf_20260816_191900_733f8f56-9bd3-40ae-9be1-3af3bf0286fd.png" },
+    { id:"one",   word:"Ice Pop",       color:"#e8213f", file:"hf_20260816_191900_733f8f56-9bd3-40ae-9be1-3af3bf0286fd.png" },
+    { id:"two",   word:"Berry Freeze",  color:"#1f74d8", file:"hf_20260816_191900_b3836246-bc88-4635-8b22-276326431490.png" },
+    { id:"three", word:"Cherry Freeze", color:"#c4102a", file:"hf_20260816_191949_cd37d5f3-39a1-4219-8690-dcbe1f216fbb.png" },
+    { id:"four",  word:"Orange Swirl",  color:"#e8700f", file:"hf_20260816_191949_35a99097-397d-4c49-a2da-cf57891d1c77.png" },
+    { id:"five",  word:"Future Freeze", color:"#2f9c7a", file:"hf_20260816_191900_aa0c4622-ebed-4505-9e75-98b36b295b1b.png" },
+    { id:"six",   word:"Summer Pop",    color:"#d9520f", file:"hf_20260816_191900_00dae5ab-af42-4b69-9c6b-3b4b111c6888.png" }
+  ];
+
+  var frame = document.getElementById("frame");
+  var field = document.getElementById("field");
+  var ink   = document.getElementById("ink");
+  var disc  = document.getElementById("disc");
+  var wordEl= document.getElementById("wordtext");
+  var index = document.getElementById("index");
+
+  // One <img> per distinct bottle, cross-faded — the product itself never unmounts.
+  var imgs = {};
+  STOPS.forEach(function(s){
+    if (imgs[s.file]) return;
+    var im = new Image();
+    im.src = CDN + s.file;
+    im.alt = "PRIME " + s.word;
+    frame.appendChild(im);
+    imgs[s.file] = im;
+  });
+
+  STOPS.forEach(function(s, i){
+    var b = document.createElement("button");
+    b.setAttribute("aria-label", s.word);
+    b.addEventListener("click", function(){ go(document.getElementById(s.id)); });
+    index.appendChild(b);
+    s.dot = b;
+  });
+
+  var current = -1;
+  function activate(i){
+    if (i === current) return;
+    current = i;
+    var s = STOPS[i];
+    field.style.background = s.color;
+    document.querySelector('meta[name="theme-color"]').setAttribute("content", s.color);
+    Object.keys(imgs).forEach(function(k){ imgs[k].classList.toggle("on", k === s.file); });
+    wordEl.style.opacity = 0;
+    setTimeout(function(){ wordEl.textContent = s.word; wordEl.style.opacity = 1; }, 260);
+    STOPS.forEach(function(o, j){ o.dot.classList.toggle("on", j === i); });
+  }
+
+  /* reveals */
+  var io = new IntersectionObserver(function(es){
+    es.forEach(function(e){ if (e.isIntersecting) e.target.classList.add("in"); });
+  }, { threshold:.3 });
+  document.querySelectorAll(".fade").forEach(function(f){ io.observe(f); });
+
+  /* ticker */
+  var run = document.getElementById("run"), s = "";
+  for (var r = 0; r < 2; r++){
+    STOPS.slice(1).forEach(function(o){ s += "<span>" + o.word + "</span><span>&mdash;</span>"; });
+  }
+  run.innerHTML = s;
+
+  /* Whichever stop owns the centre of the viewport owns the colour and the bottle. */
+  var els = STOPS.map(function(o){ return document.getElementById(o.id); });
+  function onScroll(y){
+    var mid = y + window.innerHeight / 2;
+    var best = 0;
+    for (var i = 0; i < els.length; i++){
+      if (els[i].offsetTop <= mid) best = i;
+    }
+    activate(best);
+    // On mobile only one stop may hold the pinned copy band at a time.
+    els.forEach(function(el, i){ el.classList.toggle("active", i === best); });
+
+    var p = Math.min(1, Math.max(0, y / Math.max(1, document.documentElement.scrollHeight - window.innerHeight)));
+    // The product breathes and the ring counter-rotates — small, continuous, never distracting.
+    frame.style.transform = "translateY(" + (-p * 5) + "vh) scale(" + (1 - p * 0.12) + ")";
+    disc.style.transform  = "translate(-50%,-50%) rotate(" + (p * 220) + "deg)";
+    ink.style.transform   = "scale(" + (1.1 + p * 0.2) + ") translateY(" + (-p * 8) + "%)";
+    wordEl.style.transform= "translateX(" + (-p * 14) + "vw)";
+  }
+
+  function go(el){
+    window.scrollTo({ top: el.offsetTop, behavior: reduced ? "auto" : "smooth" });
+  }
+
+  document.querySelectorAll('a[href^="#"]').forEach(function(a){
+    a.addEventListener("click", function(ev){
+      var el = document.querySelector(a.getAttribute("href"));
+      if (el){ ev.preventDefault(); go(el); }
+    });
+  });
+
+  /* Native scrolling is untouched; only the value that drives the parallax is eased,
+     so the page glides without the wheel being hijacked. */
+  var smooth = window.scrollY || 0;
+  (function loop(){
+    var raw = window.scrollY || 0;
+    smooth += (raw - smooth) * (reduced ? 1 : 0.11);
+    if (Math.abs(raw - smooth) < 0.15) smooth = raw;
+    onScroll(smooth);
+    requestAnimationFrame(loop);
+  })();
+
+  window.addEventListener("resize", function(){ onScroll(window.scrollY || 0); });
+})();
+</script>
+</body>
+</html>
