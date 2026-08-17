@@ -17,7 +17,7 @@
   --text:#f2f5f8;
   --muted:#8b94a6;
   --accent:#3aa8ff;        /* the flavour on stage; opens electric blue */
-  --safe:40vw;             /* reserved centre column — sized for the bottle's ROTATED bounding box */
+  --safe:46vw;             /* reserved centre column — holds the whole carousel row, not one bottle */
   --col:calc((100vw - var(--safe)) / 2);
 }
 *{box-sizing:border-box;margin:0;padding:0}
@@ -60,6 +60,8 @@ a{color:inherit;text-decoration:none}
 #backdrop{opacity:.42}
 #splash{opacity:0}
 #arcs{opacity:0}
+#scene .wash{position:absolute;inset:0;background:radial-gradient(60% 50% at 50% 46%,var(--accent),transparent 70%);
+  opacity:.16;mix-blend-mode:screen;transition:background 1s ease,opacity .8s ease}
 #scene .vignette{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 45%,transparent 34%,rgba(5,6,10,.82) 78%,var(--void) 100%)}
 #scene .grain{position:absolute;inset:-100%;opacity:.055;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
@@ -78,8 +80,12 @@ a{color:inherit;text-decoration:none}
 #podium .ring{grid-area:1/1;width:calc(var(--safe) * 1.12);max-width:560px;aspect-ratio:1;
   border:1px solid rgba(255,255,255,.12);border-radius:50%;will-change:transform}
 .bottle{grid-area:1/1;width:var(--safe);max-width:440px;height:74vh;object-fit:contain;
-  mix-blend-mode:screen;opacity:0;transition:opacity .7s cubic-bezier(.4,0,.2,1);will-change:transform,opacity}
+  mix-blend-mode:screen;opacity:0;will-change:transform,opacity,filter;
+  transition:transform .85s cubic-bezier(.22,1,.36,1),opacity .6s ease,filter .6s ease}
 .bottle.on{opacity:1}
+/* the flanking bottles read as depth, not as clutter */
+.bottle.near{opacity:.5;filter:blur(1.5px) saturate(.7)}
+.bottle.far{opacity:.16;filter:blur(4px) saturate(.4)}
 
 /* ---------- copy ---------- */
 .rail{position:relative;z-index:30;width:var(--col);padding:0 clamp(20px,3.4vw,64px)}
@@ -120,6 +126,10 @@ nav a:hover{color:var(--text)}
 .pips{position:fixed;left:clamp(14px,2vw,26px);top:50%;transform:translateY(-50%);z-index:50;display:flex;flex-direction:column;gap:10px;transition:opacity .5s}
 .pips button{width:8px;height:8px;border-radius:50%;border:1.5px solid rgba(255,255,255,.32);background:none;padding:0;cursor:pointer;transition:.35s}
 .pips button.on{background:var(--accent);border-color:var(--accent);transform:scale(1.5)}
+#ghost{position:fixed;inset:0;z-index:0;display:grid;place-items:center;pointer-events:none;overflow:hidden}
+#ghost b{font-family:"Archivo Black",sans-serif;font-weight:400;text-transform:uppercase;white-space:nowrap;
+  font-size:clamp(3rem,15vw,13rem);letter-spacing:-.02em;color:transparent;
+  -webkit-text-stroke:1px rgba(255,255,255,.13);transition:opacity .5s ease}
 #label{position:fixed;left:clamp(20px,3.4vw,64px);bottom:clamp(16px,3vh,30px);z-index:40;
   font-size:10.5px;font-weight:700;letter-spacing:.32em;text-transform:uppercase;color:var(--accent);
   transition:color 1s ease,opacity .4s ease;pointer-events:none}
@@ -247,6 +257,7 @@ footer p{font-size:11px;color:var(--muted)}
   <div class="sat" data-sat="5" style="width:15vw;right:10vw;top:52vh">
     <img alt="" src="https://d8j0ntlcm91z4.cloudfront.net/user_3F63NrmBiT6i54hCJdGlykemzJd/hf_20260816_175105_9570cfc6-b472-4239-a812-5eb41574f807.png" /><div class="tint"></div></div>
 
+  <div class="wash"></div>
   <div class="vignette"></div>
   <div id="podium">
     <div class="halo" id="halo"></div>
@@ -255,6 +266,7 @@ footer p{font-size:11px;color:var(--muted)}
   <div class="grain"></div>
 </div>
 
+<div id="ghost"><b id="ghostword">Berry Freeze</b></div>
 <div id="label">Berry Freeze</div>
 <div class="pips" id="pips"></div>
 <div class="scrollcue" id="cue"><span class="eyebrow">Scroll</span><span class="rod"></span></div>
@@ -445,17 +457,35 @@ footer p{font-size:11px;color:var(--muted)}
   });
 
   var live = -1;
+  var ghost = document.getElementById("ghostword");
+  var N = FLAVORS.length;
+
+  /* Lay the lineup out as a carousel: the active bottle front and centre, its
+     neighbours flanking it smaller, dimmer and softer so they read as depth.
+     Offsets are wrapped so the row is a loop with no end to fall off. */
+  function arrange(){
+    FLAVORS.forEach(function(f,j){
+      var d = j - live;
+      if (d >  N/2) d -= N;
+      if (d < -N/2) d += N;
+      var a = Math.abs(d);
+      f.el.classList.toggle("on",   a <= 2);
+      f.el.classList.toggle("near", a === 1);
+      f.el.classList.toggle("far",  a === 2);
+      f.el.dataset.off = d;
+      f.pip.classList.toggle("on", d === 0);
+    });
+  }
+
   function setFlavor(i){
     if (i === live) return;
     live = i;
     var f = FLAVORS[i];
-    FLAVORS.forEach(function(o,j){
-      o.el.classList.toggle("on", j === i);
-      o.pip.classList.toggle("on", j === i);
-    });
+    arrange();
     root.style.setProperty("--accent", f.color);
     halo.style.setProperty("--halo", rgba(f.color,.34));
     label.textContent = f.name;
+    ghost.textContent = f.name;
     cnum.textContent = String(i+1).padStart(2,"0") + " / 06";
     cname.textContent = f.name;
     cnote.textContent = f.note;
@@ -503,6 +533,9 @@ footer p{font-size:11px;color:var(--muted)}
   var sats     = [].slice.call(document.querySelectorAll(".sat"));
   var hero     = document.getElementById("hero");
   var facts    = document.getElementById("facts");
+  var spinning = false;
+  var heroReady = false;  // the opening flavour holds before the show starts turning
+  setTimeout(function(){ heroReady = true; }, 3600);
   var film     = document.getElementById("film");
 
   backdrop.play().catch(function(){});
@@ -522,10 +555,12 @@ footer p{font-size:11px;color:var(--muted)}
     var cp = (y - carousel.offsetTop) / carSpan;
     var inCarousel = cp >= -0.02 && cp <= 1.02;
     if (inCarousel){
-      var slot = Math.min(FLAVORS.length - 1, Math.max(0, Math.floor(cp * FLAVORS.length)));
+      spinning = false;
+      var slot = Math.min(N - 1, Math.max(0, Math.floor(cp * N)));
       setFlavor(slot);
     } else if (y < carousel.offsetTop){
-      setFlavor(0);
+      // the hero runs its own show, but only after the opening has been seen
+      spinning = heroReady;
     }
 
     // The show: a slow turn, a lift, and a float that never fully settles.
@@ -536,8 +571,14 @@ footer p{font-size:11px;color:var(--muted)}
     var shrink = inCarousel ? 0.9 : 1;
 
     FLAVORS.forEach(function(f){
+      var d = +(f.el.dataset.off || 0), a = Math.abs(d);
+      // neighbours sit out to the side, smaller and tipped away from the centre
+      var slide = d * 22;
+      var depth = 1 - a * 0.26;
+      var tip   = d * 7;
       f.el.style.transform =
-        "translateY(" + lift + "vh) scale(" + (swell * shrink) + ") rotate(" + spin + "deg)";
+        "translate(" + slide + "%," + lift + "vh) " +
+        "scale(" + (swell * shrink * depth) + ") rotate(" + (spin + tip) + "deg)";
     });
     ring.style.transform = "rotate(" + (p * 240) + "deg) scale(" + (1 + Math.sin(hp * Math.PI) * .05) + ")";
     cue.style.opacity = String(hp > 0.12 ? 0 : 1);
@@ -546,6 +587,7 @@ footer p{font-size:11px;color:var(--muted)}
     var handover = Math.min(1, Math.max(0, (y + window.innerHeight - film.offsetTop) / (window.innerHeight * 0.6)));
     scene.style.opacity = String(1 - handover);
     label.style.opacity = String(handover > 0.15 ? 0 : 1);
+    ghost.parentNode.style.opacity = String(1 - handover);
     pips.style.opacity  = String(inCarousel ? 1 : 0);
 
     backdrop.style.transform = "scale(" + (1.08 + p*0.14) + ") translateY(" + (-p*6) + "vh)";
@@ -587,6 +629,10 @@ footer p{font-size:11px;color:var(--muted)}
     onScroll(smooth, t || 0);
     requestAnimationFrame(loop);
   })();
+
+  setInterval(function(){
+    if (spinning && !document.hidden) setFlavor((live + 1) % N);
+  }, 2600);
 
   setFlavor(0);
   window.addEventListener("resize", function(){ onScroll(window.scrollY || 0, 0); });
