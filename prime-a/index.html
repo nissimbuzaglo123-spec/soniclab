@@ -105,7 +105,7 @@ nav a:hover{color:var(--text)}
 #hero{min-height:190vh;align-items:flex-start}
 #hero .rail{position:sticky;top:0;height:100vh;display:flex;flex-direction:column;justify-content:center}
 #hero h1{font-size:clamp(2.9rem,6.2vw,6.6rem);margin:16px 0 22px}
-.scrollcue{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);z-index:40;display:flex;flex-direction:column;align-items:center;gap:9px;transition:opacity .5s}
+.scrollcue{position:fixed;bottom:30px;right:clamp(20px,3.4vw,64px);z-index:40;display:flex;flex-direction:column;align-items:center;gap:9px;transition:opacity .5s}
 .scrollcue .rod{width:1px;height:48px;background:linear-gradient(var(--accent),transparent);transition:background 1s ease}
 
 /* ---------- carousel ---------- */
@@ -195,15 +195,17 @@ footer p{font-size:11px;color:var(--muted)}
   #podium .halo,#podium .ring{align-self:start;margin-top:2vh;width:52vw;max-width:none}
   section{min-height:100vh}
   #hero,#carousel{min-height:auto}
-  #hero .rail,#carousel .rail{position:fixed;left:0;right:0;bottom:0;top:auto;height:54vh;width:100%;
-    padding:0 22px 4vh;justify-content:center;opacity:0;pointer-events:none;transition:opacity .5s;z-index:30;
+  /* Every section that shares the screen with the fixed bottle pins its copy to the
+     lower band. Padding inside a scrolling section cannot protect against a fixed
+     element — the copy simply travels up behind it. */
+  #hero .rail,#carousel .rail,#facts .rail{position:fixed;left:0;right:0;bottom:0;top:auto;height:54vh;width:100%;
+    padding:0 22px 4vh;justify-content:center;display:flex;flex-direction:column;overflow-y:auto;
+    opacity:0;pointer-events:none;transition:opacity .5s;z-index:30;
     background:linear-gradient(transparent,var(--void) 20%)}
-  #hero.active .rail,#carousel.active .rail{opacity:1;pointer-events:auto}
+  #hero.active .rail,#carousel.active .rail,#facts.active .rail{opacity:1;pointer-events:auto}
   #hero{height:190vh}
   #carousel{height:420vh}
-  #facts{padding-top:44vh;align-items:flex-start;padding-bottom:8vh}
-  #facts .rail{width:100%;padding:0 22px}
-  #facts .rail::before{content:"";position:absolute;inset:-50px 0 0;background:linear-gradient(transparent,var(--void) 40%);z-index:-1}
+  #facts{height:130vh}
   #hero h1{font-size:clamp(2.3rem,9.6vw,3.3rem)}
   .block h2,#carousel h3{font-size:clamp(1.8rem,7.4vw,2.5rem)}
   .body{font-size:14px}
@@ -500,6 +502,7 @@ footer p{font-size:11px;color:var(--muted)}
   var scene    = document.getElementById("scene");
   var sats     = [].slice.call(document.querySelectorAll(".sat"));
   var hero     = document.getElementById("hero");
+  var facts    = document.getElementById("facts");
   var film     = document.getElementById("film");
 
   backdrop.play().catch(function(){});
@@ -562,8 +565,9 @@ footer p{font-size:11px;color:var(--muted)}
 
     // mobile: exactly one pinned copy band at a time
     var mid = y + window.innerHeight * 0.5;
-    hero.classList.toggle("active", mid >= hero.offsetTop && mid < hero.offsetTop + hero.offsetHeight);
-    carousel.classList.toggle("active", mid >= carousel.offsetTop && mid < carousel.offsetTop + carousel.offsetHeight);
+    [hero, facts, carousel].forEach(function(s){
+      s.classList.toggle("active", mid >= s.offsetTop && mid < s.offsetTop + s.offsetHeight);
+    });
   }
 
   document.querySelectorAll('a[href^="#"]').forEach(function(a){
