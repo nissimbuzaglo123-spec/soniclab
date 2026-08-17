@@ -4,32 +4,28 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <meta name="theme-color" content="#05060a" />
-<meta name="description" content="PRIME — cold, clean, relentless. Concept redesign." />
-<title>PRIME — Cold. Clean. Relentless.</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%A7%8A%3C/text%3E%3C/svg%3E" />
+<meta name="description" content="PRIME Energy — 200mg caffeine, zero sugar, vegan. Concept redesign." />
+<title>PRIME Energy — Zero Sugar. All Of It.</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9A%A1%3C/text%3E%3C/svg%3E" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <style>
 :root{
   --void:#05060a;
+  --panel:#0a0d14;
   --text:#f2f5f8;
   --muted:#8b94a6;
-  --accent:#3aa8ff;        /* driven by the flavour currently on stage; opens electric blue */
+  --accent:#3aa8ff;        /* the flavour on stage; opens electric blue */
   --safe:34vw;             /* reserved centre column — the product lives here, copy never enters */
   --col:calc((100vw - var(--safe)) / 2);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:initial;-webkit-text-size-adjust:100%}
-body{
-  background:var(--void);color:var(--text);
-  font-family:Inter,system-ui,-apple-system,sans-serif;
-  overflow-x:hidden;-webkit-font-smoothing:antialiased;
-}
+body{background:var(--void);color:var(--text);font-family:Inter,system-ui,-apple-system,sans-serif;
+  overflow-x:hidden;-webkit-font-smoothing:antialiased}
 img,video{display:block;max-width:100%}
 a{color:inherit;text-decoration:none}
-
-/* ---------- type ---------- */
 .display{font-family:"Archivo Black",Arial Black,Impact,sans-serif;letter-spacing:-.02em;line-height:.92;text-transform:uppercase}
 .eyebrow{letter-spacing:.35em;text-transform:uppercase;color:var(--muted);font-size:11px;font-weight:600}
 .body{color:var(--muted);line-height:1.65;font-size:15px;max-width:34ch}
@@ -49,49 +45,43 @@ a{color:inherit;text-decoration:none}
 #intro .word i:nth-child(5){animation-delay:.38s}
 #intro .word i.dot{color:var(--accent)}
 @keyframes rise{to{transform:translateY(0)}}
-#intro .bar{position:absolute;bottom:0;left:0;height:2px;width:0;background:var(--accent);
-  animation:fill 1.5s cubic-bezier(.4,0,.2,1) forwards}
+#intro .bar{position:absolute;bottom:0;left:0;height:2px;width:0;background:var(--accent);animation:fill 1.5s cubic-bezier(.4,0,.2,1) forwards}
 @keyframes fill{to{width:100%}}
 #intro .sub{position:absolute;bottom:9vh;opacity:0;animation:soft .6s ease .55s forwards}
 @keyframes soft{to{opacity:1}}
 
-/* ---------- fixed product stage: the bottle is ALWAYS in front ---------- */
-#stage{position:fixed;inset:0;z-index:20;pointer-events:none;display:grid;place-items:center}
-#stage .holder{position:relative;width:var(--safe);max-width:500px;height:78vh;will-change:transform}
-/* screen blending is what removes the black plate the render sits on */
-#stage .bottle{
-  position:absolute;inset:0;width:100%;height:100%;object-fit:contain;
-  mix-blend-mode:screen;opacity:0;transition:opacity .8s cubic-bezier(.4,0,.2,1);
-}
-#stage .bottle.on{opacity:1}
-#stage .halo{
-  position:absolute;inset:-16% -28%;z-index:-1;border-radius:50%;
-  background:radial-gradient(closest-side,var(--halo,rgba(58,168,255,.34)),transparent 72%);
-  filter:blur(18px);transition:background 1s ease;
-}
-#stage .ring{position:absolute;left:50%;top:50%;width:116%;aspect-ratio:1;transform:translate(-50%,-50%);
-  border:1px solid rgba(255,255,255,.13);border-radius:50%;z-index:-1;will-change:transform}
-
-/* ---------- background layer stack ---------- */
-#bg{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
-#bg .layer{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;mix-blend-mode:screen;will-change:transform,opacity}
+/* ================= THE SCENE =================
+   Background layers AND the bottle live in ONE stacking context. mix-blend-mode
+   only composites against its parent stacking context's backdrop, so a bottle
+   parked in its own fixed z-index layer would paint its black plate as an
+   opaque rectangle. Keeping them together is what makes the plate disappear. */
+#scene{position:fixed;inset:0;z-index:1;overflow:hidden;pointer-events:none}
+#scene .layer{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;mix-blend-mode:screen;will-change:transform,opacity}
 #backdrop{opacity:.42}
-#splash{opacity:0;transform:scale(1.15)}
+#splash{opacity:0}
 #arcs{opacity:0}
-#bg .vignette{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 45%,transparent 34%,rgba(5,6,10,.82) 78%,var(--void) 100%)}
-#bg .grain{position:absolute;inset:-100%;opacity:.055;
+#scene .vignette{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 45%,transparent 34%,rgba(5,6,10,.82) 78%,var(--void) 100%)}
+#scene .grain{position:absolute;inset:-100%;opacity:.055;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   animation:grain 1.1s steps(3) infinite}
 @keyframes grain{0%,100%{transform:translate(0,0)}33%{transform:translate(-3%,2%)}66%{transform:translate(2%,-3%)}}
 
-/* ---------- side effects — recoloured to whichever bottle is on stage ---------- */
-.sat{position:absolute;mix-blend-mode:screen;isolation:isolate;will-change:transform,opacity;opacity:0;pointer-events:none}
+.sat{position:absolute;mix-blend-mode:screen;isolation:isolate;opacity:0;will-change:transform,opacity}
 .sat img{width:100%;height:auto}
-/* colour blend keeps the render's luminance and takes the flavour's hue.
-   Black stays black at zero luminance, so the screen blend still hides the plate. */
 .sat .tint{position:absolute;inset:0;background:var(--accent);mix-blend-mode:color;transition:background 1s ease}
 
-/* ---------- copy rails — strictly outside the product column ---------- */
+/* podium: z-index stays auto so it never opens a stacking context of its own */
+#podium{position:absolute;inset:0;display:grid;place-items:center}
+#podium .halo{grid-area:1/1;width:var(--safe);max-width:560px;aspect-ratio:1;border-radius:50%;
+  background:radial-gradient(closest-side,var(--halo,rgba(58,168,255,.34)),transparent 72%);
+  filter:blur(16px);transition:background 1s ease}
+#podium .ring{grid-area:1/1;width:calc(var(--safe) * 1.12);max-width:560px;aspect-ratio:1;
+  border:1px solid rgba(255,255,255,.12);border-radius:50%;will-change:transform}
+.bottle{grid-area:1/1;width:var(--safe);max-width:480px;height:76vh;object-fit:contain;
+  mix-blend-mode:screen;opacity:0;transition:opacity .7s cubic-bezier(.4,0,.2,1);will-change:transform,opacity}
+.bottle.on{opacity:1}
+
+/* ---------- copy ---------- */
 .rail{position:relative;z-index:30;width:var(--col);padding:0 clamp(20px,3.4vw,64px)}
 .rail.right{margin-left:auto}
 section{position:relative;min-height:100vh;display:flex;align-items:center}
@@ -100,96 +90,128 @@ section{position:relative;min-height:100vh;display:flex;align-items:center}
 .block h2{font-size:clamp(2.1rem,3.9vw,4.1rem);margin:14px 0 18px}
 .block .eyebrow{display:block}
 
-/* ---------- header ---------- */
 header{position:fixed;top:0;left:0;right:0;z-index:60;padding:20px clamp(20px,3vw,44px);
-  display:flex;align-items:center;justify-content:space-between;
-  transition:background .5s,border-color .5s;border-bottom:1px solid transparent}
+  display:flex;align-items:center;justify-content:space-between;transition:background .5s,border-color .5s;border-bottom:1px solid transparent}
 header.stuck{background:rgba(5,6,10,.72);backdrop-filter:blur(18px);border-bottom-color:rgba(255,255,255,.07)}
 .mark{font-family:"Archivo Black",sans-serif;letter-spacing:.14em;font-size:19px}
 .mark span{color:var(--accent);transition:color 1s ease}
-nav{display:flex;gap:clamp(16px,2.2vw,38px)}
-nav a{font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);transition:color .3s}
+nav{display:flex;gap:clamp(14px,2vw,34px)}
+nav a{font-size:11px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);transition:color .3s}
 nav a:hover{color:var(--text)}
 .buy{border:1px solid rgba(255,255,255,.22);padding:9px 20px;font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;transition:.3s}
 .buy:hover{background:var(--text);color:var(--void);border-color:var(--text)}
 
-/* ---------- hero ---------- */
-#hero .rail{padding-top:12vh}
-#hero h1{font-size:clamp(2.9rem,6.4vw,7rem);margin:16px 0 22px}
-.scrollcue{position:absolute;bottom:34px;left:50%;transform:translateX(-50%);z-index:40;display:flex;flex-direction:column;align-items:center;gap:9px}
-.scrollcue .rod{width:1px;height:52px;background:linear-gradient(var(--accent),transparent);transition:background 1s ease}
+/* ---------- hero: the bottle gets the stage to itself ---------- */
+#hero{min-height:190vh;align-items:flex-start}
+#hero .rail{position:sticky;top:0;height:100vh;display:flex;flex-direction:column;justify-content:center}
+#hero h1{font-size:clamp(2.9rem,6.2vw,6.6rem);margin:16px 0 22px}
+.scrollcue{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);z-index:40;display:flex;flex-direction:column;align-items:center;gap:9px;transition:opacity .5s}
+.scrollcue .rod{width:1px;height:48px;background:linear-gradient(var(--accent),transparent);transition:background 1s ease}
 
-/* ---------- the flavour currently on stage ---------- */
-.vmark{position:fixed;right:16px;top:50%;transform:translateY(-50%) rotate(180deg);writing-mode:vertical-rl;
-  font-family:"Archivo Black",sans-serif;font-size:11px;letter-spacing:.5em;color:rgba(255,255,255,.16);z-index:50;pointer-events:none}
-#now{position:fixed;left:clamp(14px,2vw,26px);top:50%;transform:translateY(-50%);z-index:50;
-  display:flex;flex-direction:column;gap:10px;pointer-events:auto}
-#now button{width:9px;height:9px;border-radius:50%;border:1.5px solid rgba(255,255,255,.34);background:none;
-  padding:0;cursor:pointer;transition:.35s}
-#now button.on{background:var(--accent);border-color:var(--accent);transform:scale(1.45)}
-#label{position:fixed;left:50%;bottom:clamp(18px,3vh,34px);transform:translateX(-50%);z-index:40;
+/* ---------- carousel ---------- */
+#carousel{min-height:420vh;align-items:flex-start}
+#carousel .rail{position:sticky;top:0;height:100vh;display:flex;flex-direction:column;justify-content:center}
+#carousel .num{font-family:"Archivo Black",sans-serif;font-size:12px;letter-spacing:.3em;color:var(--accent);transition:color 1s ease}
+#carousel h3{font-size:clamp(2.2rem,4.4vw,4.4rem);margin:12px 0 16px;transition:opacity .4s}
+#carousel .note{min-height:5.4em}
+#carousel .meta{display:flex;gap:26px;margin-top:26px;flex-wrap:wrap}
+#carousel .meta div .k{font-family:"Archivo Black",sans-serif;font-size:1.3rem;color:var(--text)}
+#carousel .meta div .v{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:3px}
+.pips{position:fixed;left:clamp(14px,2vw,26px);top:50%;transform:translateY(-50%);z-index:50;display:flex;flex-direction:column;gap:10px;transition:opacity .5s}
+.pips button{width:8px;height:8px;border-radius:50%;border:1.5px solid rgba(255,255,255,.32);background:none;padding:0;cursor:pointer;transition:.35s}
+.pips button.on{background:var(--accent);border-color:var(--accent);transform:scale(1.5)}
+#label{position:fixed;left:50%;bottom:clamp(16px,3vh,30px);transform:translateX(-50%);z-index:40;
   font-size:10.5px;font-weight:700;letter-spacing:.32em;text-transform:uppercase;color:var(--accent);
   transition:color 1s ease,opacity .4s ease;pointer-events:none}
 
-/* ---------- flavor chips ---------- */
-#flavors .strip{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
-.chip{border:1px solid rgba(255,255,255,.16);padding:9px 15px;font-size:10.5px;font-weight:700;letter-spacing:.16em;
-  text-transform:uppercase;cursor:pointer;transition:.3s;color:var(--muted);background:none;font-family:inherit}
-.chip:hover{color:var(--text);border-color:rgba(255,255,255,.4)}
-.chip.on{background:var(--flav);border-color:var(--flav);color:#05060a}
-
-/* ---------- stats ---------- */
-.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:30px 22px;margin-top:34px}
+/* ---------- numbers ---------- */
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:28px 22px;margin-top:32px}
 .stat .n{font-family:"Archivo Black",sans-serif;font-size:clamp(1.7rem,2.6vw,2.5rem);color:var(--accent);transition:color 1s ease}
 .stat .l{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:5px}
+.versus{margin-top:34px;border-top:1px solid rgba(255,255,255,.1);padding-top:20px}
+.vrow{display:flex;justify-content:space-between;align-items:center;padding:9px 0;font-size:13px;border-bottom:1px solid rgba(255,255,255,.05)}
+.vrow .who{color:var(--muted);font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+.vrow b{font-family:"Archivo Black",sans-serif;font-weight:400}
+.vrow.us b{color:var(--accent);transition:color 1s ease}
 
-/* ---------- athlete panel ---------- */
-#field{min-height:150vh}
-#field .plate{position:sticky;top:0;height:100vh;display:grid;place-items:center;overflow:hidden}
-#field video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.5}
-#field .scrim{position:absolute;inset:0;background:linear-gradient(90deg,var(--void) 4%,transparent 46%,transparent 54%,var(--void) 96%)}
-#field .copy{position:relative;z-index:2;width:var(--col);padding:0 clamp(20px,3.4vw,64px)}
+/* ================= THE FILM — its own page ================= */
+#film{position:relative;z-index:35;background:#000;min-height:auto;display:block;padding:0}
+#film .stack{position:relative;height:100vh;overflow:hidden;display:grid;place-items:center}
+#film video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+#film .fade{position:absolute;inset:0;background:linear-gradient(#000 0%,transparent 22%,transparent 62%,rgba(0,0,0,.92) 100%)}
+#film .title{position:relative;z-index:2;text-align:center;padding:0 22px;align-self:end;margin-bottom:9vh}
+#film .title h2{font-size:clamp(2.4rem,6.4vw,5.6rem);margin:14px 0 14px}
+#film .title p{color:#cfd6e2;max-width:46ch;margin:0 auto;line-height:1.7;font-size:15px}
+#film .sound{position:absolute;right:22px;bottom:22px;z-index:3;border:1px solid rgba(255,255,255,.3);
+  background:rgba(0,0,0,.4);color:#fff;padding:9px 18px;font-size:10.5px;font-weight:700;letter-spacing:.2em;
+  text-transform:uppercase;cursor:pointer;font-family:inherit;backdrop-filter:blur(8px)}
 
-/* ---------- marquee ---------- */
-.marquee{overflow:hidden;padding:26px 0;border-top:1px solid rgba(255,255,255,.07);border-bottom:1px solid rgba(255,255,255,.07);position:relative;z-index:30;background:var(--void)}
+/* ================= SHOP ================= */
+#shop{position:relative;z-index:35;background:var(--void);min-height:auto;display:block;padding:14vh clamp(20px,4vw,72px) 10vh}
+#shop .head{text-align:center;margin-bottom:8vh}
+#shop .head h2{font-size:clamp(2.4rem,5.6vw,5rem);margin:14px 0 14px}
+#shop .head p{color:var(--muted);max-width:48ch;margin:0 auto;line-height:1.7;font-size:15px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:20px;max-width:1400px;margin:0 auto}
+.card{background:var(--panel);border:1px solid rgba(255,255,255,.07);isolation:isolate;
+  padding:26px 20px 22px;display:flex;flex-direction:column;align-items:center;text-align:center;
+  transition:border-color .4s,transform .4s;position:relative;overflow:hidden}
+.card::before{content:"";position:absolute;left:50%;top:-30%;width:150%;aspect-ratio:1;transform:translateX(-50%);
+  background:radial-gradient(closest-side,var(--c),transparent 70%);opacity:.16;transition:opacity .4s}
+.card:hover{transform:translateY(-5px);border-color:var(--c)}
+.card:hover::before{opacity:.3}
+.card .shot{height:230px;display:grid;place-items:center;margin-bottom:16px}
+.card .shot img{height:100%;width:auto;object-fit:contain;mix-blend-mode:screen}
+.card .tag{font-size:9.5px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--c)}
+.card h3{font-family:"Archivo Black",sans-serif;font-size:1.15rem;text-transform:uppercase;margin:9px 0 8px;letter-spacing:-.01em}
+.card .desc{font-size:12.5px;color:var(--muted);line-height:1.6;min-height:4.8em}
+.card .spec{display:flex;gap:14px;justify-content:center;margin:14px 0 16px;flex-wrap:wrap}
+.card .spec span{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);
+  border:1px solid rgba(255,255,255,.12);padding:4px 9px}
+.card .price{font-family:"Archivo Black",sans-serif;font-size:1.5rem;margin-bottom:3px}
+.card .per{font-size:10.5px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;margin-bottom:16px}
+.card .add{width:100%;background:var(--c);color:#05060a;border:none;padding:13px;font-family:inherit;
+  font-size:10.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;transition:filter .3s}
+.card .add:hover{filter:brightness(1.15)}
+#shop .fineprint{text-align:center;color:var(--muted);font-size:11px;margin-top:5vh;line-height:1.8}
+
+/* ---------- marquee / close ---------- */
+.marquee{overflow:hidden;padding:24px 0;border-top:1px solid rgba(255,255,255,.07);border-bottom:1px solid rgba(255,255,255,.07);position:relative;z-index:35;background:var(--void)}
 .track{display:flex;width:max-content;animation:march 26s linear infinite}
-.track span{font-family:"Archivo Black",sans-serif;font-size:clamp(1.5rem,3vw,2.6rem);letter-spacing:.04em;text-transform:uppercase;padding:0 26px;color:rgba(255,255,255,.09)}
+.track span{font-family:"Archivo Black",sans-serif;font-size:clamp(1.4rem,2.8vw,2.4rem);text-transform:uppercase;padding:0 24px;color:rgba(255,255,255,.09)}
 .track span.hot{color:var(--accent);transition:color 1s ease}
 @keyframes march{to{transform:translateX(-50%)}}
-
-/* ---------- close ---------- */
-#close{position:relative;z-index:30;background:var(--void);text-align:center;padding:16vh 20px 8vh;min-height:auto;display:block}
-#close h2{font-size:clamp(2.6rem,6.4vw,6rem);margin-bottom:20px}
-#close .body{margin:0 auto 34px}
-.cta{display:inline-block;background:var(--accent);color:#fff;padding:17px 42px;font-size:12px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;transition:.3s}
-.cta:hover{background:var(--text);color:var(--void)}
-footer{position:relative;z-index:30;background:var(--void);padding:30px clamp(20px,3vw,44px);display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;align-items:center;border-top:1px solid rgba(255,255,255,.07)}
+#close{position:relative;z-index:35;background:var(--void);text-align:center;padding:15vh 20px 8vh;min-height:auto;display:block}
+#close h2{font-size:clamp(2.6rem,6.2vw,5.6rem);margin-bottom:18px}
+#close .body{margin:0 auto 32px}
+.cta{display:inline-block;background:var(--accent);color:#05060a;padding:17px 42px;font-size:12px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;transition:.3s}
+.cta:hover{background:var(--text)}
+footer{position:relative;z-index:35;background:var(--void);padding:28px clamp(20px,3vw,44px);display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;align-items:center;border-top:1px solid rgba(255,255,255,.07)}
 footer p{font-size:11px;color:var(--muted)}
 
 @media (max-width:900px){
-  :root{--safe:58vw;--col:100vw}
-  #stage{align-items:flex-start;padding-top:5vh}
-  #stage .holder{height:34vh;max-width:none}
+  :root{--safe:60vw;--col:100vw}
+  #podium{align-items:flex-start;padding-top:6vh}
+  .bottle{height:34vh;max-width:none}
+  #podium .halo,#podium .ring{align-self:start;margin-top:2vh;width:52vw;max-width:none}
   section{min-height:100vh}
-  main .rail{
-    position:fixed;left:0;right:0;bottom:0;height:56vh;width:100%;
-    padding:0 22px 4vh;display:flex;flex-direction:column;justify-content:center;
-    opacity:0;pointer-events:none;transition:opacity .55s ease;z-index:30;
-    background:linear-gradient(transparent,var(--void) 20%);
-  }
-  main section.active .rail{opacity:1;pointer-events:auto}
-  #hero .rail{padding-top:0}
-  #hero h1{font-size:clamp(2.4rem,10vw,3.4rem)}
-  .vmark,.scrollcue,#now{display:none}
-  #label{bottom:auto;top:41vh}
-  .block h2{font-size:clamp(1.8rem,7.6vw,2.6rem)}
+  #hero,#carousel{min-height:auto}
+  #hero .rail,#carousel .rail{position:fixed;left:0;right:0;bottom:0;top:auto;height:54vh;width:100%;
+    padding:0 22px 4vh;justify-content:center;opacity:0;pointer-events:none;transition:opacity .5s;z-index:30;
+    background:linear-gradient(transparent,var(--void) 20%)}
+  #hero.active .rail,#carousel.active .rail{opacity:1;pointer-events:auto}
+  #hero{height:190vh}
+  #carousel{height:420vh}
+  #facts{padding-top:44vh;align-items:flex-start;padding-bottom:8vh}
+  #facts .rail{width:100%;padding:0 22px}
+  #facts .rail::before{content:"";position:absolute;inset:-50px 0 0;background:linear-gradient(transparent,var(--void) 40%);z-index:-1}
+  #hero h1{font-size:clamp(2.3rem,9.6vw,3.3rem)}
+  .block h2,#carousel h3{font-size:clamp(1.8rem,7.4vw,2.5rem)}
   .body{font-size:14px}
-  .stats{gap:18px 14px;margin-top:24px}
-  #field{min-height:auto;background:var(--void);z-index:30}
-  #field .plate{position:relative;height:auto;padding:44vh 0 9vh;display:block;background:var(--void)}
-  #field video{height:42vh;opacity:.55}
-  #field .scrim{background:linear-gradient(transparent 18%,var(--void) 46%)}
-  #field .copy{width:100%;padding:0 22px}
+  .pips,.scrollcue{display:none}
+  #label{bottom:auto;top:41vh}
+  .stats{gap:18px 14px}
+  #carousel .note{min-height:6.4em}
+  .card .shot{height:180px}
 }
 @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 </style>
@@ -198,11 +220,11 @@ footer p{font-size:11px;color:var(--muted)}
 
 <div id="intro">
   <div class="word"><i>P</i><i>R</i><i>I</i><i>M</i><i>E</i><i class="dot">.</i></div>
-  <span class="eyebrow sub">Hydration</span>
+  <span class="eyebrow sub">Energy</span>
   <div class="bar"></div>
 </div>
 
-<div id="bg">
+<div id="scene">
   <video id="backdrop" class="layer" muted loop playsinline preload="auto"
     src="https://d8j0ntlcm91z4.cloudfront.net/user_3F63NrmBiT6i54hCJdGlykemzJd/hf_20260816_193153_1099f722-1878-499c-86e6-1cf6cda27549.mp4"></video>
   <video id="splash" class="layer" muted loop playsinline preload="auto"
@@ -210,43 +232,40 @@ footer p{font-size:11px;color:var(--muted)}
   <img id="arcs" class="layer" alt=""
     src="https://d8j0ntlcm91z4.cloudfront.net/user_3F63NrmBiT6i54hCJdGlykemzJd/hf_20260816_175403_f7b569c6-5383-421e-a5b4-f06efe818982.png" />
 
-  <div class="sat" data-sat="0" style="width:19vw;left:5vw;top:16vh">
+  <div class="sat" data-sat="0" style="width:18vw;left:5vw;top:16vh">
     <img alt="" src="https://d8j0ntlcm91z4.cloudfront.net/user_3F63NrmBiT6i54hCJdGlykemzJd/hf_20260816_175007_a8fbf0f7-253d-4e17-b64b-3ad16b32bb0e.png" /><div class="tint"></div></div>
-  <div class="sat" data-sat="1" style="width:16vw;right:6vw;top:24vh">
+  <div class="sat" data-sat="1" style="width:15vw;right:6vw;top:23vh">
     <img alt="" src="https://d8j0ntlcm91z4.cloudfront.net/user_3F63NrmBiT6i54hCJdGlykemzJd/hf_20260816_175007_82dcecc1-5883-4df4-a4a9-4e543acc1be4.png" /><div class="tint"></div></div>
-  <div class="sat" data-sat="2" style="width:17vw;left:8vw;bottom:12vh">
+  <div class="sat" data-sat="2" style="width:16vw;left:8vw;bottom:12vh">
     <img alt="" src="https://d8j0ntlcm91z4.cloudfront.net/user_3F63NrmBiT6i54hCJdGlykemzJd/hf_20260816_175236_cdb79b78-41ae-4440-968c-58e0100c44e5.png" /><div class="tint"></div></div>
-  <div class="sat" data-sat="3" style="width:18vw;right:5vw;bottom:16vh">
+  <div class="sat" data-sat="3" style="width:17vw;right:5vw;bottom:15vh">
     <img alt="" src="https://d8j0ntlcm91z4.cloudfront.net/user_3F63NrmBiT6i54hCJdGlykemzJd/hf_20260816_175105_c380dcd3-9887-4f51-8fa4-0389bb364804.png" /><div class="tint"></div></div>
-  <div class="sat" data-sat="4" style="width:15vw;left:11vw;top:44vh">
+  <div class="sat" data-sat="4" style="width:14vw;left:11vw;top:45vh">
     <img alt="" src="https://d8j0ntlcm91z4.cloudfront.net/user_3F63NrmBiT6i54hCJdGlykemzJd/hf_20260816_175007_67a93871-1c12-4c23-8d6f-76223bd461c7.png" /><div class="tint"></div></div>
-  <div class="sat" data-sat="5" style="width:16vw;right:10vw;top:52vh">
+  <div class="sat" data-sat="5" style="width:15vw;right:10vw;top:52vh">
     <img alt="" src="https://d8j0ntlcm91z4.cloudfront.net/user_3F63NrmBiT6i54hCJdGlykemzJd/hf_20260816_175105_9570cfc6-b472-4239-a812-5eb41574f807.png" /><div class="tint"></div></div>
 
   <div class="vignette"></div>
-  <div class="grain"></div>
-</div>
-
-<div id="stage">
-  <div class="holder" id="holder">
+  <div id="podium">
     <div class="halo" id="halo"></div>
     <div class="ring" id="ring"></div>
   </div>
+  <div class="grain"></div>
 </div>
 
-<div class="vmark">PRIME HYDRATION</div>
-<div id="now"></div>
 <div id="label">Berry Freeze</div>
+<div class="pips" id="pips"></div>
+<div class="scrollcue" id="cue"><span class="eyebrow">Scroll</span><span class="rod"></span></div>
 
 <header id="head">
   <a href="#top" class="mark">PRIME<span>.</span></a>
   <nav>
-    <a href="#inside">Inside</a>
-    <a href="#cold">Cold</a>
-    <a href="#flavors">Flavors</a>
-    <a href="#field">Field</a>
+    <a href="#facts">Formula</a>
+    <a href="#carousel">Flavors</a>
+    <a href="#film">Film</a>
+    <a href="#shop">Shop</a>
   </nav>
-  <a href="#close" class="buy">Find it</a>
+  <a href="#shop" class="buy">Buy</a>
 </header>
 
 <main id="top">
@@ -254,67 +273,77 @@ footer p{font-size:11px;color:var(--muted)}
   <section id="hero">
     <div class="rail">
       <div class="block in">
-        <span class="eyebrow">Electrolyte Enhanced</span>
-        <h1 class="display">Cold.<br />Clean.<br />Relentless.</h1>
-        <p class="body">Ten percent coconut water. Zero added sugar. Nothing to come down from.</p>
+        <span class="eyebrow">200mg Caffeine &middot; Zero Sugar</span>
+        <h1 class="display">Zero sugar.<br />All of it.</h1>
+        <p class="body">Two hundred milligrams of caffeine, three hundred and fifty-five of electrolytes, and ten calories. Vegan. Gluten free. Nothing else needed saying.</p>
       </div>
     </div>
-    <div class="scrollcue"><span class="eyebrow">Scroll</span><span class="rod"></span></div>
   </section>
 
-  <section id="inside">
+  <section id="facts">
     <div class="rail right">
       <div class="block">
-        <span class="eyebrow">What's inside</span>
-        <h2 class="display">Nothing<br />to hide</h2>
-        <p class="body">Coconut water for the minerals. Electrolytes for the balance. That is the whole list — no added sugar, no artificial dyes, nothing along for the ride.</p>
+        <span class="eyebrow">The formula</span>
+        <h2 class="display">Read the<br />whole can</h2>
+        <p class="body">Coconut water and electrolytes for the hydration. B6 and B12 for the metabolism. L-theanine alongside the caffeine, which is the part that keeps the edge off.</p>
         <div class="stats">
-          <div class="stat"><div class="n">10%</div><div class="l">Coconut water</div></div>
-          <div class="stat"><div class="n">0g</div><div class="l">Added sugar</div></div>
-          <div class="stat"><div class="n">0</div><div class="l">Artificial dyes</div></div>
-          <div class="stat"><div class="n">6</div><div class="l">Electrolytes</div></div>
+          <div class="stat"><div class="n">200mg</div><div class="l">Caffeine</div></div>
+          <div class="stat"><div class="n">0g</div><div class="l">Sugar</div></div>
+          <div class="stat"><div class="n">355mg</div><div class="l">Electrolytes</div></div>
+          <div class="stat"><div class="n">10</div><div class="l">Calories</div></div>
+        </div>
+        <div class="versus">
+          <div class="vrow us"><span class="who">PRIME Energy</span><b>200mg caffeine &middot; 0g sugar</b></div>
+          <div class="vrow"><span class="who">Red Bull</span><b>114mg &middot; 38g sugar</b></div>
+          <div class="vrow"><span class="who">Monster</span><b>160mg &middot; 54g sugar</b></div>
         </div>
       </div>
     </div>
   </section>
 
-  <section id="cold">
+  <section id="carousel">
     <div class="rail">
-      <div class="block">
-        <span class="eyebrow">Serve it cold</span>
-        <h2 class="display">Built for<br />the last set</h2>
-        <p class="body">The bottle sweats. So do you. Everything about this is designed for the moment the work is nearly done and you still have one more in you.</p>
-      </div>
-    </div>
-  </section>
-
-  <section id="flavors">
-    <div class="rail right">
-      <div class="block">
-        <span class="eyebrow">Six ways</span>
-        <h2 class="display">Pick<br />your cold</h2>
-        <p class="body">Same formula every time. The only thing that changes is what it tastes like.</p>
-        <div class="strip" id="chips"></div>
+      <div class="block in">
+        <span class="num" id="cnum">01 / 06</span>
+        <h3 class="display" id="cname">Berry Freeze</h3>
+        <p class="body note" id="cnote">Cold blue fruit with a clean finish. The one people reach for without thinking about it.</p>
+        <div class="meta">
+          <div><div class="k" id="ccaf">200mg</div><div class="v">Caffeine</div></div>
+          <div><div class="k">0g</div><div class="v">Sugar</div></div>
+          <div><div class="k" id="cprice">$1.17</div><div class="v">Per can</div></div>
+        </div>
       </div>
     </div>
   </section>
 
 </main>
 
-<section id="field">
-  <div class="plate">
-    <video id="athlete" muted loop playsinline preload="none"
+<section id="film">
+  <div class="stack">
+    <video id="reel" muted loop playsinline preload="metadata"
       poster="https://d8j0ntlcm91z4.cloudfront.net/user_3F63NrmBiT6i54hCJdGlykemzJd/hf_20260816_210454_5760228a-f08d-48fc-b5ca-7ec58685625d.png"
       src="https://d8j0ntlcm91z4.cloudfront.net/user_3F63NrmBiT6i54hCJdGlykemzJd/hf_20260816_211028_cf67b5ae-13cb-456b-b5ef-b97cbb4c77ff.mp4"></video>
-    <div class="scrim"></div>
-    <div class="copy">
-      <div class="block">
-        <span class="eyebrow">In the field</span>
-        <h2 class="display">Earn the<br />first sip</h2>
-        <p class="body">It tastes better when you've done something to deserve it. That is not marketing — that is just how it works.</p>
-      </div>
+    <div class="fade"></div>
+    <div class="title">
+      <span class="eyebrow">The film</span>
+      <h2 class="display">Four seconds<br />after the set</h2>
+      <p>No crash to plan around, no sugar to sit through. Just the part where you put the can down and go again.</p>
     </div>
+    <button class="sound" id="sound">Sound off</button>
   </div>
+</section>
+
+<section id="shop">
+  <div class="head">
+    <span class="eyebrow">The lineup</span>
+    <h2 class="display">Six flavors</h2>
+    <p>Same can, same 200mg, same zero sugar. Pick the one you want to keep in the fridge.</p>
+  </div>
+  <div class="cards" id="cards"></div>
+  <p class="fineprint">
+    Prices shown are typical US retail for a 12-pack. Concept work — not a real store.<br />
+    Contains caffeine. Not recommended for children or people sensitive to caffeine.
+  </p>
 </section>
 
 <div class="marquee"><div class="track" id="track"></div></div>
@@ -322,16 +351,16 @@ footer p{font-size:11px;color:var(--muted)}
 <section id="close">
   <div class="block">
     <span class="eyebrow">Stocked nationwide</span>
-    <h2 class="display">Find it cold</h2>
-    <p class="body">In the fridge at the front of the store. Ask for it by name.</p>
-    <a href="#top" class="cta">Where to buy</a>
+    <h2 class="display">Go get one</h2>
+    <p class="body">Front of the store, in the cold case. You will know it when you see it.</p>
+    <a href="#shop" class="cta">Shop the lineup</a>
   </div>
 </section>
 
 <footer>
   <span class="mark">PRIME<span>.</span></span>
-  <p>Concept redesign. Not affiliated with or endorsed by PRIME.</p>
-  <p>Cold. Clean. Relentless.</p>
+  <p>Concept redesign. Not affiliated with or endorsed by PRIME or Congo Brands.</p>
+  <p>Zero sugar. All of it.</p>
 </footer>
 
 <script>
@@ -339,97 +368,111 @@ footer p{font-size:11px;color:var(--muted)}
   "use strict";
   var CDN = "https://d8j0ntlcm91z4.cloudfront.net/user_3F63NrmBiT6i54hCJdGlykemzJd/";
   var reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var root = document.documentElement;
 
   /* ---------- intro ---------- */
   var intro = document.getElementById("intro");
-  function dropIntro(){
-    if (intro.classList.contains("done")) return;
+  setTimeout(function(){
     intro.classList.add("done");
-    setTimeout(function(){ intro.remove(); }, 1400);
-  }
-  setTimeout(dropIntro, reduced ? 300 : 2000);
+    setTimeout(function(){ if (intro.parentNode) intro.remove(); }, 1400);
+  }, reduced ? 300 : 2100);
 
-  /* ---------- flavours ---------- */
-  /* Berry Freeze leads so the site opens on the electric blue. */
+  /* ---------- the lineup ---------- */
   var FLAVORS = [
-    { name:"Berry Freeze",  color:"#3aa8ff", file:"hf_20260816_191900_b3836246-bc88-4635-8b22-276326431490.png" },
-    { name:"Ice Pop",       color:"#ff3355", file:"hf_20260816_191900_733f8f56-9bd3-40ae-9be1-3af3bf0286fd.png" },
-    { name:"Cherry Freeze", color:"#ff2d46", file:"hf_20260816_191949_cd37d5f3-39a1-4219-8690-dcbe1f216fbb.png" },
-    { name:"Orange Swirl",  color:"#ff8a1f", file:"hf_20260816_191949_35a99097-397d-4c49-a2da-cf57891d1c77.png" },
-    { name:"Future Freeze", color:"#7ce8c4", file:"hf_20260816_191900_aa0c4622-ebed-4505-9e75-98b36b295b1b.png" },
-    { name:"Summer Pop",    color:"#ffb01f", file:"hf_20260816_191900_00dae5ab-af42-4b69-9c6b-3b4b111c6888.png" }
+    { name:"Berry Freeze",  color:"#3aa8ff", price:"$13.98", each:"$1.17",
+      note:"Cold blue fruit with a clean finish. The one people reach for without thinking about it.",
+      file:"hf_20260816_191900_b3836246-bc88-4635-8b22-276326431490.png" },
+    { name:"Ice Pop",       color:"#ff3355", price:"$13.98", each:"$1.17",
+      note:"Cherry, lime and blue raspberry in the order you remember them. Bomb pop, in a can.",
+      file:"hf_20260816_191900_733f8f56-9bd3-40ae-9be1-3af3bf0286fd.png" },
+    { name:"Cherry Freeze", color:"#ff2d46", price:"$13.98", each:"$1.17",
+      note:"Dark cherry, cold enough to bite. The loudest one in the fridge and it knows it.",
+      file:"hf_20260816_191949_cd37d5f3-39a1-4219-8690-dcbe1f216fbb.png" },
+    { name:"Orange Swirl",  color:"#ff8a1f", price:"$13.98", each:"$1.17",
+      note:"Citrus and cream, the way it worked when the truck came down the street.",
+      file:"hf_20260816_191949_35a99097-397d-4c49-a2da-cf57891d1c77.png" },
+    { name:"Future Freeze", color:"#7ce8c4", price:"$13.98", each:"$1.17",
+      note:"Mint and something you cannot quite name. Nobody picks it first, everybody comes back.",
+      file:"hf_20260816_191900_aa0c4622-ebed-4505-9e75-98b36b295b1b.png" },
+    { name:"Summer Pop",    color:"#ffb01f", price:"$15.98", each:"$1.33",
+      note:"One run, one season. When the last case ships that is the end of it.",
+      file:"hf_20260816_191900_00dae5ab-af42-4b69-9c6b-3b4b111c6888.png" }
   ];
 
-  var holder = document.getElementById("holder");
+  var podium = document.getElementById("podium");
   var halo   = document.getElementById("halo");
   var ring   = document.getElementById("ring");
   var label  = document.getElementById("label");
-  var nowNav = document.getElementById("now");
-  var chips  = document.getElementById("chips");
-  var root   = document.documentElement;
+  var pips   = document.getElementById("pips");
+  var cards  = document.getElementById("cards");
+  var cnum   = document.getElementById("cnum");
+  var cname  = document.getElementById("cname");
+  var cnote  = document.getElementById("cnote");
+  var cprice = document.getElementById("cprice");
 
-  // Each bottle gets its own layer so a swap is a cross-fade, never a reload.
-  FLAVORS.forEach(function(f, i){
+  function rgba(hex,a){var n=parseInt(hex.slice(1),16);
+    return "rgba("+(n>>16&255)+","+(n>>8&255)+","+(n&255)+","+a+")";}
+
+  FLAVORS.forEach(function(f,i){
     var im = new Image();
     im.className = "bottle";
     im.src = CDN + f.file;
-    im.alt = "PRIME " + f.name;
-    holder.appendChild(im);
+    im.alt = "PRIME Energy " + f.name;
+    podium.appendChild(im);
     f.el = im;
 
-    var dot = document.createElement("button");
-    dot.setAttribute("aria-label", f.name);
-    dot.addEventListener("click", function(){ show(i, true); });
-    nowNav.appendChild(dot);
-    f.dot = dot;
+    var pip = document.createElement("button");
+    pip.setAttribute("aria-label", f.name);
+    pip.addEventListener("click", function(){ jumpTo(i); });
+    pips.appendChild(pip);
+    f.pip = pip;
 
-    var chip = document.createElement("button");
-    chip.className = "chip";
-    chip.textContent = f.name;
-    chip.style.setProperty("--flav", f.color);
-    chip.addEventListener("click", function(){ show(i, true); });
-    chips.appendChild(chip);
-    f.chip = chip;
+    var c = document.createElement("article");
+    c.className = "card";
+    c.style.setProperty("--c", f.color);
+    c.innerHTML =
+      '<div class="shot"><img alt="PRIME Energy ' + f.name + '" loading="lazy" src="' + CDN + f.file + '"></div>' +
+      '<span class="tag">' + (i === 5 ? "Limited run" : "12-pack &middot; 12 fl oz") + '</span>' +
+      '<h3>' + f.name + '</h3>' +
+      '<p class="desc">' + f.note + '</p>' +
+      '<div class="spec"><span>200mg caffeine</span><span>0g sugar</span><span>Vegan</span></div>' +
+      '<div class="price">' + f.price + '</div>' +
+      '<div class="per">' + f.each + ' per can</div>' +
+      '<button class="add">Add to cart</button>';
+    cards.appendChild(c);
   });
 
-  function rgba(hex, a){
-    var n = parseInt(hex.slice(1), 16);
-    return "rgba(" + (n>>16&255) + "," + (n>>8&255) + "," + (n&255) + "," + a + ")";
-  }
-
-  var live = -1, locked = false, lockTimer;
-  function show(i, byHand){
+  var live = -1;
+  function setFlavor(i){
     if (i === live) return;
     live = i;
     var f = FLAVORS[i];
-
-    FLAVORS.forEach(function(o, j){
+    FLAVORS.forEach(function(o,j){
       o.el.classList.toggle("on", j === i);
-      o.dot.classList.toggle("on", j === i);
-      o.chip.classList.toggle("on", j === i);
+      o.pip.classList.toggle("on", j === i);
     });
-
-    // One variable drives the accent everywhere: halo, side effects, stats, chrome.
     root.style.setProperty("--accent", f.color);
-    halo.style.setProperty("--halo", rgba(f.color, .34));
+    halo.style.setProperty("--halo", rgba(f.color,.34));
     label.textContent = f.name;
-    document.querySelector('meta[name="theme-color"]').setAttribute("content", "#05060a");
+    cnum.textContent = String(i+1).padStart(2,"0") + " / 06";
+    cname.textContent = f.name;
+    cnote.textContent = f.note;
+    cprice.textContent = f.each;
+  }
 
-    if (byHand){
-      // A manual pick holds for a moment so scrolling does not immediately override it.
-      locked = true;
-      clearTimeout(lockTimer);
-      lockTimer = setTimeout(function(){ locked = false; }, 2600);
-    }
+  var carousel = document.getElementById("carousel");
+  function jumpTo(i){
+    // land in the middle of that flavour's slice of the carousel
+    var span = carousel.offsetHeight - window.innerHeight;
+    var y = carousel.offsetTop + span * ((i + 0.5) / FLAVORS.length);
+    window.scrollTo({ top:y, behavior: reduced ? "auto" : "smooth" });
   }
 
   /* ---------- marquee ---------- */
-  var words = ["Cold","Clean","Relentless","Zero Sugar","Coconut Water"], line = "";
-  for (var r = 0; r < 2; r++){
-    words.forEach(function(w, i){
-      line += "<span" + (i % 2 ? ' class="hot"' : "") + ">" + w + "</span><span>&bull;</span>";
-    });
-  }
+  var words = ["200mg Caffeine","Zero Sugar","Vegan","Gluten Free","355mg Electrolytes"], line = "";
+  for (var r=0;r<2;r++) words.forEach(function(w,i){
+    line += '<span'+(i%2?' class="hot"':'')+'>'+w+'</span><span>&bull;</span>';
+  });
   document.getElementById("track").innerHTML = line;
 
   /* ---------- reveals ---------- */
@@ -438,60 +481,89 @@ footer p{font-size:11px;color:var(--muted)}
   }, { threshold:.25, rootMargin:"-40px 0px" });
   document.querySelectorAll(".block").forEach(function(b){ io.observe(b); });
 
+  /* ---------- film ---------- */
+  var reel = document.getElementById("reel"), sound = document.getElementById("sound");
+  sound.addEventListener("click", function(){
+    reel.muted = !reel.muted;
+    sound.textContent = reel.muted ? "Sound off" : "Sound on";
+  });
+  new IntersectionObserver(function(es){
+    es.forEach(function(e){ e.isIntersecting ? reel.play().catch(function(){}) : reel.pause(); });
+  }, { threshold:.35 }).observe(document.getElementById("film"));
+
   /* ---------- scroll ---------- */
   var head     = document.getElementById("head");
   var backdrop = document.getElementById("backdrop");
   var splash   = document.getElementById("splash");
   var arcs     = document.getElementById("arcs");
+  var cue      = document.getElementById("cue");
+  var scene    = document.getElementById("scene");
   var sats     = [].slice.call(document.querySelectorAll(".sat"));
-  var pinned   = [].slice.call(document.querySelectorAll("main section"));
-  var owner    = -1;
+  var hero     = document.getElementById("hero");
+  var film     = document.getElementById("film");
 
   backdrop.play().catch(function(){});
   splash.play().catch(function(){});
 
-  function onScroll(y){
+  function onScroll(y, t){
     var max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
     var p = Math.min(1, Math.max(0, y / max));
-
     head.classList.toggle("stuck", y > 40);
 
-    // The bottle swaps on its own cadence — more often than the copy changes,
-    // which is what keeps the stage alive while the reading stays put.
-    if (!locked){
-      var slot = Math.min(FLAVORS.length - 1, Math.floor(p / 0.145));
-      show(slot, false);
+    /* ---- act one: the bottle performs, and holds its flavour ---- */
+    var heroSpan = Math.max(1, hero.offsetHeight - window.innerHeight);
+    var hp = Math.min(1, Math.max(0, (y - hero.offsetTop) / heroSpan));
+
+    /* ---- act two: the carousel takes over, one bottle at a time ---- */
+    var carSpan = Math.max(1, carousel.offsetHeight - window.innerHeight);
+    var cp = (y - carousel.offsetTop) / carSpan;
+    var inCarousel = cp >= -0.02 && cp <= 1.02;
+    if (inCarousel){
+      var slot = Math.min(FLAVORS.length - 1, Math.max(0, Math.floor(cp * FLAVORS.length)));
+      setFlavor(slot);
+    } else if (y < carousel.offsetTop){
+      setFlavor(0);
     }
 
-    // Pinned copy on mobile: exactly one section may own the band.
-    var mid = y + window.innerHeight * 0.5, best = 0;
-    for (var i = 0; i < pinned.length; i++){ if (pinned[i].offsetTop <= mid) best = i; }
-    if (best !== owner){
-      owner = best;
-      pinned.forEach(function(s, j){ s.classList.toggle("active", j === best); });
-    }
+    // The show: a slow turn, a lift, and a float that never fully settles.
+    var float = reduced ? 0 : Math.sin(t / 1400) * 1.1;
+    var spin  = hp * 16 - (inCarousel ? 0 : 0);
+    var swell = 1 + Math.sin(hp * Math.PI) * 0.07;
+    var lift  = -p * 3 + float;
+    var shrink = inCarousel ? 0.9 : 1;
 
-    holder.style.transform = "translateY(" + (-p * 4) + "vh) scale(" + (1 - p * 0.18) + ")";
-    ring.style.transform = "translate(-50%,-50%) rotate(" + (p * 200) + "deg)";
-
-    backdrop.style.transform = "scale(" + (1.08 + p * 0.14) + ") translateY(" + (-p * 6) + "vh)";
-    backdrop.style.opacity = String(0.42 - p * 0.16);
-
-    var bloom = 1 - Math.min(1, Math.abs(p - 0.42) / 0.24);
-    splash.style.opacity = String(bloom * 0.5);
-    splash.style.transform = "scale(" + (1.15 + bloom * 0.2) + ")";
-
-    arcs.style.opacity = String(Math.min(1, Math.max(0, (p - 0.62) / 0.24)) * 0.34);
-    label.style.opacity = String(p > 0.9 ? 0 : 1);
-
-    sats.forEach(function(s, i){
-      var phase = Math.min(1, Math.max(0, (p - 0.06 - i * 0.055) / 0.34));
-      var dir = i % 2 ? 1 : -1;
-      s.style.opacity = String(phase * (1 - Math.max(0, (p - 0.78) / 0.22)) * 0.85);
-      s.style.transform =
-        "translate3d(" + (dir * (1 - phase) * 12) + "vw," +
-        (-p * (14 + i * 5)) + "vh,0) rotate(" + (dir * p * (28 + i * 12)) + "deg)";
+    FLAVORS.forEach(function(f){
+      f.el.style.transform =
+        "translateY(" + lift + "vh) scale(" + (swell * shrink) + ") rotate(" + spin + "deg)";
     });
+    ring.style.transform = "rotate(" + (p * 240) + "deg) scale(" + (1 + Math.sin(hp * Math.PI) * .05) + ")";
+    cue.style.opacity = String(hp > 0.12 ? 0 : 1);
+
+    // The scene hands the screen over once the film starts.
+    var handover = Math.min(1, Math.max(0, (y + window.innerHeight - film.offsetTop) / (window.innerHeight * 0.6)));
+    scene.style.opacity = String(1 - handover);
+    label.style.opacity = String(handover > 0.15 ? 0 : 1);
+    pips.style.opacity  = String(inCarousel ? 1 : 0);
+
+    backdrop.style.transform = "scale(" + (1.08 + p*0.14) + ") translateY(" + (-p*6) + "vh)";
+    backdrop.style.opacity = String(0.42 - p*0.14);
+    var bloom = 1 - Math.min(1, Math.abs(hp - 0.62) / 0.3);
+    splash.style.opacity = String(bloom * 0.42);
+    splash.style.transform = "scale(" + (1.12 + bloom*0.18) + ")";
+    arcs.style.opacity = String(inCarousel ? 0.26 : 0);
+
+    sats.forEach(function(s,i){
+      var phase = Math.min(1, Math.max(0, (hp - i*0.06) / 0.4));
+      var dir = i % 2 ? 1 : -1;
+      s.style.opacity = String(phase * 0.8);
+      s.style.transform =
+        "translate3d(" + (dir*(1-phase)*10) + "vw," + (-p*(12+i*4)) + "vh,0) rotate(" + (dir*p*(26+i*10)) + "deg)";
+    });
+
+    // mobile: exactly one pinned copy band at a time
+    var mid = y + window.innerHeight * 0.5;
+    hero.classList.toggle("active", mid >= hero.offsetTop && mid < hero.offsetTop + hero.offsetHeight);
+    carousel.classList.toggle("active", mid >= carousel.offsetTop && mid < carousel.offsetTop + carousel.offsetHeight);
   }
 
   document.querySelectorAll('a[href^="#"]').forEach(function(a){
@@ -503,19 +575,17 @@ footer p{font-size:11px;color:var(--muted)}
     });
   });
 
-  /* Native scrolling is left alone; only the value driving the parallax is eased. */
   var smooth = window.scrollY || 0;
-  (function loop(){
+  (function loop(t){
     var raw = window.scrollY || 0;
     smooth += (raw - smooth) * (reduced ? 1 : 0.11);
     if (Math.abs(raw - smooth) < 0.15) smooth = raw;
-    onScroll(smooth);
+    onScroll(smooth, t || 0);
     requestAnimationFrame(loop);
   })();
 
-  show(0, false);
-  onScroll(smooth);
-  window.addEventListener("resize", function(){ onScroll(window.scrollY || 0); });
+  setFlavor(0);
+  window.addEventListener("resize", function(){ onScroll(window.scrollY || 0, 0); });
 })();
 </script>
 </body>
