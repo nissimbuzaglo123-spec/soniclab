@@ -1,0 +1,916 @@
+<title>תיק אינדיאנפוליס</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700&family=Frank+Ruhl+Libre:wght@700;800&family=IBM+Plex+Mono:wght@400;600&display=swap">
+
+<style>
+  :root {
+    --ground:      #EDEFEE;
+    --surface:     #FFFFFF;
+    --surface-2:   #F4F7F6;
+    --ink:         #12171A;
+    --ink-2:       #3D4A4F;
+    --muted:       #6B7A80;
+    --rule:        #D6DCDA;
+    --rule-strong: #B9C3C1;
+    --accent:      #1F4E79;
+    --accent-ink:  #1F4E79;
+    --accent-soft: #E3ECF3;
+    --good:        #1C6444;
+    --good-soft:   #DDEEE5;
+    --warn:        #8A5C0B;
+    --warn-soft:   #F5EAD3;
+    --bad:         #9C2C26;
+    --bad-soft:    #F6E2E0;
+    --shadow:      0 1px 2px rgba(18,23,26,.05), 0 8px 24px -16px rgba(18,23,26,.28);
+
+    --serif: "Frank Ruhl Libre", "Times New Roman", serif;
+    --sans:  "Assistant", "Segoe UI", system-ui, sans-serif;
+    --mono:  "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
+
+    --maxw: 1120px;
+    --prose: 68ch;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground:      #0F1416;
+      --surface:     #161D20;
+      --surface-2:   #1D2528;
+      --ink:         #E8EDEC;
+      --ink-2:       #B7C2C4;
+      --muted:       #86959A;
+      --rule:        #2A3337;
+      --rule-strong: #3A4549;
+      --accent:      #77AEDF;
+      --accent-ink:  #9CC6EC;
+      --accent-soft: #16303F;
+      --good:        #61C293;
+      --good-soft:   #12301F;
+      --warn:        #DCA943;
+      --warn-soft:   #33260A;
+      --bad:         #E5786F;
+      --bad-soft:    #351613;
+      --shadow:      0 1px 2px rgba(0,0,0,.4), 0 10px 30px -18px rgba(0,0,0,.8);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground:      #0F1416;
+    --surface:     #161D20;
+    --surface-2:   #1D2528;
+    --ink:         #E8EDEC;
+    --ink-2:       #B7C2C4;
+    --muted:       #86959A;
+    --rule:        #2A3337;
+    --rule-strong: #3A4549;
+    --accent:      #77AEDF;
+    --accent-ink:  #9CC6EC;
+    --accent-soft: #16303F;
+    --good:        #61C293;
+    --good-soft:   #12301F;
+    --warn:        #DCA943;
+    --warn-soft:   #33260A;
+    --bad:         #E5786F;
+    --bad-soft:    #351613;
+    --shadow:      0 1px 2px rgba(0,0,0,.4), 0 10px 30px -18px rgba(0,0,0,.8);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    direction: rtl;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 17px;
+    line-height: 1.68;
+    margin: 0;
+    padding: 0 20px 96px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: var(--maxw); margin: 0 auto; }
+
+  .num, .money {
+    font-family: var(--mono);
+    font-variant-numeric: tabular-nums;
+    direction: ltr;
+    unicode-bidi: isolate;
+    font-size: .94em;
+  }
+
+  /* ---------- masthead ---------- */
+  header.masthead {
+    padding: 72px 0 40px;
+    border-bottom: 2px solid var(--ink);
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  .eyebrow {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--accent-ink);
+  }
+  h1 {
+    font-family: var(--serif);
+    font-weight: 800;
+    font-size: clamp(2.6rem, 7vw, 4.4rem);
+    line-height: 1.02;
+    letter-spacing: -.01em;
+    margin: 0;
+    text-wrap: balance;
+  }
+  .standfirst {
+    font-size: clamp(1.05rem, 2.2vw, 1.3rem);
+    color: var(--ink-2);
+    max-width: var(--prose);
+    margin: 0;
+  }
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 26px;
+    font-size: 13px;
+    color: var(--muted);
+    padding-top: 6px;
+    border-top: 1px solid var(--rule);
+  }
+  .meta-row b { color: var(--ink-2); font-weight: 600; }
+
+  /* ---------- sections ---------- */
+  section { padding-top: 64px; }
+  .sec-head {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    border-bottom: 1px solid var(--rule-strong);
+    padding-bottom: 10px;
+    margin-bottom: 28px;
+  }
+  .sec-head .tag {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent-ink);
+    letter-spacing: .04em;
+    flex: none;
+  }
+  h2 {
+    font-family: var(--serif);
+    font-weight: 700;
+    font-size: clamp(1.5rem, 3.4vw, 2.1rem);
+    line-height: 1.18;
+    margin: 0;
+    text-wrap: balance;
+  }
+  h3 {
+    font-family: var(--sans);
+    font-weight: 700;
+    font-size: 1.12rem;
+    margin: 0 0 8px;
+    letter-spacing: -.005em;
+  }
+  p { max-width: var(--prose); margin: 0 0 16px; }
+  .stack { display: flex; flex-direction: column; gap: 20px; }
+  a { color: var(--accent-ink); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+  a:focus-visible, input:focus-visible, button:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 3px;
+  }
+
+  /* ---------- callouts ---------- */
+  .callout {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-right: 4px solid var(--muted);
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .callout.warn { border-right-color: var(--warn); background: var(--warn-soft); }
+  .callout.bad  { border-right-color: var(--bad);  background: var(--bad-soft); }
+  .callout.good { border-right-color: var(--good); background: var(--good-soft); }
+  .callout.key  { border-right-color: var(--accent); background: var(--accent-soft); }
+  .callout h3 { margin: 0; }
+  .callout p  { margin: 0; max-width: 74ch; }
+  .callout ul { margin: 0; padding-inline-start: 1.15em; max-width: 74ch; }
+  .callout li { margin-bottom: 6px; }
+
+  /* ---------- stat grid ---------- */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(178px, 1fr));
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+  }
+  .stat {
+    background: var(--surface);
+    padding: 18px 18px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .stat .k {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .stat .v {
+    font-family: var(--mono);
+    font-variant-numeric: tabular-nums;
+    direction: ltr;
+    text-align: right;
+    font-size: 1.55rem;
+    font-weight: 600;
+    line-height: 1.15;
+    color: var(--ink);
+  }
+  .stat .n { font-size: 12.5px; color: var(--muted); line-height: 1.45; }
+
+  /* ---------- tables ---------- */
+  .tscroll {
+    overflow-x: auto;
+    border: 1px solid var(--rule);
+    background: var(--surface);
+  }
+  table { border-collapse: collapse; width: 100%; min-width: 720px; font-size: 15px; }
+  thead th {
+    background: var(--surface-2);
+    text-align: right;
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 11px 14px;
+    border-bottom: 1px solid var(--rule-strong);
+    white-space: nowrap;
+  }
+  tbody td {
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+  }
+  tbody tr:last-child td { border-bottom: 0; }
+  tbody tr:nth-child(even) td { background: var(--surface-2); }
+  td.name { font-weight: 700; white-space: nowrap; }
+  td.name small { display: block; font-weight: 400; color: var(--muted); font-family: var(--mono); font-size: 11.5px; direction: ltr; text-align: right; }
+  td.n { font-family: var(--mono); font-variant-numeric: tabular-nums; direction: ltr; text-align: right; white-space: nowrap; font-size: 14px; }
+  td.note { color: var(--ink-2); font-size: 14.5px; line-height: 1.5; min-width: 240px; }
+
+  /* ---------- pills ---------- */
+  .pill {
+    display: inline-block;
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    padding: 3px 9px;
+    border-radius: 999px;
+    white-space: nowrap;
+    border: 1px solid transparent;
+  }
+  .pill.good { background: var(--good-soft); color: var(--good); border-color: var(--good); }
+  .pill.warn { background: var(--warn-soft); color: var(--warn); border-color: var(--warn); }
+  .pill.bad  { background: var(--bad-soft);  color: var(--bad);  border-color: var(--bad); }
+  .pill.flat { background: var(--accent-soft); color: var(--accent-ink); border-color: var(--accent); }
+
+  /* ---------- tier blocks ---------- */
+  .tier { display: flex; flex-direction: column; gap: 14px; margin-bottom: 40px; }
+  .tier-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding-right: 14px;
+    border-right: 5px solid var(--rule-strong);
+  }
+  .tier.t-a .tier-head { border-right-color: var(--accent); }
+  .tier.t-b .tier-head { border-right-color: var(--good); }
+  .tier.t-c .tier-head { border-right-color: var(--warn); }
+  .tier.t-d .tier-head { border-right-color: var(--bad); }
+  .tier-head h3 { font-size: 1.28rem; margin: 0; }
+  .tier-head .sub { font-size: 14px; color: var(--muted); }
+
+  /* ---------- calculator ---------- */
+  .calc {
+    display: grid;
+    grid-template-columns: minmax(280px, 1fr) minmax(300px, 1.1fr);
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    box-shadow: var(--shadow);
+  }
+  @media (max-width: 800px) { .calc { grid-template-columns: 1fr; } }
+  .calc-in, .calc-out { background: var(--surface); padding: 22px; }
+  .calc-out { background: var(--surface-2); }
+  .field-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(132px, 1fr));
+    gap: 14px;
+  }
+  .field { display: flex; flex-direction: column; gap: 5px; }
+  .field label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--muted);
+    letter-spacing: .03em;
+  }
+  .field input {
+    font-family: var(--mono);
+    font-variant-numeric: tabular-nums;
+    direction: ltr;
+    text-align: right;
+    font-size: 15px;
+    padding: 9px 10px;
+    border: 1px solid var(--rule-strong);
+    border-radius: 4px;
+    background: var(--ground);
+    color: var(--ink);
+    width: 100%;
+  }
+  .calc-sub {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 22px 0 12px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .calc-sub:first-child { margin-top: 0; }
+  .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 14px; }
+  .kpi {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    padding: 12px 13px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .kpi .k { font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+  .kpi .v {
+    font-family: var(--mono);
+    font-variant-numeric: tabular-nums;
+    direction: ltr;
+    text-align: right;
+    font-size: 1.3rem;
+    font-weight: 600;
+  }
+  .kpi.pos .v { color: var(--good); }
+  .kpi.neg .v { color: var(--bad); }
+  .ledger { width: 100%; min-width: 0; font-size: 14.5px; }
+  .ledger td { padding: 6px 0; border-bottom: 1px dotted var(--rule); }
+  .ledger td:last-child {
+    font-family: var(--mono);
+    font-variant-numeric: tabular-nums;
+    direction: ltr;
+    text-align: left;
+    white-space: nowrap;
+  }
+  .ledger tr.total td { border-bottom: 0; border-top: 2px solid var(--rule-strong); font-weight: 700; padding-top: 9px; }
+  #verdict { margin-top: 16px; font-size: 14.5px; line-height: 1.55; }
+
+  /* ---------- misc ---------- */
+  .two-col {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .card p, .card ul { margin: 0; max-width: none; }
+  .card ul { padding-inline-start: 1.15em; }
+  .card li { margin-bottom: 5px; font-size: 15px; }
+  ol.steps { max-width: var(--prose); padding-inline-start: 1.3em; }
+  ol.steps li { margin-bottom: 12px; }
+  ul.plain { max-width: var(--prose); padding-inline-start: 1.15em; }
+  ul.plain li { margin-bottom: 8px; }
+  .src-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; font-size: 14.5px; }
+  .src-list li { padding-bottom: 8px; border-bottom: 1px solid var(--rule); }
+  footer {
+    margin-top: 72px;
+    padding-top: 20px;
+    border-top: 2px solid var(--ink);
+    font-size: 13.5px;
+    color: var(--muted);
+    max-width: var(--prose);
+  }
+</style>
+
+<div class="wrap">
+
+  <header class="masthead">
+    <div class="eyebrow">ניתוח שוק שכירות · אוגוסט 2026</div>
+    <h1>אינדיאנפוליס</h1>
+    <p class="standfirst">איפה לקנות נכס להשכרה, כמה זה באמת מחזיר אחרי מסים וריבית, ואיך מריצים ניתוח קומפס נכון לפני שמגישים הצעה.</p>
+    <div class="meta-row">
+      <span><b>מטרה:</b> נכס בודד להשכרה ארוכת טווח</span>
+      <span><b>שוק:</b> Marion County + טבעת הפרברים</span>
+      <span><b>עודכן:</b> 18 באוגוסט 2026</span>
+    </div>
+  </header>
+
+  <section>
+    <div class="sec-head"><span class="tag">00</span><h2>לפני הכול — מה מאחורי המספרים</h2></div>
+    <div class="stack">
+      <div class="callout warn">
+        <h3>לא נמשכו ליסטינגים חיים</h3>
+        <p>Zillow, Redfin, HUD User, RentCafe ו‑BiggerPockets חסומים ביציאה לרשת של הסביבה הזו. כל מספר בדף נאסף ממקורות משניים דרך חיפוש רשת, נכון לאוגוסט 2026. המשמעות המעשית: <b>המספרים כאן טובים לבחירת אזור, לא לתמחור נכס.</b> ברגע שיש כתובת ספציפית — צריך MLS או ליסטינג אמיתי, וזה בדיוק מה שאני צריך ממך כדי להריץ קומפס (סעיף 07).</p>
+      </div>
+      <div class="callout">
+        <h3>איפה המקורות סותרים זה את זה</h3>
+        <ul>
+          <li>חציון מחיר בעיר: <span class="num">$245K–$255K</span> לפי מקור אחד, <span class="num">$260K</span> לפי אחר — ההבדל הוא עיר מול מטרו. אני עובד עם העיר.</li>
+          <li>שכ״ד ב‑Speedway: מקור אחד גורס <span class="num">$450–$700</span>, וזה כמעט בוודאות נתון ישן או בלבול עם הכנסה חציונית. השכ״ד בפועל ל‑3 חדרים באזור קרוב יותר ל‑<span class="num">$1,400–$1,600</span>.</li>
+          <li>Warren Township מוצג עם ערך חציוני של <span class="num">$104K</span> — נתון שנראה מיושן ביחס לשוק של 2026. <b>אל תבנה עליו מודל.</b></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="tag">01</span><h2>מצב השוק</h2></div>
+    <div class="stats">
+      <div class="stat"><span class="k">חציון מחיר · עיר</span><span class="v">$245–255K</span><span class="n">עלייה חד־ספרתית נמוכה שנה־על־שנה</span></div>
+      <div class="stat"><span class="k">תחזית מחירים 12ח׳</span><span class="v">+3.2–4.5%</span><span class="n">חזק יותר בשכונות מתחדשות</span></div>
+      <div class="stat"><span class="k">שכ״ד ממוצע · הכול</span><span class="v">$1,375</span><span class="n">כל סוגי הנכסים, אוגוסט 2026</span></div>
+      <div class="stat"><span class="k">שכ״ד · בית פרטי</span><span class="v">$1,650–1,790</span><span class="n">3 חדרים סביב <span class="num">$1,625</span></span></div>
+      <div class="stat"><span class="k">תחזית שכ״ד</span><span class="v">+3.5–4.2%</span><span class="n">בפועל <span class="num">4–5%</span> שנה־על־שנה</span></div>
+      <div class="stat"><span class="k">שיעור ריקנות</span><span class="v">6–7%</span><span class="n">מטרו · גבוה מהממוצע ההיסטורי</span></div>
+      <div class="stat"><span class="k">ימים בשוק</span><span class="v">&lt; 35</span><span class="n">מלאי צפוף מתחת ל‑<span class="num">$300K</span></span></div>
+      <div class="stat"><span class="k">ריבית · נכס השקעה</span><span class="v">7.24–7.80%</span><span class="n">DSCR: <span class="num">6.375–7.875%</span></span></div>
+    </div>
+    <div class="stack" style="margin-top:26px">
+      <p><b>למה השוק הזה בכלל מעניין.</b> גידול אוכלוסייה במטרו של <span class="num">1.2%</span> בשנה מול <span class="num">0.5%</span> ארצית, בסיס תעסוקה מפוזר — Eli Lilly, IU Health, Salesforce, Amazon, מרכז FedEx, Rolls‑Royce, Allison — ומחירי כניסה שהם שבריר מהחוף. קמפוס LEAP של Lilly בלבנון (השקעה מצטברת של <span class="num">$13B</span>) נפתח במאי 2026 עם כ‑<span class="num">1,300</span> משרות ישירות, והמשיכה מורגשת בעיקר בצפון‑מערב המטרו.</p>
+      <p><b>ולמה זה לא מספיק.</b> ריבית משכנתה להשקעה סביב <span class="num">7.4%</span>, תקרת ארנונה של <span class="num">2%</span> משווי שומה על נכס שאינו מגורי בעלים, וביטוח שעלה בגלל ברד — שלושת אלה יחד אוכלים את התשואה. הסעיף הבא הוא המסקנה שנובעת מזה, והיא לא נעימה.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="tag">02</span><h2>המסקנה המרכזית</h2></div>
+    <div class="stack">
+      <div class="callout bad">
+        <h3>נכס במחיר מלא עם <span class="num">25%</span> הון עצמי לא מייצר תזרים חיובי באינדיאנפוליס באוגוסט 2026</h3>
+        <p>זו לא דעה — זו אריתמטיקה. הנה בית טיפוסי מדרגה B, מתומחר בשוק, ממומן סטנדרטית:</p>
+      </div>
+
+      <div class="tscroll">
+        <table>
+          <thead><tr><th>סעיף</th><th>חודשי</th><th>הערה</th></tr></thead>
+          <tbody>
+            <tr><td class="name">שכר דירה ברוטו</td><td class="n">$1,500</td><td class="note">בית 3 חד׳, דרגה B</td></tr>
+            <tr><td class="name">ארנונה</td><td class="n">−$292</td><td class="note"><span class="num">2%</span> מ‑<span class="num">$175K</span> שווי שומה — התקרה לנכס שאינו מגורי בעלים</td></tr>
+            <tr><td class="name">ביטוח</td><td class="n">−$110</td><td class="note">טווח שוק <span class="num">$1,100–$1,600</span> לשנה, עולה בגלל תדירות ברד</td></tr>
+            <tr><td class="name">ניהול נכס</td><td class="n">−$120</td><td class="note"><span class="num">8%</span> מהגבייה, בנוסף דמי איכלוס של חצי עד חודש שכירות</td></tr>
+            <tr><td class="name">ריקנות</td><td class="n">−$90</td><td class="note"><span class="num">6%</span> — בהתאם לשוק</td></tr>
+            <tr><td class="name">תחזוקה + רזרבת CapEx</td><td class="n">−$180</td><td class="note"><span class="num">12%</span> — מלאי הדיור באינדי ישן, גגות ואינסטלציה</td></tr>
+            <tr class="total"><td class="name">NOI</td><td class="n">$708</td><td class="note">שנתי <span class="num">$8,496</span> · Cap Rate <span class="num">4.85%</span></td></tr>
+            <tr><td class="name">החזר משכנתה</td><td class="n">−$909</td><td class="note"><span class="num">$131,250</span> ל‑<span class="num">30</span> שנה ב‑<span class="num">7.4%</span></td></tr>
+            <tr class="total"><td class="name">תזרים נטו</td><td class="n" style="color:var(--bad)">−$201</td><td class="note"><span class="pill bad">שלילי</span> DSCR <span class="num">0.78</span> — מתחת לסף של רוב המלווים</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout key">
+        <h3>ארבע הדרכים שכן עובדות</h3>
+        <ul>
+          <li><b>יחס שכ״ד למחיר של <span class="num">1%</span> ומעלה.</b> בית ב‑<span class="num">$150K</span> שמשכיר ב‑<span class="num">$1,500</span> מגיע ל‑Cap של <span class="num">~6%</span> ולתזרים אפס בערך. זה הרף המינימלי — מתחתיו אתה מסבסד את הדייר.</li>
+          <li><b>הון עצמי של <span class="num">40%</span> ומעלה, או מזומן.</b> בקנייה במזומן התשואה הבלתי‑ממונפת היא ה‑Cap עצמו: <span class="num">4.8–6%</span>. סביר, לא מרשים, אבל בלי סיכון מינוף.</li>
+          <li><b>Section 8.</b> FMR ל‑3 חד׳ במיקודים מרכזיים עומד על <span class="num">$1,590</span> — מעל שכ״ד השוק בשכונות דרגה C. הפער הזה הוא ארביטראז׳ אמיתי. אזהרה: FMR הוא תקרה מותרת, לא הבטחה — הרשות משלמת לפי שכ״ד סביר בפועל.</li>
+          <li><b>קנייה מתחת לשוק / השבחה.</b> רכישה ב‑<span class="num">80–85%</span> מ‑ARV. זה ה‑BRRRR הקלאסי, וזה דורש קבלן, זמן ונוכחות — לא מודל פסיבי.</li>
+        </ul>
+      </div>
+
+      <div class="callout good">
+        <h3>נקודת הקלה אחת</h3>
+        <p>שווי השומה באינדיאנה נקבע על ידי השמאי המחוזי ולא בהכרח שווה למחיר הרכישה — לרוב הוא מפגר אחריו בשנה‑שנתיים. בנוסף, רפורמת המס של 2025 מוסיפה ניכוי חדש לנכסי מגורים שאינם מגורי בעלים: <span class="num">6%</span> משווי השומה ב‑2025, עולה בהדרגה ל‑<span class="num">33.4%</span> עד 2030. <b>תמיד תבדוק את השומה בפועל</b> באתר שמאי מחוז Marion לפני שאתה בונה מודל — יכול להיות פער של <span class="num">$80–120</span> בחודש לטובתך.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="tag">03</span><h2>דירוג שכונות</h2></div>
+    <p style="margin-bottom:32px">ארבע דרגות, לפי מה שהן באמת עושות לתיק — לא לפי כמה נעים לגור שם. יחס שכ״ד/מחיר הוא שכ״ד חודשי חלקי מחיר רכישה; מתחת ל‑<span class="num">0.7%</span> אתה קונה עליית ערך, לא תזרים.</p>
+
+    <div class="tier t-b">
+      <div class="tier-head">
+        <h3>דרגה B — האזור שאני ממליץ עליו</h3>
+        <span class="sub">תזרים סביר, דיירים יציבים, ניהול נורמלי</span>
+      </div>
+      <div class="tscroll">
+        <table>
+          <thead><tr><th>אזור</th><th>מחיר כניסה</th><th>שכ״ד 3 חד׳</th><th>יחס</th><th>למה</th></tr></thead>
+          <tbody>
+            <tr>
+              <td class="name">Lawrence Township<small>46226 · 46235 · 46236</small></td>
+              <td class="n">$200–260K</td><td class="n">$1,700–1,800</td><td class="n">~0.75%</td>
+              <td class="note"><span class="pill good">בחירה ראשונה</span> מבין החזקים ביחס שכ״ד/מחיר בעיר. אוריינטציה משפחתית, תחלופת דיירים נמוכה, ביקוש עמוק ל‑3 חד׳. זה מה שהייתי קונה.</td>
+            </tr>
+            <tr>
+              <td class="name">Beech Grove<small>46107</small></td>
+              <td class="n">$175–215K</td><td class="n">$1,400–1,600</td><td class="n">~0.78%</td>
+              <td class="note"><span class="pill good">בחירה שנייה</span> עיר עצמאית בתוך Marion. שקטה, צפויה, תחלופה נמוכה. אם המטרה היא דייר שנשאר חמש שנים — כאן.</td>
+            </tr>
+            <tr>
+              <td class="name">Speedway<small>46224</small></td>
+              <td class="n">$170–210K</td><td class="n">$1,400–1,600</td><td class="n">~0.78%</td>
+              <td class="note">מסדרון חזק ביחס שכ״ד/מחיר. FMR ל‑3 חד׳ במיקוד הזה הוא <span class="num">$1,590</span> — מיקוד מצוין ל‑Section 8.</td>
+            </tr>
+            <tr>
+              <td class="name">Garfield Park / דרום<small>46203 · 46227</small></td>
+              <td class="n">$185–225K</td><td class="n">$1,400–1,600</td><td class="n">~0.72%</td>
+              <td class="note">מחיר חציוני מבוקש סביב <span class="num">$199,900</span>. גובל ב‑Fountain Square שכבר התייקרה — יש כאן זליגת ביקוש.</td>
+            </tr>
+            <tr>
+              <td class="name">Irvington<small>46219</small></td>
+              <td class="n">$220–290K</td><td class="n">$1,600–1,900</td><td class="n">~0.68%</td>
+              <td class="note">שכונה היסטורית עם אופי, מזוהה כאחת משלוש שהביקוש בהן עוקף את המלאי. תזרים חלש יותר, עליית ערך טובה יותר.</td>
+            </tr>
+            <tr>
+              <td class="name">Greenwood<small>Johnson County</small></td>
+              <td class="n">$270–320K</td><td class="n">$1,800–2,000</td><td class="n">~0.65%</td>
+              <td class="note">מחוץ ל‑Marion — ארנונה נמוכה יותר, בתי ספר טובים יותר, אכיפה ידידותית יותר לבעלי נכסים. מחיר כניסה גבוה יותר.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="tier t-a">
+      <div class="tier-head">
+        <h3>דרגה A — עליית ערך, בלי תזרים</h3>
+        <span class="sub">Hamilton ו‑Boone County</span>
+      </div>
+      <div class="tscroll">
+        <table>
+          <thead><tr><th>אזור</th><th>מחיר כניסה</th><th>שכ״ד</th><th>יחס</th><th>למה</th></tr></thead>
+          <tbody>
+            <tr><td class="name">Westfield</td><td class="n">$450–580K</td><td class="n">$2,300–2,800</td><td class="n">~0.50%</td><td class="note">מנוע הצמיחה הגדול במטרו, בתי ספר מצוינים. תזרים שלילי עמוק במינוף — זו קנייה של הון עצמי עתידי.</td></tr>
+            <tr><td class="name">Fishers / Carmel</td><td class="n">$460–620K</td><td class="n">$2,400–2,900</td><td class="n">~0.48%</td><td class="note">היציבות הגבוהה במטרו, גם הכניסה היקרה ביותר. דיירים איכותיים, ריקנות אפסית, תשואה שוטפת אפסית.</td></tr>
+            <tr><td class="name">Noblesville</td><td class="n">$380–450K</td><td class="n">$2,100–2,400</td><td class="n">~0.55%</td><td class="note">נקודת הכניסה הנגישה מבין השלושה. מלאי צפוף, מרכז עיר בהתחדשות.</td></tr>
+            <tr><td class="name">Whitestown / Zionsville<small>Boone County</small></td><td class="n">$380–520K</td><td class="n">$2,000–2,500</td><td class="n">~0.52%</td><td class="note"><span class="pill flat">הימור LEAP</span> הקרוב ביותר לקמפוס Lilly שנפתח במאי 2026. הכי ספקולטיבי, וגם ההימור עם ה‑upside הברור ביותר.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="tier t-c">
+      <div class="tier-head">
+        <h3>דרגה C — תשואה גבוהה, ניהול כבד</h3>
+        <span class="sub">רק אם יש לך מנהל נכסים מקומי שאתה סומך עליו</span>
+      </div>
+      <div class="tscroll">
+        <table>
+          <thead><tr><th>אזור</th><th>מחיר כניסה</th><th>שכ״ד</th><th>יחס</th><th>למה</th></tr></thead>
+          <tbody>
+            <tr><td class="name">Bates‑Hendricks</td><td class="n">$220–290K</td><td class="n">$1,600–1,900</td><td class="n">~0.70%</td><td class="note"><span class="pill warn">כבר התייקרה</span> מוזכרת בכל רשימה — מה שאומר שהכסף הקל כבר נלקח. הצמוד למרכז, התחדשות אמיתית, אבל אתה נכנס באמצע.</td></tr>
+            <tr><td class="name">Fountain Square</td><td class="n">~$285K</td><td class="n">$1,700–2,000</td><td class="n">~0.63%</td><td class="note">עלייה של <span class="num">4.2%</span> בשנה. שכונת בילויים, דיירים צעירים, תחלופה גבוהה יותר. תמחור כבר לא של השקעה.</td></tr>
+            <tr><td class="name">Warren Township<small>46229 · מזרח 46219</small></td><td class="n">$130–180K</td><td class="n">$1,200–1,500</td><td class="n">~0.90%</td><td class="note">התשואה על ההון הגבוהה בעיר לפי מקורות מקומיים (<span class="num">8–12%</span>), אבל <b>המספרים שמצוטטים שם נראים מיושנים</b>. פוטנציאל אמיתי, דורש אימות מלא.</td></tr>
+            <tr><td class="name">Near Eastside<small>46201</small></td><td class="n">$110–165K</td><td class="n">$1,100–1,400</td><td class="n">~0.95%</td><td class="note">היחס הגבוה ביותר בעיר, וגם התחלופה, הפיגורים והפחת הגבוהים ביותר. <span class="num">184</span> בתים להשכרה פעילים במיקוד — היצע כבד.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="tier t-d">
+      <div class="tier-head">
+        <h3>דרגה D — לא בקנייה ראשונה מרחוק</h3>
+        <span class="sub">Crown Hill · Mapleton‑Fall Creek · Riverside / Near Northwest · Martindale‑Brightwood · Meadows · Tuxedo Park</span>
+      </div>
+      <p style="margin-bottom:0">כל אלה מסומנים כבעלי פשיעה מוגברת בדירוגי בטיחות שכונתיים — Crown Hill בציון <span class="num">D−</span>, Mapleton‑Fall Creek <span class="num">C−</span>, Riverside <span class="num">C−</span>. המחירים על הנייר מפתים והתשואה החזויה גבוהה, אבל היא נשענת על תפוסה מלאה שלא קורית: פינוי אחד עולה <span class="num">$3,000–5,000</span> ושלושה חודשי ריקנות ומוחק שנה של תזרים. חלק מהמקורות ממליצים על Riverside לתזרים — אני חולק, בהינתן שאתה קונה מרחוק ובפעם הראשונה בשוק הזה.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="tag">04</span><h2>מחשבון החתמה</h2></div>
+    <p>הזן מספרים של עסקה אמיתית. ברירת המחדל היא הדוגמה מסעיף 02. הכול מתעדכן מיידית.</p>
+
+    <div class="calc">
+      <div class="calc-in">
+        <div class="calc-sub">רכישה ומימון</div>
+        <div class="field-grid">
+          <div class="field"><label for="price">מחיר רכישה ($)</label><input id="price" type="number" value="175000" step="1000"></div>
+          <div class="field"><label for="rehab">שיפוץ ($)</label><input id="rehab" type="number" value="0" step="1000"></div>
+          <div class="field"><label for="down">הון עצמי (%)</label><input id="down" type="number" value="25" step="1"></div>
+          <div class="field"><label for="rate">ריבית שנתית (%)</label><input id="rate" type="number" value="7.4" step="0.05"></div>
+          <div class="field"><label for="years">שנות הלוואה</label><input id="years" type="number" value="30" step="1"></div>
+          <div class="field"><label for="closing">עלויות סגירה (%)</label><input id="closing" type="number" value="3" step="0.5"></div>
+        </div>
+
+        <div class="calc-sub">הכנסה והוצאות תפעול</div>
+        <div class="field-grid">
+          <div class="field"><label for="rent">שכ״ד חודשי ($)</label><input id="rent" type="number" value="1500" step="25"></div>
+          <div class="field"><label for="av">שווי שומה ($)</label><input id="av" type="number" value="175000" step="1000"></div>
+          <div class="field"><label for="ins">ביטוח לשנה ($)</label><input id="ins" type="number" value="1320" step="60"></div>
+          <div class="field"><label for="pm">ניהול (%)</label><input id="pm" type="number" value="8" step="0.5"></div>
+          <div class="field"><label for="vac">ריקנות (%)</label><input id="vac" type="number" value="6" step="0.5"></div>
+          <div class="field"><label for="mc">תחזוקה+CapEx (%)</label><input id="mc" type="number" value="12" step="1"></div>
+          <div class="field"><label for="hoa">ועד בית לחודש ($)</label><input id="hoa" type="number" value="0" step="10"></div>
+          <div class="field"><label for="taxrate">תקרת ארנונה (%)</label><input id="taxrate" type="number" value="2" step="0.1"></div>
+        </div>
+      </div>
+
+      <div class="calc-out">
+        <div class="calc-sub">תוצאה</div>
+        <div class="kpi-grid">
+          <div class="kpi" id="k-cf"><span class="k">תזרים לחודש</span><span class="v" id="v-cf">—</span></div>
+          <div class="kpi"><span class="k">Cap Rate</span><span class="v" id="v-cap">—</span></div>
+          <div class="kpi" id="k-coc"><span class="k">תשואה על ההון</span><span class="v" id="v-coc">—</span></div>
+          <div class="kpi" id="k-dscr"><span class="k">DSCR</span><span class="v" id="v-dscr">—</span></div>
+          <div class="kpi" id="k-ratio"><span class="k">שכ״ד / מחיר</span><span class="v" id="v-ratio">—</span></div>
+          <div class="kpi"><span class="k">הון נדרש</span><span class="v" id="v-cash">—</span></div>
+        </div>
+
+        <div class="calc-sub">פירוט חודשי</div>
+        <table class="ledger">
+          <tbody>
+            <tr><td>שכר דירה ברוטו</td><td id="l-rent">—</td></tr>
+            <tr><td>ארנונה</td><td id="l-tax">—</td></tr>
+            <tr><td>ביטוח</td><td id="l-ins">—</td></tr>
+            <tr><td>ניהול נכס</td><td id="l-pm">—</td></tr>
+            <tr><td>ריקנות</td><td id="l-vac">—</td></tr>
+            <tr><td>תחזוקה + CapEx</td><td id="l-mc">—</td></tr>
+            <tr><td>ועד בית</td><td id="l-hoa">—</td></tr>
+            <tr class="total"><td>NOI</td><td id="l-noi">—</td></tr>
+            <tr><td>החזר משכנתה</td><td id="l-pi">—</td></tr>
+            <tr class="total"><td>תזרים נטו</td><td id="l-cf">—</td></tr>
+          </tbody>
+        </table>
+
+        <div class="calc-sub">רגישות להון עצמי</div>
+        <table class="ledger">
+          <tbody id="sens"></tbody>
+        </table>
+
+        <div id="verdict"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="tag">05</span><h2>מבנה ההוצאות המקומי</h2></div>
+    <div class="two-col">
+      <div class="card">
+        <h3>ארנונה — הסעיף שמפתיע ישראלים</h3>
+        <p>אינדיאנה מפעילה תקרות מס לפי סוג נכס. נכס מגורים שאינו מגורי בעלים יושב על תקרה של <span class="num">2%</span> משווי השומה — כפול מהתקרה של בית שגר בו הבעלים. נכס בבעלות LLC נחשב אוטומטית להשקעה. על נכס ב‑<span class="num">$200K</span> אלה <span class="num">$4,000</span> בשנה, גם אם החישוב הרגיל היה נמוך יותר — עודף מקוזז אוטומטית באשראי Circuit Breaker.</p>
+      </div>
+      <div class="card">
+        <h3>ביטוח — עולה, וסיבה אחת</h3>
+        <p>ברד. תדירות סופות הברד באזור הוכפלה בשנים האחרונות, והמבטחים מגלגלים את החלפות הגגות לפרמיה. טווח סביר לבית פרטי: <span class="num">$1,100–$1,600</span> לשנה. מחסור בקבלנים באינדיאנפוליס העלה גם את הערכות עלות השחזור, כך שהמגמה נמשכת.</p>
+      </div>
+      <div class="card">
+        <h3>ניהול נכס</h3>
+        <p><span class="num">8–10%</span> מהשכר שנגבה בפועל, ובנוסף דמי איכלוס שנעים בין חצי חודש שכירות לחודש מלא בכל החלפת דייר. אם אתה מנהל מישראל — זה לא אופציונלי, וזה גם הופך את תחלופת הדיירים לסעיף עלות אמיתי ולא תיאורטי.</p>
+      </div>
+      <div class="card">
+        <h3>כלל ה‑50% מחזיק כאן</h3>
+        <p>סך ההוצאות התפעוליות באינדיאנפוליס נופל בדרך כלל על <span class="num">45–55%</span> מהשכ״ד ברוטו — לפני החזר משכנתה. אם ליסטינג או משווק turnkey מציג לך <span class="num">30%</span> הוצאות, הוא השמיט CapEx, ריקנות, או את שניהם. זו הבדיקה המהירה ביותר לאיכות של כל מודל שמראים לך.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="tag">06</span><h2>סיכונים</h2></div>
+    <div class="stack">
+      <div class="callout bad">
+        <h3>פינויים — אינדיאנפוליס במקום השישי בארה״ב</h3>
+        <p>Eviction Lab מדרג את אינדיאנפוליס במקום השישי בשיעור הגשת תביעות פינוי מבין <span class="num">27</span> ערים שהוא עוקב אחריהן. ב‑2024 הוגשו במחוז Marion למעלה מ‑<span class="num">25,000</span> תביעות פינוי. חלק מהריכוזים הגבוהים ביותר נמצאים בשכונות שבהן משקיעים מוסדיים מחזיקים בתי מגורים בהיקף גדול ומגישים פינויים אוטומטית. <b>המשמעות עבורך:</b> בשכונות דרגה C ו‑D, ה‑underwriting חייב לכלול תרחיש פינוי אחד לפחות בכל שלוש שנים.</p>
+      </div>
+      <div class="callout warn">
+        <h3>מלכודת הנכסים הזולים</h3>
+        <ul>
+          <li>הלוואות מתחת ל‑<span class="num">$100K</span> נופלות מתחת למינימום של רוב מלווי ה‑DSCR — אתה נשאר עם מזומן או עם מלווה מקומי בתנאים גרועים יותר.</li>
+          <li>זמינות ביטוח מוגבלת בשכבה התחתונה, לא רק המחיר.</li>
+          <li>מספרי SAFMR עלולים להציג שכ״ד גבוה מזה שניתן לגבות בפועל באזור.</li>
+        </ul>
+      </div>
+      <div class="callout">
+        <h3>מה כן עובד לטובתך — החוק</h3>
+        <p>אינדיאנה ידידותית לבעלי נכסים: אין פיקוח על שכר דירה, אין תקרה חוקית לפיקדון, הודעת <span class="num">10</span> ימים באי‑תשלום, ותהליך פינוי טיפוסי של <span class="num">3–6</span> שבועות מהודעה עד צו פינוי. החזרת פיקדון תוך <span class="num">45</span> יום עם פירוט ניכויים — ואם בית משפט קובע שפעלת בחוסר תום לב, החשיפה היא עד כפל הפיקדון. תקנות עירוניות באינדיאנפוליס מוסיפות הגנות מקומיות מעבר לחוק המדינה, אז כדאי לעבור עליהן עם עורך דין מקומי לפני החוזה הראשון.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="tag">07</span><h2>איך אני מנתח קומפס</h2></div>
+    <p>כן, אני יכול להריץ ניתוח קומפס מלא — גם קומפס מכירה (מה הנכס באמת שווה) וגם קומפס שכירות (מה הוא באמת ישכיר). מה שאני צריך זה נתונים, כי אני לא יכול למשוך אותם מ‑Zillow בסביבה הזו. <b>שלח לי כתובת אחת או שתיים, או הדבק את פרטי הליסטינג</b> — ואני מריץ.</p>
+
+    <div class="two-col" style="margin-top:24px">
+      <div class="card">
+        <h3>מה לשלוח לי על נכס המטרה</h3>
+        <ul>
+          <li>כתובת מלאה ומחיר מבוקש</li>
+          <li>חדרי שינה / אמבטיה / שטח בנוי (sqft)</li>
+          <li>שנת בנייה, מספר קומות, סוג בנייה</li>
+          <li>מרתף — יש? גמור או לא?</li>
+          <li>חניה מקורה, גודל מגרש</li>
+          <li>מצב הנכס וכל שיפוץ בחמש השנים האחרונות</li>
+          <li>שווי שומה וארנונה בפועל</li>
+          <li>ועד בית, אם יש</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>ומה לשלוח על הקומפס</h3>
+        <ul>
+          <li><b>עסקאות סגורות:</b> <span class="num">3–6</span> מכירות, לא ליסטינגים פעילים</li>
+          <li>רדיוס <span class="num">0.5</span> מייל (עד <span class="num">1</span> מייל באזור דליל)</li>
+          <li>שישה חודשים אחורה, לא יותר</li>
+          <li>אותו township ואותו מחוז בתי ספר</li>
+          <li>לכל קומפ: מחיר סגירה, תאריך, שטח, חדרים, שנה, מרתף, חניה</li>
+          <li><b>קומפס שכירות:</b> <span class="num">4–6</span> יחידות — מושכרות עדיף על פעילות, וציין הנחות פתיחה</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3 style="margin-top:36px">מה אני עושה עם זה</h3>
+    <ol class="steps">
+      <li><b>סינון והתאמה.</b> פוסל קומפס מחוץ לטווח — שטח בנוי מעבר ל‑<span class="num">±20%</span>, גיל מעבר ל‑<span class="num">±10</span> שנים, או מעבר לגבול מחוז בתי ספר. באינדיאנפוליס גבול ה‑township משנה מחיר יותר מחצי מייל של מרחק.</li>
+      <li><b>טבלת התאמות.</b> כל קומפ מתואם לנכס המטרה — שטח, מרתף גמור, חניה, מצב, מגרש, תאריך מכירה מול מגמת השוק. התוצאה היא טווח שווי מתואם, לא מספר בודד, ועם מדד פיזור שאומר כמה לסמוך עליו.</li>
+      <li><b>שכ״ד ריאלי.</b> אותה שיטה על צד השכירות, מנוכה מהנחות פתיחה, ומוצלב מול FMR של המיקוד כדי לראות אם יש פער Section 8.</li>
+      <li><b>החתמה מלאה.</b> מריץ את השווי והשכ״ד שיצאו דרך מבנה ההוצאות המקומי מסעיף 05 — כולל השומה בפועל, לא <span class="num">2%</span> ממחיר הרכישה.</li>
+      <li><b>מחיר הצעה ולא רק הערכה.</b> המסקנה היא מספר: מה המחיר המקסימלי שבו העסקה עדיין עומדת ביעד התזרים שתגדיר. זה מה שבאמת נחוץ לך מול המוכר.</li>
+    </ol>
+
+    <div class="callout key" style="margin-top:24px">
+      <h3>אזהרה אחת על קומפס באינדיאנפוליס</h3>
+      <p>העיר מפוצלת ברמת גרנולריות גבוהה במיוחד. שני רחובות מקבילים יכולים להיות בהפרש של <span class="num">30%</span> בשווי ובעולם דיירים אחר לגמרי. אלגוריתם אוטומטי — Zestimate, Redfin Estimate — מפספס את זה שיטתית, כי הוא ממצע על פני גבול שהשוק המקומי מתייחס אליו כחומה. <b>אל תגיש הצעה על סמך הערכה אוטומטית באינדיאנפוליס.</b></p>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="tag">08</span><h2>מה הייתי עושה</h2></div>
+    <div class="stack">
+      <ul class="plain">
+        <li><b>שכונה:</b> Lawrence Township, ואחריה Beech Grove. יחס שכ״ד/מחיר סביר, דיירים יציבים, ניהול שאפשר לעשות מרחוק.</li>
+        <li><b>נכס:</b> בית פרטי <span class="num">3</span> חדרים עם חניה מקורה, בנייה משנות ה‑<span class="num">60</span> ואילך, גג שהוחלף בעשור האחרון. לא דירה — ועד בית שובר את המודל, וריכוז שכירות בבניין פוגע גם במימון וגם במכירה עתידית.</li>
+        <li><b>מחיר:</b> אל תחצה יחס של <span class="num">0.75%</span> שכ״ד/מחיר. ב‑<span class="num">$1,500</span> שכ״ד זה אומר תקרה של <span class="num">$200K</span>.</li>
+        <li><b>מימון:</b> ב‑<span class="num">25%</span> הון עצמי בריבית של היום העסקה שלילית. או <span class="num">40%</span> ומעלה, או קנייה מתחת לשוק שמייצרת את המרווח מראש.</li>
+        <li><b>לפני חתימה:</b> בדיקת שומה בפועל אצל שמאי מחוז Marion, הצעת מחיר מחייבת מהמבטח, וראיון עם שני מנהלי נכסים מקומיים — כולל שאלה ישירה על שיעור הפינויים שלהם ברחוב הספציפי.</li>
+      </ul>
+      <div class="callout key">
+        <h3>הצעד הבא</h3>
+        <p>שלח לי <span class="num">2–3</span> נכסים ספציפיים שמעניינים אותך — כתובת, מחיר ופרטים מסעיף 07 — ואני מריץ עליהם קומפס מלא, החתמה, ומחיר הצעה מקסימלי. אם יש לך גישה ל‑MLS דרך סוכן, ייצוא של הקומפס משם הוא הקלט הטוב ביותר שאפשר לתת לי.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="tag">09</span><h2>מקורות</h2></div>
+    <ul class="src-list">
+      <li><a href="https://www.rootsrealty.co/blog/top-indianapolis-neighborhoods-for-real-estate-investing">Roots Realty — Indianapolis Real Estate Investing: Best Neighborhoods to Buy</a></li>
+      <li><a href="https://www.livinginindianapolis.com/blog/best-areas-to-live-in-indianapolis-roi-2026">Living in Indianapolis — Best Areas To Live In Indianapolis For ROI In 2026</a></li>
+      <li><a href="https://www.houzeo.com/housing-market/indiana/indianapolis">Houzeo — Indianapolis, IN Housing Market in 2026</a></li>
+      <li><a href="http://www.ibrc.indiana.edu/ibr/pre/outlook/housing.html">Indiana Business Research Center — The Indiana Housing Market: 2026 Forecast</a></li>
+      <li><a href="https://www.ibrc.indiana.edu/ibr/2025/outlook/indianapolis-carmel.html">Indiana Business Research Center — Indianapolis Forecast 2026</a></li>
+      <li><a href="https://www.threaltyinc.com/how-do-indiana-property-taxes-work-for-real-estate-investors/">T&amp;H Realty Services — How Do Indiana Property Taxes Work for Real Estate Investors?</a></li>
+      <li><a href="https://www.ksmcpa.com/insights/indianas-property-tax-overhaul-big-cuts-new-levers/">Katz, Sapper &amp; Miller — Indiana's Property Tax Overhaul: Big Cuts, New Levers</a></li>
+      <li><a href="https://www.threaltyinc.com/investor-guide-warren-township/">T&amp;H Realty Services — Investor Guide: Warren Township</a></li>
+      <li><a href="https://www.fhcci.org/wp-content/uploads/2026/03/FHCCI-Evictions-Report-Part-1-2026-3-24-26.pdf">Fair Housing Center of Central Indiana — The Stacked Deck: Eviction Filings in Marion County</a></li>
+      <li><a href="https://suhrelawindianapolis.com/blog/what-are-the-safest-and-most-dangerous-neighborhoods-in-indianapolis/">Suhre &amp; Associates — Safest and Most Dangerous Neighborhoods in Indianapolis</a></li>
+      <li><a href="https://www.indyhousing.org/fair-market-rates">Indianapolis Housing Agency — Fair Market Rates</a></li>
+      <li><a href="https://www.doorloop.com/laws/indiana-eviction-process">DoorLoop — Indiana Eviction Laws: The Process &amp; Timeline In 2026</a></li>
+      <li><a href="https://www.hemlane.com/resources/indiana-security-deposit-laws/">Hemlane — Indiana Security Deposit Laws in 2026</a></li>
+      <li><a href="https://www.obieinsurance.com/blog/landlord-insurance-indiana">Obie Insurance — 2026 Guide to Indiana Landlord Insurance</a></li>
+      <li><a href="https://www.zumper.com/rent-research/indianapolis-in">Zumper — Average Rent in Indianapolis, IN</a></li>
+      <li><a href="https://www.astephome.com/blog/rent-growth-vs-vacancy-risk-indianapolis-2026-market-update-for-owners">A Step Home — Rent Growth vs. Vacancy Risk: Indianapolis 2026</a></li>
+      <li><a href="https://themortgagereports.com/27698/investment-property-mortgage-rates-how-much-more-will-you-pay">The Mortgage Reports — Investment Property Mortgage Rates, August 2026</a></li>
+      <li><a href="https://ahlend.com/indianapolis-dscr-investor-market-2026/">Ahlend — Indianapolis DSCR Investor Market 2026: ZIP-Level Map</a></li>
+      <li><a href="https://www.reddoorrents.com/blog/indianapolis-market-updates-rents-rise-but-cheap-deals-can-still-burn-investors">Red Door — Rents Rise, But Cheap Deals Can Still Burn Investors</a></li>
+    </ul>
+  </section>
+
+  <footer>
+    ניתוח מחקרי, לא ייעוץ השקעות. הנתונים נאספו ממקורות משניים ב‑18 באוגוסט 2026 ולא אומתו מול MLS או מול רשומות מחוז Marion. אמת כל מספר לפני שאתה מגיש הצעה.
+  </footer>
+
+</div>
+
+<script>
+(function () {
+  var ids = ["price","rehab","down","rate","years","closing","rent","av","ins","pm","vac","mc","hoa","taxrate"];
+  var el = {};
+  ids.forEach(function (id) { el[id] = document.getElementById(id); });
+
+  function num(id) { var v = parseFloat(el[id].value); return isFinite(v) ? v : 0; }
+
+  function usd(n) {
+    var s = Math.round(Math.abs(n)).toLocaleString("en-US");
+    return (n < 0 ? "−$" : "$") + s;
+  }
+  function pct(n) { return (isFinite(n) ? n.toFixed(2) : "—") + "%"; }
+
+  function payment(principal, annualRate, years) {
+    if (principal <= 0 || years <= 0) return 0;
+    var r = annualRate / 100 / 12;
+    var n = years * 12;
+    if (r === 0) return principal / n;
+    return principal * r / (1 - Math.pow(1 + r, -n));
+  }
+
+  function model(downPct) {
+    var price = num("price"), rehab = num("rehab"), rent = num("rent");
+    var loan = price * (1 - downPct / 100);
+    var pi = payment(loan, num("rate"), num("years"));
+    var tax = num("av") * (num("taxrate") / 100) / 12;
+    var ins = num("ins") / 12;
+    var pm = rent * num("pm") / 100;
+    var vac = rent * num("vac") / 100;
+    var mc = rent * num("mc") / 100;
+    var hoa = num("hoa");
+    var opex = tax + ins + pm + vac + mc + hoa;
+    var noi = rent - opex;
+    var cf = noi - pi;
+    var cashIn = price * (downPct / 100) + rehab + price * (num("closing") / 100);
+    return {
+      price: price, rent: rent, pi: pi, tax: tax, ins: ins, pm: pm, vac: vac, mc: mc,
+      hoa: hoa, opex: opex, noi: noi, cf: cf, cashIn: cashIn,
+      cap: price > 0 ? (noi * 12) / (price + rehab) * 100 : 0,
+      coc: cashIn > 0 ? (cf * 12) / cashIn * 100 : 0,
+      dscr: pi > 0 ? noi / pi : Infinity,
+      ratio: price > 0 ? rent / price * 100 : 0
+    };
+  }
+
+  function setKpi(boxId, valId, text, state) {
+    document.getElementById(valId).textContent = text;
+    var box = document.getElementById(boxId);
+    if (box) box.className = "kpi" + (state ? " " + state : "");
+  }
+
+  function render() {
+    var m = model(num("down"));
+
+    document.getElementById("l-rent").textContent = usd(m.rent);
+    document.getElementById("l-tax").textContent  = usd(-m.tax);
+    document.getElementById("l-ins").textContent  = usd(-m.ins);
+    document.getElementById("l-pm").textContent   = usd(-m.pm);
+    document.getElementById("l-vac").textContent  = usd(-m.vac);
+    document.getElementById("l-mc").textContent   = usd(-m.mc);
+    document.getElementById("l-hoa").textContent  = usd(-m.hoa);
+    document.getElementById("l-noi").textContent  = usd(m.noi);
+    document.getElementById("l-pi").textContent   = usd(-m.pi);
+    document.getElementById("l-cf").textContent   = usd(m.cf);
+
+    setKpi("k-cf", "v-cf", usd(m.cf), m.cf >= 0 ? "pos" : "neg");
+    document.getElementById("v-cap").textContent = pct(m.cap);
+    setKpi("k-coc", "v-coc", pct(m.coc), m.coc >= 6 ? "pos" : (m.coc >= 0 ? "" : "neg"));
+    setKpi("k-dscr", "v-dscr", isFinite(m.dscr) ? m.dscr.toFixed(2) : "∞", m.dscr >= 1.2 ? "pos" : (m.dscr >= 1 ? "" : "neg"));
+    setKpi("k-ratio", "v-ratio", pct(m.ratio), m.ratio >= 0.9 ? "pos" : (m.ratio >= 0.7 ? "" : "neg"));
+    document.getElementById("v-cash").textContent = usd(m.cashIn);
+
+    var sens = document.getElementById("sens");
+    sens.innerHTML = "";
+    [20, 25, 35, 50, 100].forEach(function (d) {
+      var s = model(d);
+      var tr = document.createElement("tr");
+      var td1 = document.createElement("td");
+      td1.textContent = d === 100 ? "מזומן מלא" : d + "% הון עצמי";
+      var td2 = document.createElement("td");
+      td2.textContent = usd(s.cf) + " / חודש";
+      td2.style.color = s.cf >= 0 ? "var(--good)" : "var(--bad)";
+      tr.appendChild(td1); tr.appendChild(td2);
+      sens.appendChild(tr);
+    });
+
+    var v = document.getElementById("verdict");
+    var notes = [];
+    if (m.ratio < 0.7) notes.push("יחס שכ״ד/מחיר של " + pct(m.ratio) + " נמוך מדי — זו קניית עליית ערך, לא תזרים.");
+    else if (m.ratio >= 0.9) notes.push("יחס שכ״ד/מחיר של " + pct(m.ratio) + " חזק. בדוק שהשכונה מצדיקה אותו.");
+    if (m.dscr < 1) notes.push("DSCR מתחת ל‑1.00 — רוב מלווי ה‑DSCR ידחו את התיק במינוף הזה.");
+    else if (m.dscr < 1.2) notes.push("DSCR מתחת ל‑1.20 — הסף הנפוץ של מלווים. שקול הון עצמי גדול יותר.");
+    var opexShare = m.rent > 0 ? m.opex / m.rent * 100 : 0;
+    if (opexShare < 40) notes.push("ההוצאות התפעוליות עומדות על " + pct(opexShare) + " מהשכ״ד — מתחת לטווח האופייני של 45–55% באינדי. ודא שלא חסר CapEx או ריקנות.");
+    if (m.price > 0 && num("av") / m.price > 1.02) notes.push("שווי השומה גבוה ממחיר הרכישה — כדאי לבדוק ערעור שומה.");
+    if (m.cf >= 0 && m.dscr >= 1.2) notes.push("העסקה עומדת בשני הסינונים הבסיסיים. השלב הבא הוא קומפס, לא עוד מודל.");
+
+    v.innerHTML = "";
+    notes.forEach(function (t) {
+      var p = document.createElement("p");
+      p.style.margin = "0 0 8px";
+      p.textContent = "· " + t;
+      v.appendChild(p);
+    });
+  }
+
+  ids.forEach(function (id) {
+    el[id].addEventListener("input", render);
+  });
+  render();
+})();
+</script>
